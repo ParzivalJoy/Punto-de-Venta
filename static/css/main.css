@@ -1,0 +1,10 @@
+:root{
+    --background: #d9e3f1;
+    --light: #ffffff;
+}
+
+body{
+    font-family: 'Spartan',Helvetica;
+    font-weight: 300;
+}
+
