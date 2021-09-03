@@ -52,6 +52,7 @@ _______________________**/
 }
   
 .login .title{
+  color: var(--dk-darker-blue);
   font-size: 27px;
   font-weight: 700;
   padding-top: 10px;
