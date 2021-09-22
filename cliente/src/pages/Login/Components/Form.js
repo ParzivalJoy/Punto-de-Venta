@@ -1,0 +1,28 @@
+import React, {useState} from 'react'
+import Login from '../Login'
+import '../../../styles.scss'
+import Clock from './Time'
+import ScheduleIcon from '@mui/icons-material/Schedule'
+import axios from 'axios'
+
+function Form(){
+    const [isSubmitted, setIsSubmitted] = useState(false);
+
+    return (
+    <>
+    <div className="ocean">
+	    <div className="wave"></div>
+	    <div className="wave"></div>
+    </div>
+      <div className='form-container'>
+        <div className='form-content-left'>
+        <ScheduleIcon className="login-cal-icon"/>
+        <Clock/>
+        </div>
+        <Login/>
+      </div>
+    </>
+  );
+};
+
+export default Form

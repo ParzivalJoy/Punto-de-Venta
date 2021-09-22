@@ -1,0 +1,18 @@
+Inicio de Sesion:	Front end, Token, JWT
+Sidebar:	Front end, responsive
+			(Perfil de usuario)
+
+Navbar:	Front end, responsive
+
+Empleados:	Front end, Back end, Conexion bd
+			(doble click en el modal de editar empleado)
+
+
+Flujo de venta
+Inventarios: Front end (en progreso)
+Dashboard:	Front end
+			(Responsive)
+Configuración
+Contabilidad
+Gestor de campañas
+Productos
