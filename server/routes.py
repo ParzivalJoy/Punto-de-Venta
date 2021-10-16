@@ -17,7 +17,7 @@ CORS(app)
 def conexion():
     return psycopg2.connect(
     host="localhost",
-    database="puntodeventa",
+    database="puntoventa",
     user="postgres",
     password="root")
 
@@ -46,6 +46,65 @@ def index():
     conn.close()
     return jsonify(rows)
 
+@app.route('/api/categories',  methods=['GET'])
+def getCategories():
+    conn = conexion()
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+    cur.execute("SELECT idcategoria, nombrecategoria FROM categorias ORDER BY idcategoria")
+    rows = cur.fetchall()
+    conn.close()
+    return jsonify(rows)
+
+@app.route('/api/complements/<id>',  methods=['GET'])
+def getListComplements(id):
+    conn = conexion()
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+    cur.execute("SELECT nombrecomplemento, preciocomplemento, descripcioncomplemento FROM complementos JOIN productoscomplementos ON productoscomplementos.idproducto = '{0}' AND complementos.idcomplemento = productoscomplementos.idcomplemento".format(id))
+    rows = cur.fetchall()
+    conn.close()
+    return jsonify(rows)
+
+@app.route('/api/modifiers/<id>',  methods=['GET'])
+def getListModifiers(id):
+    conn = conexion()
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+    cur.execute('''SELECT modificadores.idmodificador, nombremodificador, preciomodificador, obligatorio, multiple FROM modificadores INNER JOIN productosmodificadores 
+                ON productosmodificadores.idproducto = '{0}' AND modificadores.idmodificador = productosmodificadores.idmodificador'''.format(id))
+    rows = cur.fetchall()
+    conn.close()
+    return jsonify(rows)
+
+@app.route('/api/options/<idmodificador>',  methods=['GET'])
+def getListOptions(idmodificador):
+    conn = conexion()
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+    cur.execute('''SELECT nombreopcion, precioopcionmodificador FROM opciones JOIN modificadoresopciones
+                ON modificadoresopciones.idmodificador = {0} AND opciones.idopcionmodificador = modificadoresopciones.idopcionmodificador'''.format(idmodificador))
+    rows = cur.fetchall()
+    conn.close()
+    return jsonify(rows)
+
+@app.route('/api/categories/<idcategoria>',  methods=['GET'])
+def getProducts(idcategoria):
+    conn = conexion()
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+    sql="SELECT idproducto, nombreproducto, descripcionproducto, precioproducto, idcategoria, encode(imagenproducto, 'base64') FROM productos WHERE idcategoria = {0}".format(idcategoria)
+    cur.execute(sql, idcategoria) 
+    row = cur.fetchall()
+    conn.close()
+    return jsonify(row)
+
+@app.route('/api/products/<idproducto>',  methods=['GET'])
+def getProduct(idproducto):
+    conn = conexion()
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+    sql='''SELECT nombreproducto, nombreunidad, cantidadproducto, descripcionproducto, precioproducto, encode(imagenproducto, 'base64')
+        FROM productos INNER JOIN unidades ON idproducto = '{0}' '''.format(idproducto)
+    cur.execute(sql, idproducto) 
+    row = cur.fetchone()
+    conn.close()
+    return jsonify(row)
+
 @app.route('/api/<idempleado>',  methods=['GET'])
 def getEmployee(idempleado):
     conn = conexion()
@@ -55,6 +114,7 @@ def getEmployee(idempleado):
     row = cur.fetchone()
     conn.close()
     return jsonify(row)
+
 
 @app.route('/api', methods=['POST'])
 def saveEmployee():
@@ -91,6 +151,8 @@ def updateEmployee():
     conn.close()
     cur.close()
     return jsonify(msg="employee updated") 
+
+
     
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)

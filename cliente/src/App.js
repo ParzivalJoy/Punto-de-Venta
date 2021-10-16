@@ -8,6 +8,8 @@ import {BrowserRouter, Route, Switch} from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import Configuracion from './pages/Config/Config'
 import Sales from './pages/Sales/Sales';
+import SalesDetails from './pages/Sales/Components/SalesDetails'
+import Carrito from './pages/Sales/Components/Carrito';
 
 function App() {
   return (
@@ -48,6 +50,24 @@ function App() {
               <Sidebar/>
               <div className="principal-page">
                 <Sales/>
+              </div>
+            </div>
+          </Route>
+          <Route exact path ="/sales/:id">
+          <Navbar/>
+              <div className="sidebar-container">
+              <Sidebar/>
+              <div className="principal-page">
+                <SalesDetails/>
+              </div>
+            </div>
+          </Route>
+          <Route exact path ="/carrito">
+          <Navbar/>
+              <div className="sidebar-container">
+              <Sidebar/>
+              <div className="principal-page">
+                <Carrito/>
               </div>
             </div>
           </Route>

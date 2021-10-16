@@ -1,6 +1,4 @@
-import React, {useEffect, useState } from 'react';
-import validate from './Components/validateInfo';
-import useForm from './Components/useForm';
+import React, {useState } from 'react';
 import '../../styles.scss';
 import axios from 'axios'
 
@@ -17,6 +15,7 @@ import axios from 'axios'
       sessionStorage.setItem("token", data.access_token)
     }
   return (
+
     <div className="login">
         <div className='form-content-right'>
             <form className='form'>
@@ -35,6 +34,7 @@ import axios from 'axios'
             </form>
         </div>
     </div>
+    
   );
 };
 

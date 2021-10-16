@@ -1,13 +1,10 @@
-import React, {useState} from 'react'
+import React from 'react'
 import Login from '../Login'
 import '../../../styles.scss'
 import Clock from './Time'
 import ScheduleIcon from '@mui/icons-material/Schedule'
-import axios from 'axios'
 
 function Form(){
-    const [isSubmitted, setIsSubmitted] = useState(false);
-
     return (
     <>
     <div className="ocean">

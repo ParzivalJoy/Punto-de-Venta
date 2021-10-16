@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import imageadd from '../../../assets/add-user.svg'
 import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
 import imageuser from '../../../assets/user.png'

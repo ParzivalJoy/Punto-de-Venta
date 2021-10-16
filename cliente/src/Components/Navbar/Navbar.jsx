@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React from 'react'
 import "../../styles.scss"
 import "./Components/themes.css"
 import StarsIcon from '@mui/icons-material/Stars';
