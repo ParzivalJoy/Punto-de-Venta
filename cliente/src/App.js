@@ -1,5 +1,6 @@
 import React from 'react';
 import Dashboard from './pages/Dashboard/dashboard';
+import Inventory from './pages/Inventory/MenuPosterior'
 import Form from './pages/Login/Components/Form';
 import Employees from './pages/Employees/Employees';
 import {BrowserRouter, Route, Switch} from 'react-router-dom'
@@ -17,6 +18,7 @@ function App() {
           <ProtectedRoute exact path ="/employees" component={Employees}/>
           <ProtectedRoute exact path ="/configuration" component={Configuracion}/>
           <ProtectedRoute exact path ="/sales" component={Sales}/>
+          <ProtectedRoute exact path = "/inventory" component={Inventory}/>
         </Switch>
         </BrowserRouter>
     </div>
