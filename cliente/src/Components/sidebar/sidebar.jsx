@@ -1,5 +1,5 @@
 import React from 'react'
-import "../../styles.scss" 
+import "../../styles.scss"
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
@@ -10,8 +10,22 @@ import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import LogoutIcon from '@mui/icons-material/Logout';
 import SettingsIcon from '@mui/icons-material/Settings';
+import { useHistory } from "react-router-dom";
 
-export default function sidebar() {
+function Sidebar() {
+    const user = localStorage.getItem("user")
+    const role = localStorage.getItem('role')
+
+    let history = useHistory();
+
+    function logoutapp()
+    {
+        localStorage.removeItem("user")
+        localStorage.removeItem('role')
+        localStorage.removeItem('token')
+        history.push("/login");
+    }
+
     return (
         <div className="sidebar">
             <div className="sidebar-wrapper">
@@ -20,11 +34,10 @@ export default function sidebar() {
                         <AccountCircleIcon className="profile-icon"/>
                     </div>
                     <div className="sidebar-info">
-                        <span className="sidebar-info-name">Robbie Hedfors</span>
-                        <span className="sidebar-info-ocupation">Gerente</span>
+                        <span className="sidebar-info-name">{user}</span>
+                        <span className="sidebar-info-ocupation">{role}</span>
                     </div>
-                    <LogoutIcon className="icon-logout"/>
-                    
+                    <button onClick={logoutapp}><LogoutIcon className="icon-logout"/></button>
                 </div>
 
                 <div className="sidebarMenu">
@@ -66,3 +79,4 @@ export default function sidebar() {
         </div>
     )
 }
+export default Sidebar;

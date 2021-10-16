@@ -25,17 +25,6 @@ def conexion():
 app.config["JWT_SECRET_KEY"] = "dsankldqwp2310953nc812245" 
 jwt = JWTManager(app)
 
-# Create a route to authenticate your users and return JWTs. The
-# create_access_token() function is used to actually generate the JWT.
-@app.route("/api/token", methods=["POST", "GET"])
-def verifyLogin():
-    username = request.json.get("username", None)
-    password = request.json.get("password", None)
-    if username != "test" or password != "test":
-        return jsonify({"msg": "Bad username or password"}), 401
-
-    access_token = create_access_token(identity=username)
-    return jsonify(access_token=access_token)
 
 @app.route('/api',  methods=['GET'])
 def index():
@@ -45,6 +34,36 @@ def index():
     rows = cur.fetchall()
     conn.close()
     return jsonify(rows)
+
+@app.route('/api/login', methods=['POST'])
+def verifyLogin():
+    conn = conexion()
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+    data=request.json
+    print(data)
+    sql="SELECT a.nombreempleado as nombreempleado, c.nombrecargo as nombrecargo FROM empleados a LEFT JOIN usuarios b ON a.idempleado=b.idempleado LEFT JOIN perfil c ON a.idcargo=c.idcargo WHERE b.usuario='{0}' AND b.contrasena='{1}'".format(data['username'],data['password'])
+    cur.execute(sql)
+    row = cur.fetchone()
+    conn.close()
+    if (row==None):
+        return jsonify('0')
+    access_token = create_access_token(identity=data['username'])
+    row['access_token'] = access_token
+    return jsonify(row)
+
+@app.route('/api/userEmail',  methods=['POST'])
+def getEmailUser():
+    conn = conexion()
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+    data=request.json
+    print(data)
+    sql="SELECT a.emailempleado FROM empleados a LEFT JOIN usuarios b ON b.idempleado=a.idempleado WHERE usuario= '{0}'".format(data['username'])
+    cur.execute(sql)
+    row = cur.fetchone()
+    conn.close()
+    if (row==None):
+        return jsonify(0)
+    return jsonify(row)
 
 @app.route('/api/categories',  methods=['GET'])
 def getCategories():
