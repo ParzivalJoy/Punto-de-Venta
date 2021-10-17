@@ -13,16 +13,23 @@ const Login = () => {
 
   let history = useHistory();
   const [errors, setErrors] = useState({})
-  const [username, setUsername] = useState("")
+  const [username, setUsername] = useState('')
+  const [name, setName] = useState('')
+  const [password, setPassword] = useState('')
   const [email, setEmail] = useState('')
   const [values, setValues] = useState({
     username: '',
     password: '',
   });
+  const [msg, setMsg]=useState('')
 
   const [show, setShow] = useState(false);
 
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    setShow(false)
+    setMsg('')
+    setUsername('')
+  };
   const handleShow = () => setShow(true);
 
   const handleChange = e => {
@@ -46,11 +53,15 @@ const Login = () => {
     return error;
   }
   function sendEmail(){
-    emailjs.send('default_service','template_80673b6', email, 'user_vE01873KnIdtHQnqhpb3Q', { email: email, message: 'Hola', reply_to: 'Maira' })
+    emailjs.send('service_vvmlhv5','template_80673b6',{ email: email,
+      message: "Tu contraseña es: "+ password,
+      name: name}, 'user_vE01873KnIdtHQnqhpb3Q', )
 		.then((response) => {
 				   console.log('SUCCESS!', response.status, response.text);
+           setMsg('La contraseña ha sido enviada a tu email')
 		}, (err) => {
 				   console.log('FAILED...', err);
+           setMsg('No se pudo enviar la contraseña a tu email, intenta de nuevo')
 		});
   }
 
@@ -59,11 +70,13 @@ const Login = () => {
     const {data} = await axios.post(baseURL+'/userEmail',obj)
     console.log(data)
     if(data=='0'){
-      let msj='El usuario no se encuentra registrado'
-      console.log(msj)
+      setMsg('El usuario no se encuentra registrado')
     }
     else{
+      console.log(data.emailempleado)
+      setPassword(data.contrasena)
       setEmail(data.emailempleado)
+      setName(data.nombreempleado)
       sendEmail()
     }
   }
@@ -128,6 +141,8 @@ const Login = () => {
                   <div >
                       <label className="col-form-label"><b> Ingrese su usuario:</b></label>
                       <input type="text" className="form-control" value={username} onChange={ e=> setUsername(e.target.value)}/>
+                        <br/>
+                        {msg && <p>{msg}</p>}
                   </div>
                 </div>
                 </div>
