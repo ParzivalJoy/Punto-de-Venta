@@ -8,6 +8,8 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import Configuracion from './pages/Config/Config'
 import Sales from './pages/Sales/Sales';
 import { ProtectedRoute } from './ProtectedRoute';
+import Products from './pages/Products/Products';
+
 function App() {
   return (
     <div className="App">
@@ -19,6 +21,7 @@ function App() {
           <ProtectedRoute exact path ="/configuration" component={Configuracion}/>
           <ProtectedRoute exact path ="/sales" component={Sales}/>
           <ProtectedRoute exact path = "/inventory" component={Inventory}/>
+          <ProtectedRoute exact path ="/products" component={Products}/>
         </Switch>
         </BrowserRouter>
     </div>
