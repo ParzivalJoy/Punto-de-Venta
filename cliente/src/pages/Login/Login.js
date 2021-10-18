@@ -12,7 +12,7 @@ const baseURL = process.env.REACT_APP_API_URL
 const Login = () => {
 
   let history = useHistory();
-  const [errors, setErrors] = useState({})
+  const [errors, setErrors] = useState({msg:'', type:0})
   const [username, setUsername] = useState('')
   const [name, setName] = useState('')
   const [password, setPassword] = useState('')
