@@ -85,8 +85,8 @@ const Login = () => {
     e.preventDefault()
 
     setErrors(validateInfo(1));
-    console.log(validateInfo(1))
-    if (errors.type===0)
+    const error= validateInfo(1)  
+    if (error.type===0)
     {
       const {data}= await axios.post(baseURL+'/login', values)
       if (data!=0)
@@ -98,7 +98,6 @@ const Login = () => {
       }else
       {
         setErrors(validateInfo(0));
-        console.log(validateInfo(0))
       }
     }
   }
