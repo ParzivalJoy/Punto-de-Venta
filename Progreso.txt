@@ -22,3 +22,20 @@ Productos
 --select * from productos
 --select idproducto, encode(imagenproducto, 'base64') from productos
 --insert into productos values ('2','Nacho cheese chips Doritos 255g',14,10,'Bite into the cheesy goodness of Doritos Nacho Cheese flavoured tortilla chips for a tastebud-shattering crunch. With Doritos Nacho Cheese chips every crunchy bite is packed with a burst of bold, cheesy flavour. Turn any event into a bold snacking experience!',1,1,50,30,pg_read_binary_file('C:\Users\MARCK\Google Drive\Escuela\ESCOM\TT2\App\cliente\src\assets\doritos.jpg'))
+
+
+
+--select SUM (totalventa) AS totalventas from ventas
+--where  fechaventa = '2021-10-15'
+--(select SUM (totalventa) AS totalventas from ventas
+--where  fechaventa = '2021-10-15') union
+--(select SUM (totalventa) AS ventas from ventas
+--where  fechaventa = '2021-10-13')
+--insert into ventas values (3,'2021-10-13',30.50,1,0,5,1)
+
+
+--select * from ventas
+--SELECT
+--(Select SUM(totalventa) as SumNo1 From ventas where fechaventa = '2021-10-15' and idventa = 1),
+--(Select SUM(totalventa) as SumNo2 From ventas where fechaventa = '2021-10-14' and idventa = 1)
+--from ventas

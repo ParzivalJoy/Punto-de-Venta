@@ -13,7 +13,7 @@ export const ProtectedRoute = ({ component: Component, ...rest}) => {
                 return <><Navbar /><div className="sidebar-container">
                     <Sidebar />
                     <div className="principal-page">
-                        <Component {...props} />
+                        <Component {...props} />              
                     </div>
                 </div></>;
             }

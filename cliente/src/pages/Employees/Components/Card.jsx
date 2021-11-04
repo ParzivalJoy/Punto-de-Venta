@@ -3,6 +3,11 @@ import imageuser from '../../../assets/user.png'
 import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
 import '../../../styles.scss'
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import EditIcon from '@mui/icons-material/Edit';
+import SaveIcon from '@mui/icons-material/Save';
+import CloseIcon from '@mui/icons-material/Close';
+
 
 function Card(props) {
     const [show, setShow] = useState(false);
@@ -19,7 +24,7 @@ function Card(props) {
     const handleShow = () => setShow(true);
 
     return (
-        <div className="card bg-light mb-3" max-width="20rem" box-shadow="0 0 20px #909BA2" >
+        <div className="card mb-3" max-width="20rem" box-shadow="0 0 20px #909BA2" >
             <div className="card-body-user">
                 <div className="text-center">
                     <img src={imageuser} width="100" height="100" className="rounded" alt="imagen usuario"/>
@@ -32,8 +37,8 @@ function Card(props) {
                 <div ><b className="card-sub">Fecha Alta:</b> {props.fechacontra} </div>
                 <br/>
                 <div className="card-buttons">
-                <button className="btn btn-primary" onClick={props.deleteEmployee.bind(this, props.idempleado)}>Eliminar</button>   
-                <button className="btn btn-primary" onClick={handleShow}>Editar</button>
+                <button className="btn btn-primary" onClick={props.deleteEmployee.bind(this, props.idempleado)}><DeleteOutlineIcon className="icons"/> Eliminar</button>   
+                <button className="btn btn-primary" onClick={handleShow}><EditIcon className="icons"/>Editar</button>
                 </div>
                 <Modal
                 show={show}
@@ -41,7 +46,7 @@ function Card(props) {
                 backdrop="static"
                 keyboard={false}
                 >
-                <Modal.Header closeButton>
+                <Modal.Header>
                     <Modal.Title>Editar Empleado</Modal.Title>
                 </Modal.Header>
                 <form id="formEdit"> 
@@ -74,9 +79,9 @@ function Card(props) {
                 </form>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleClose}>
-                    Cerrar
+                    <CloseIcon className="icons"/>Cerrar
                     </Button>
-                    <Button variant="primary"  onClick={props.getEmployee.bind(this, props.idempleado)}>Guardar</Button>
+                    <Button variant="primary"  onClick={props.getEmployee.bind(this, props.idempleado)}><SaveIcon className="icons"/>Guardar</Button>
                 </Modal.Footer>
                 </Modal>
         </div>

@@ -1,6 +1,7 @@
 import React,{useState, useEffect} from 'react'
 import PacmanLoader from "react-spinners/PacmanLoader";
 import imgavailable from './imgs/noavailable.jpg'
+import Swal from 'sweetalert2';
 
 function AgregarInventario() {
 
@@ -106,7 +107,8 @@ function AgregarInventario() {
         setEsproducto(2);
 
         if(actualingredient===''){
-          alert('no hay ingredientes, ingresa algunos!')
+          cleanstates()
+          Swal.fire('Atención!','no hay ingredientes, ingresa algunos!', 'info')
         }else{
           const res = await fetch(
             `http://localhost:5000/inventario/getActualIngredient/${actualingredient}`
@@ -174,7 +176,8 @@ function AgregarInventario() {
         const data2 = await res2.json();
         setProductproveedor(data2.nombreproveedor);
       }else{
-        alert('no hay productos, inserta algunos!')
+        cleanstates();
+        Swal.fire('Atención!','no hay productos, ingresa algunos!', 'info')
       }  
     }
     ///////////////////////////////////////////////////
@@ -195,6 +198,19 @@ function AgregarInventario() {
             setTodosvalidos('false')
         }
       })
+    }
+    const traduccionUnidades= () =>{
+      var unidad='';
+      if(productunidad===1)
+              unidad='kg'
+            else if(productunidad===2)
+              unidad='gramos'
+            else if(productunidad===3)
+              unidad='Litros'
+            else if(productunidad===4)
+              unidad='ml'
+            else unidad='unidades';
+       return unidad;
     }
     /////////////////////////////////////////////////////////////////
     //función para insertar un nuevo producto/ingrediente
@@ -248,6 +264,7 @@ function AgregarInventario() {
               `http://localhost:5000/inventario/getProveedor/${productproveedor}`
             );
             const data1 = await res1.json();
+            console.log(data1)
             /////Si no existe ese nombre de proveedor, crearlo////
             if(data1===null){
               const res2 = await fetch(
@@ -262,7 +279,8 @@ function AgregarInventario() {
                   }),
                 }
               );
-              await res2.json();
+              const data2=await res2.json();
+              console.log(data2)
             }
             /////Se consigue el id del proveedor recien creado//////////////////
             const res3 = await fetch(
@@ -271,6 +289,7 @@ function AgregarInventario() {
             const data3 = await res3.json();
             setIdproveedor(data3.idproveedor)
             const idproveedor1= data3.idproveedor;
+            console.log(data3)
             //////////al conseguirse el id del proveedor, se inserta este y los demas datos a proveedor-producto///
             const res4 = await fetch(
               `http://localhost:5000/inventario/insertProveedorProduct`,
@@ -331,8 +350,31 @@ function AgregarInventario() {
             );
             const data8 = await res8.json();
             console.log(data8)
+            ////////////////Insertar el movimiento para la contabilidad////////////////////1111
+            var totalinversion= parseFloat(productcost)* parseFloat(productstock)
+            var unidad=traduccionUnidades()
+            var razon='carga'
+            var tipo='entradaInventario'
+            var descripcionmov=('Se ingreso '+productstock+unidad+ ' de ('+productname+')')
+            const res9 = await fetch(
+              `http://localhost:5000/inventario/insertInventarioMovimiento`,
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  totalinversion,
+                  descripcionmov,
+                  razon,
+                  tipo
+                }),
+              }
+            );
+             const data9=await res9.json();
+             console.log(data9)
           }else{
-            alert('no se insertó la información, el código de producto ya existe')
+            Swal.fire('Error!','no se ingreso el producto, el código ya existe!', 'error')
             setProductCode('')
             return;
           }
@@ -446,6 +488,29 @@ function AgregarInventario() {
             );
             const data7 = await res7.json();
             console.log(data7)
+            /////////////////////Insertar el movimiento de inventario //////////////////////////
+            totalinversion= parseFloat(productcost)* parseFloat(productstock)
+            unidad=traduccionUnidades();
+            descripcionmov=('Se ingreso '+productstock+unidad+ ' de ('+productname+')')
+            razon='carga'
+            tipo='entradaInventario'
+            const res9 = await fetch(
+              `http://localhost:5000/inventario/insertInventarioMovimiento`,
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  totalinversion,
+                  descripcionmov,
+                  razon,
+                  tipo
+                }),
+              }
+            );
+             const data9=await res9.json();
+             console.log(data9)
             setBlockbutton(false)
           }
           else{
@@ -502,12 +567,35 @@ function AgregarInventario() {
             );
             const data3 = await res3.json();
             console.log(data3)
+            ///////////////////Insertar el movimiento del ingrediente////////////////////
+            totalinversion= parseFloat(productcost)* parseFloat(productstock)
+            unidad=traduccionUnidades();
+            descripcionmov=('Se ingreso '+productstock+unidad+ ' de ('+productname+')')
+            razon='carga'
+            tipo='entradaInventario'
+            const res9 = await fetch(
+              `http://localhost:5000/inventario/insertInventarioMovimiento`,
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  totalinversion,
+                  descripcionmov,
+                  razon,
+                  tipo
+                }),
+              }
+            );
+             const data9=await res9.json();
+             console.log(data9)
           }
         }
         cleanstates();
-        alert('Tu información se dio de alta exitosamente')
+        Swal.fire('Bien!','Tu información se dio de alta exitosamente','success')
       }else{
-        alert('Error. Revisa los campos que llenaste')
+        Swal.fire('Error','Revisa los campos que llenaste','error')
       }
       setBlockbutton(false)
       setLoading(false)
@@ -588,15 +676,37 @@ function AgregarInventario() {
           );
           const data4 = await res4.json();
           console.log(data4)
+          var totalinversion= parseFloat(productcost)* parseFloat(productstock)
+          var unidad=traduccionUnidades();
+          var descripcionmov=('Se ingreso '+productstock+unidad+ ' de ('+productname+')')
+          var razon='carga'
+          var tipo='entradaInventario'
+          const res9 = await fetch(
+            `http://localhost:5000/inventario/insertInventarioMovimiento`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                totalinversion,
+                descripcionmov,
+                razon,
+                tipo
+              }),
+            }
+          );
+           const data9=await res9.json();
+           console.log(data9)
           ///////////////////////////////////////////////////////////////////////////////////
           cleanstates();
-          alert('Tu información se dió de alta de manera exitosa')
+          Swal.fire('Bien!','Tu información se dió de alta de manera exitosa','success')
         }else{
-          alert('no se insertó la información, el código del ingrediente ya existe')
+          Swal.fire('Error!','no se insertó la información, el código del ingrediente ya existe','error')
           setProductCode('')
         }
       } else{
-        alert('Error. Revisa la información que llenaste')
+        Swal.fire('Error!','Revisa los campos que llenaste','error')
       }
       setLoading(false)
     }
@@ -678,13 +788,13 @@ const expresiones = {
           </div>
         ) : (
           <div>
-            <div className="p-2 border mt-3">
+            <div className="p-2 border mt-3" id="colors">
               <h2>Llene el formulario</h2>
             </div>
 
             <form
               className="mt-3 row my-3 d-flex justify-content-center border"
-              id="formulario"
+              id="colors"
             >
               <div className="mb-3 form-check m-3 border col-md-10 col-11">
                 <input
@@ -694,12 +804,12 @@ const expresiones = {
                   checked={productonuevo}
                   onChange={handleChangeCh}
                 />
-                <label className="form-check-label" htmlFor="exampleCheck1">
-                  Es un producto nuevo?
+                <label className="form-check-label" htmlFor="exampleCheck1" id="colors2">
+                  Marca si agregas un producto/ingrediente nuevo
                 </label>
               </div>
 
-              <div className=" row d-flex justify-content-center border">
+              <div className=" row d-flex justify-content-center border" id="colors2">
                 {habilitar ? (
                   <h6>No necesitas este menú por ahora ;)</h6>
                 ) : (
@@ -1001,8 +1111,8 @@ const expresiones = {
                     checked={habilitaring}
                     disabled={!habilitar}
                   />
-                  <label className="form-check-label" htmlFor="exampleCheck1">
-                    Se agrega como ingrediente???
+                  <label className="form-check-label" htmlFor="exampleCheck1" id="colors2">
+                    Marca si es un ingrediente nuevo
                   </label>
                 </div>
 

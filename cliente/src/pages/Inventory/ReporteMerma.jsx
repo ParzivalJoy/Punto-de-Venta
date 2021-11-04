@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react'
+import Swal from 'sweetalert2'
 
 
 function ReporteMerma() {
@@ -13,6 +14,7 @@ function ReporteMerma() {
   const[productcode, setProductCode]=useState('')
   const[productdescrip, setProductdescrip]=useState('')
   const[productname, setProductname]=useState('')
+  const[productcost, setProductcost]= useState('')
   const[inicialstock, setInicialstock]= useState('')
   const[productdescripvalid, setProductdescripvalid]= useState(null)
   const[productcantidadvalid, setProductcantidadvalid]= useState(null)
@@ -25,6 +27,7 @@ function ReporteMerma() {
       setProductcantidad('');
       setProductdescrip('');
       setProductunidad('');
+      setProductcost('')
       setProductdescripvalid(null)
       setProductcantidadvalid(null)
       setProductunidadvalid(null)
@@ -72,6 +75,7 @@ function ReporteMerma() {
     setProductCode(data.idproducto);
     setInicialstock(data.cantidadproducto)
     setProductname(data.nombreproducto);
+    setProductcost(data.costoproducto)
   };
 
   const handleActualIngredient = async (actualingredient) =>{
@@ -86,9 +90,22 @@ function ReporteMerma() {
     setProductCode(data.idingrediente);
     setInicialstock(data.cantidadingrediente)
     setProductname(data.nombreingrediente)
+    setProductcost(data.costo)
   }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
-
+const traduccionUnidades= () =>{
+  var unidad='';
+  if(productunidad===1)
+          unidad='kg'
+        else if(productunidad===2)
+          unidad='gramos'
+        else if(productunidad===3)
+          unidad='Litros'
+        else if(productunidad===4)
+          unidad='ml'
+        else unidad='unidades';
+   return unidad;
+}
 /////////////////////////Función para hacer la inserción/////////////////////////////////////////////////
 
 const handleinsert = async (e) =>{
@@ -149,10 +166,34 @@ const handleinsert = async (e) =>{
             const data = await res.json();
             console.log(data);
       }
+        //////////////////////Insercion del movimiento de productos///////////////////////
+        var totalinversion= parseFloat(productcost)* parseFloat(productcantidad)
+        var unidad=traduccionUnidades();
+        var descripcionmov=('Se perdieron '+productcantidad+unidad+ ' de ('+productname+')')
+        var razon='merma'
+        var tipo='salidaInventario'
+        const res9 = await fetch(
+          `http://localhost:5000/inventario/insertInventarioMovimiento`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              totalinversion,
+              descripcionmov,
+              razon,
+              tipo
+            }),
+          }
+        );
+         const data9=await res9.json();
+         console.log(data9)
+
         cleanstates();
-        alert('la merma se ha reportado satisfacoriamente')
+        Swal.fire('Bien!','la merma se ha reportado satisfacoriamente','success')
       }else{
-        alert('No se reportó la merma, revisa los campos que llenaste')
+        Swal.fire('Error','No se reportó la merma, revisa los campos que llenaste','warning')
       }
       
 }
@@ -181,7 +222,7 @@ const validacion = () => {
   }
 };
 const expresiones = {
-	nombre: /^[a-zA-ZÀ-ÿ0-9\s]{1,40}$/, // Letras y espacios, pueden llevar acentos.
+	nombre: /^[a-zA-ZÀ-ÿ0-9\s,]{1,40}$/, // Letras y espacios, pueden llevar acentos.
   codigo:/^[a-zA-Z0-9]{1,40}$/,   //mayusculas, minusculas y numeros
 	numerosfloat:/^[0-9.]{1,20}$/, // 1 a 20 digitos con punto.
 }
@@ -189,13 +230,13 @@ const expresiones = {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
     return (
       <div>
-        <div className="container">
+        <div className="container" id="colors">
           <div className="row d-flex justify-content-center">
-            <h1 className="border p-3">
+            <h1 className="border p-3" id="colors2">
               Llene el formulario para reportar la merma:
             </h1>
             <form className="mt-4 row border border-radius d-flex justify-content-center">
-            <div className=" row d-flex justify-content-center border">
+            <div className=" row d-flex justify-content-center border" id="colors2">
               <h6>Selecciona un producto o ingrediente!</h6>
               <div className="form-floating col-md-4 align-self-center p-3" style={esproducto===1 ? {background: '#CCFFC0'}: {background: 'white'}}>
                 <p className="mb-0">Productos:</p>

@@ -14,12 +14,10 @@ function CardAdd(props) {
 
     return (
     <>
-        <div className="card bg-light mb-3" styles="max-width: 20rem; box-shadow: 0 0 20px #909BA2 ;">
-            <div className="card-body">
+        <div className="card mb-3" styles="max-width: 20rem; box-shadow: 0 0 20px #909BA2 ;">
+            <div className="card-body-user">
                <br/>
-                <button  className="btn btn-outline-light" onClick={handleShow}>
-                <PersonAddIcon className="add-user-icon"/>
-                </button>
+                <PersonAddIcon className="icons add-user-icon" onClick={handleShow}/>
                 <br/>
                 <br/>
                 <Modal
@@ -28,7 +26,7 @@ function CardAdd(props) {
                 backdrop="static"
                 keyboard={false}
                 >
-                <Modal.Header closeButton>
+                <Modal.Header>
                     <Modal.Title><b>Agregar Empleado </b></Modal.Title>
                 </Modal.Header>
                 <form id="formLink"> 

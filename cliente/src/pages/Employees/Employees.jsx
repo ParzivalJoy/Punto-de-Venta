@@ -4,6 +4,7 @@ import CardAdd from './Components/CardAdd'
 import  { useEffect, useState } from 'react'
 import axios from 'axios' //npm i axios
 import '../../styles.scss'
+import Swal from 'sweetalert2'
 
 const baseURL = process.env.REACT_APP_API_URL //npm i dotenv
 
@@ -31,17 +32,24 @@ function Employees() {
         let date = newDate.getDate();
         let month = newDate.getMonth() + 1;
         let year = newDate.getFullYear();
-
         return `${year}${separator}${month<10?`0${month}`:`${month}`}${separator}${date}`
     }
 
     async function saveEmployee(){
-         let fechacontra=getCurrentDate()
+        let fechacontra=getCurrentDate()
         const obj = { nombreempleado,fechacontra, emailempleado, telempleado,dirempleado }
         const { data } = await axios.post(baseURL, obj)
         console.log(data)
         clearInput()
         getEmployees()
+
+        Swal.fire({
+            icon: 'success',
+            title: 'Se agrego el emplado correctamente!',
+            showConfirmButton: false,
+            timer: 1500
+          })
+   
     }
 
     function clearInput(){
@@ -52,33 +60,104 @@ function Employees() {
     }
 
     async function deleteEmployee(idempleado){
-        if(window.confirm('¿seguro que quieres eliminar?')){
+        const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+              confirmButton: 'btn btn-primary',
+              cancelButton: 'btn btn-secondary'
+            },
+            buttonsStyling: false
+          })
+          
+          swalWithBootstrapButtons.fire({
+            title: '¿Estas segur@?',
+            text: "No podrás revertir los cambios después!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Si, eliminalo!',
+            cancelButtonText: 'No, cancela!',
+            reverseButtons: true
+          }).then((result) => {
+            if (result.isConfirmed) {
+              swalWithBootstrapButtons.fire(
+                'Eliminado!',
+                'El empleado ha sido eliminado de forma correcta',
+                'success'
+              )
+              deleteEmployeeAlert(idempleado)
+            } else if (
+              /* Read more about handling dismissals below */
+              result.dismiss === Swal.DismissReason.cancel
+            ) {
+              swalWithBootstrapButtons.fire(
+                'Cancelado',
+                'El empleado aun se encuentra en el sistema',
+                'error'
+              )
+            }
+          })
+
+    }
+
+    async function deleteEmployeeAlert(idempleado){
         const { data } = await axios.delete(baseURL+`/${idempleado}`)
         console.log(data)
         getEmployees()
-        }
     }
 
     async function getEmployee(idempleado){
-        if(window.confirm('¿seguro que quieres actualizar?')){
-        setUpdate(true)
-        const {data} = await axios.get(baseURL+`/${idempleado}`)
-        let nombre =  data.nombreempleado
-        let email =  data.emailempleado
-        let tel = data.telempleado
-        let dir = data.dirempleado
-        setId(idempleado)
-        if (nombreempleado==='')
-            setName(nombre)
-        if (emailempleado==='')
-            setEmail(email)
-        if (telempleado==='')
-            setTel(tel)
-        if (dirempleado==='')
-            setDir(dir)
-        }
-        else
-            setUpdate(false)
+        const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+              confirmButton: 'btn btn-primary',
+              cancelButton: 'btn btn-secondary'
+            },
+            buttonsStyling: false
+          })
+          
+          swalWithBootstrapButtons.fire({
+            title: '¿Estas segur@?',
+            text: "Podrás cambiar los datos más adelante",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Si, modificalo!',
+            cancelButtonText: 'No, cancela!',
+            reverseButtons: true
+          }).then((result) => {
+            if (result.isConfirmed) {
+              swalWithBootstrapButtons.fire(
+                'Modificado!',
+                'Los datos del empleado han sido modificados exitosamente',
+                'success'
+              )
+              getEmployeeAlert(idempleado)
+            } else if (
+              /* Read more about handling dismissals below */
+              result.dismiss === Swal.DismissReason.cancel
+            ) {
+              swalWithBootstrapButtons.fire(
+                'Cancelado',
+                'No se han modificado los datos del empleado',
+                'error'
+              )
+            }
+          })
+    }
+
+    async function getEmployeeAlert(idempleado){
+            setUpdate(true)
+            const {data} = await axios.get(baseURL+`/${idempleado}`)
+            let nombre =  data.nombreempleado
+            let email =  data.emailempleado
+            let tel = data.telempleado
+            let dir = data.dirempleado
+            setId(idempleado)
+            if (nombreempleado==='')
+                setName(nombre)
+            if (emailempleado==='')
+                setEmail(email)
+            if (telempleado==='')
+                setTel(tel)
+            if (dirempleado==='')
+                setDir(dir)
     }
 
     async function updateEmployee(){
@@ -88,10 +167,11 @@ function Employees() {
         clearInput()
         getEmployees()
      }
+     
 
     return (
         
-        <div className="p-3 mb-2 bg-light text-dark" >
+        <div className="p-3 mb-2" >
             <div className='row'>
                 { listEmployees.map(item => (
                  <div className="col-md-3" key={item.idempleado}>

@@ -10,52 +10,54 @@ import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import LogoutIcon from '@mui/icons-material/Logout';
 import SettingsIcon from '@mui/icons-material/Settings';
-import { useHistory } from "react-router-dom";
+import {Link} from 'react-router-dom';
 
 function Sidebar() {
     const user = localStorage.getItem("user")
     const role = localStorage.getItem('role')
-
-    let history = useHistory();
-
-    function logoutapp()
-    {
-        localStorage.removeItem("user")
-        localStorage.removeItem('role')
-        localStorage.removeItem('token')
-        history.push("/login");
-    }
 
     return (
         <div className="sidebar">
             <div className="sidebar-wrapper">
                 <div className="sidebar-profile">
                     <div className="sidebar-img">
-                        <AccountCircleIcon className="profile-icon"/>
+                        <AccountCircleIcon className="icons profile-icon"/>
                     </div>
                     <div className="sidebar-info">
                         <span className="sidebar-info-name">{user}</span>
                         <span className="sidebar-info-ocupation">{role}</span>
                     </div>
-                    <button onClick={logoutapp}><LogoutIcon className="icon-logout"/></button>
+                    <Link to = '/logout' className="link">
+                        <LogoutIcon className="icons icon-logout" />
+                    </Link>
                 </div>
 
                 <div className="sidebarMenu">
                     <ul className="sidebar-list">
                         <li className="sidebar-items active">
-                            <DashboardIcon className="sidebar-icons"/> <span className="sidebar-pages">Dashboard</span>
+                            <Link to = '/dashboard' className= "link">
+                                <DashboardIcon className="icons sidebar-icons"/> 
+                                <span className="sidebar-pages">Dashboard</span>
+                            </Link>
                         </li>
                         <hr/>
                         <li className="sidebar-items">
-                            <AssignmentIndIcon className="sidebar-icons"/> <span className="sidebar-pages">Empleados</span>
+                            <Link to = '/employees' className= "link">
+                                <AssignmentIndIcon className="icons sidebar-icons"/> 
+                                <span className="sidebar-pages">Empleados</span>
+                            </Link>
                         </li>
                         <hr/>
                         <li className="sidebar-items">
-                            <AttachMoneyIcon className="sidebar-icons"/> <span className="sidebar-pages">Ventas</span>
+                            <Link to = '/ventas' className= "link">
+                                <AttachMoneyIcon className="icons sidebar-icons"/> <span className="sidebar-pages">Ventas</span>
+                            </Link>
                         </li>
                         <hr/>
                         <li className="sidebar-items">
-                            <StorageIcon className="sidebar-icons"/> <span className="sidebar-pages">Inventario</span>
+                            <Link to = '/inventory' className= "link">  
+                                <StorageIcon className="icons sidebar-icons"/> <span className="sidebar-pages">Inventario</span>
+                            </Link>
                         </li>
                         <hr/>
                         <li className="sidebar-items">

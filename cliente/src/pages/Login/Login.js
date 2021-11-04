@@ -35,11 +35,11 @@ const Login = () => {
 
   function validateInfo(data) {
     let error={msg:'', type:0}
-    if (values.username==''||values.password=='') {
+    if (values.username === ''||values.password ==='') {
       error.msg= 'Por favor llene ambos campos.'
       error.type=1
     }
-    if (data==0){
+    if (data === 0){
       error.msg='El password o contraseña son inválidos, vuelva a intentar de nuevo.'
       error.type=2
     }
@@ -58,7 +58,7 @@ const Login = () => {
     const obj = {username}
     const {data} = await axios.post(baseURL+'/userEmail',obj)
     console.log(data)
-    if(data=='0'){
+    if(data === '0'){
       let msj='El usuario no se encuentra registrado'
       console.log(msj)
     }
@@ -73,10 +73,10 @@ const Login = () => {
 
     setErrors(validateInfo(1));
     console.log(validateInfo(1))
-    if (errors.type===0)
+    if (errors.type === 0)
     {
       const {data}= await axios.post(baseURL+'/login', values)
-      if (data!=0)
+      if (data !== 0)
       {
         localStorage.setItem("user", data.nombreempleado)
         localStorage.setItem('role',data.nombrecargo)
@@ -104,7 +104,7 @@ const Login = () => {
                 <input className='form-input' type='password' name='password' placeholder='Ingresa tu contraseña' onChange={handleChange} />
                 {errors.msg && <p className="p-pass">{errors.msg}</p>}
                 </div>
-                <button className='btn btn-primary' type='submit'>Iniciar sesión</button>
+                <button className='btn btn-primary' type='submit' >Iniciar sesión</button>
                 <br/><br/>
                 <span className='form-input-login'>
                     <a href='#' onClick={handleShow} align='center'>¿Olvidaste tu contraseña?</a>
