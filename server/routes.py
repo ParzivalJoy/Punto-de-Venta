@@ -1,8 +1,9 @@
-from flask import Flask,request,jsonify #pip install Flask
+from flask import Flask,request, jsonify, send_from_directory #pip install Flask
 import psycopg2
 from psycopg2.extras import RealDictCursor
 from flask_cors import CORS #pip install flask-cors
 import os
+from werkzeug.utils import secure_filename
 
 #JWT libraries
 from flask_jwt_extended import create_access_token
@@ -17,7 +18,7 @@ CORS(app)
 def conexion():
     return psycopg2.connect(
     host="localhost",
-    database="puntoventa",
+    database="puntodeventa",
     user="postgres",
     password="root")
 
@@ -280,13 +281,11 @@ def getEmailUser():
         return jsonify(0)
     return jsonify(row)
 
-
-
 @app.route('/api/complements/<id>',  methods=['GET'])
 def getListComplements(id):
     conn = conexion()
     cur = conn.cursor(cursor_factory=RealDictCursor)
-    cur.execute("SELECT complementos.idcomplemento, nombrecomplemento, preciocomplemento, descripcioncomplemento FROM complementos JOIN productoscomplementos ON productoscomplementos.idproducto = '{0}' AND complementos.idcomplemento = productoscomplementos.idcomplemento".format(id))
+    cur.execute("SELECT idcomplemento, nombrecomplemento, preciocomplemento, descripcioncomplemento FROM complementos WHERE idproducto = '{0}'".format(id))
     rows = cur.fetchall()
     conn.close()
     return jsonify(rows)
@@ -397,6 +396,9 @@ ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 @app.route('/inventario/manejoImgs/<id>', methods=['PUT'])
 def uploadimage(id):
     conn = conexion()
@@ -414,6 +416,18 @@ def uploadimage(id):
         return jsonify('got it: '+filename)
     else:
         return jsonify('extensiones permitidas: jpg, jpeg, png')
+
+@app.route('/inventario/insertInventarioMovimiento', methods=['POST'])
+def insercionMoveInv():
+    conn=conexion()
+    cur=conn.cursor()
+    data=request.json
+    sql="""INSERT INTO movimientos (tipo,razon,descripcion,total,idusuario,fechamovimiento) values(%(tipo)s,%(razon)s,%(descripcionmov)s,%(totalinversion)s,1,NOW())"""
+    cur.execute(sql, data)
+    conn.commit()
+    conn.close()
+    cur.close()
+    return jsonify(msg='movimiento de entrada agregado');
 
 @app.route('/inventario/bringImgs/<filename>')
 def uploaded_file(filename):
@@ -448,6 +462,8 @@ def selectall2(valor):
         cur.execute("SELECT c.nombreproveedor, a.costoproducto,a.precioproducto,a.descripcionproducto, a.nombreproducto, a.idunidad, a.idproducto,b.cantidad,b.fecha,TO_CHAR(b.fecha, 'DD/MM/YYYY') AS fecha FROM productos a LEFT JOIN productosproveedores b ON a.idproducto=b.idproducto LEFT JOIN proveedores c ON c.idproveedor=b.idproveedor ORDER BY b.fecha DESC")
     if valor ==7:
         cur.execute("SELECT idproducto,cantidadmerma,descripcionmerma,nombreproducto,idunidad,fechareporte,TO_CHAR(fechareporte, 'DD/MM/YYYY') AS fechareporteZ FROM reportesMermas ORDER BY fechareporteZ DESC")
+    if valor ==8:
+        cur.execute("SELECT descripcion,total,to_char(fechamovimiento, 'YYYY-MM-DD HH24:MI:SS') As fechamovimiento, usuarios.usuario FROM movimientos JOIN usuarios ON usuarios.idusuario=movimientos.idusuario WHERE (razon='carga' AND fechamovimiento>current_date-interval '5' day) ORDER BY fechamovimiento DESC")
     rows=cur.fetchall()
     conn.close()
     cur.close()
