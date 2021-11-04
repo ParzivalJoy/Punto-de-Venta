@@ -272,7 +272,7 @@ def getEmailUser():
     cur = conn.cursor(cursor_factory=RealDictCursor)
     data=request.json
     print(data)
-    sql="SELECT a.emailempleado FROM empleados a LEFT JOIN usuarios b ON b.idempleado=a.idempleado WHERE usuario= '{0}'".format(data['username'])
+    sql="SELECT a.emailempleado, a.nombreempleado,  b.contrasena FROM empleados a LEFT JOIN usuarios b ON b.idempleado=a.idempleado WHERE usuario= '{0}'".format(data['username'])
     cur.execute(sql)
     row = cur.fetchone()
     conn.close()
