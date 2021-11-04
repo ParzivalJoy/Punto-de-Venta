@@ -17,7 +17,7 @@ import './Themes.scss'
 import PacmanLoader from "react-spinners/PacmanLoader";
 import AperturaCaja from './pages/Accounting/AperturaCaja'
 import FinalizarCierre from './pages/Accounting/FinalizarCierre'
-
+//Comentario
 
 function App() {
 
