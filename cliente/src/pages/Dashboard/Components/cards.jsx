@@ -86,7 +86,6 @@ export default function Cards() {
                     <NotificationsIcon className="icons"/>
                     <span className="card-money-title">{productnot}</span>
                 </div>
-
             </div>
             <div className="card card-item">
                 <span className="card-title">Clientes afiliados</span>

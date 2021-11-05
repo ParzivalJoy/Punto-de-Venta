@@ -17,6 +17,10 @@ import './Themes.scss'
 import PacmanLoader from "react-spinners/PacmanLoader";
 import AperturaCaja from './pages/Accounting/AperturaCaja'
 import FinalizarCierre from './pages/Accounting/FinalizarCierre'
+import MenuContabilidad from './pages/Accounting/MenuContabilidad'
+import BarraLateral from './pages/Accounting/BarraLateral'
+import CierreCaja from './pages/Accounting/CierreCaja'
+import { Link } from 'react-router-dom';
 
 function App() {
 
@@ -88,9 +92,48 @@ function App() {
           <ProtectedRoute exact path = "/inventory/report" component={ReporteMerma} />
           <ProtectedRoute exact path = "/ventas" component={Ventas} />
           <ProtectedRoute exact path = "/product/:id" component={Product} />
-          <ProtectedRoute exact path="/AperturaCaja" component={AperturaCaja} />
-          
-          <Route exact path ="/logout"><Logout/></Route>  
+          <ProtectedRoute exact path="/AperturaCaja" component={AperturaCaja} /> 
+          <ProtectedRoute exact path="/ReporteCierre" component={FinalizarCierre}/>
+          <Route exact path="/accounting">
+            {huboapertura === 'true' ? (
+              <div className="container">
+                <MenuContabilidad />
+                <div className="row my-2">
+                  <div
+                    className="card col-md-3 rounded-3 p-2 m-3"
+                    id="colors"
+                  >
+                    <BarraLateral />
+                  </div>
+                  <div
+                    className="card col-md-8 rounded-3 p-2 mx-2 my-3"
+                    id="colors"
+                  >
+                    <CierreCaja />
+                  </div>
+                </div>
+              </div>
+            ) : huboapertura==='false' ? (
+              <div className="container">
+                <div className="d-flex justify-content-center" id="colors">
+                  <h1>Primero haz el apertura de caja</h1>
+                </div>
+                <div className="row">
+                  <div className="d-flex justify-content-center m-3">
+                    <Link to="/AperturaCaja">
+                          <button className="p-2">Hacer apertura de caja</button>
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            ) : (<div className="d-flex justify-content-center align-items-center" id="cargascreen">
+                  <div>
+                      <PacmanLoader size={30} color={"#123adc"} loading={loading}  />
+                  </div>
+                </div>
+             )}
+          </Route>
+          <Route exact path ="/logout"><Logout/></Route> 
         </Switch>
         </BrowserRouter>
     </div>

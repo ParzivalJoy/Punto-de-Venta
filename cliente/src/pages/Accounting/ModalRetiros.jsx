@@ -1,7 +1,7 @@
 import React,{useState} from 'react'
 import Modal from 'react-modal'
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faMoneyBill} from '@fortawesome/free-solid-svg-icons'
+//import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+//import {faMoneyBill} from '@fortawesome/free-solid-svg-icons'
 import mil from './Components/imgs/billetemil.jpg'
 import quinientos from './Components/imgs/billete500.jpg'
 import doscientos from './Components/imgs/billete200.png'
@@ -13,8 +13,10 @@ import cinco from './Components/imgs/5pesos.jpg'
 import dos from './Components/imgs/2Pesos.jpg'
 import uno from './Components/imgs/1Peso.jpg'
 import cincuentac from './Components/imgs/50Centavos.jpg'
+import MoneyOffIcon from '@mui/icons-material/MoneyOff';
 //import './Modal.css'
 import Swal from 'sweetalert2'
+import '../../styles.scss'
 
 const ModalRetiros = () => {
 
@@ -82,10 +84,12 @@ const ModalRetiros = () => {
   return (
     <div>
       <div>
-        <button onClick={() => setShowretirar(true)}>
-          <FontAwesomeIcon icon={faMoneyBill} id="icons" />
-          <p id="mtext">Realizar Retiros</p>
-        </button>
+     <div className="card card-item" onClick={() => setShowretirar(true)}>
+                <span className="card-title">Realizar Retiros</span>
+                <div className="card-money">
+                    <MoneyOffIcon className="icons"/>
+                </div>
+        </div>
       </div>
       <Modal isOpen={showRetirar} ariaHideApp={false}>
         <div className="row" id="modales">
@@ -137,7 +141,7 @@ const ModalRetiros = () => {
             <div className="p-2">
               <button
                 type="submit"
-                className="btn btn-info p-2"
+                className="btn btn-primary p-2"
                 disabled={lock}
                 onClick={handleRetiro}
                 onMouseOver={handleValid}
@@ -147,7 +151,7 @@ const ModalRetiros = () => {
             </div>
             <div className="p-2">
               <button
-                className="btn btn-danger p-2"
+                className="btn btn-secondary p-2"
                 onClick={handleCantidadTotal}
               >
                 Cancelar

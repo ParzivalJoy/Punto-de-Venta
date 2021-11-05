@@ -1,6 +1,4 @@
 import React, {useState, useEffect} from 'react'
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faRedo} from '@fortawesome/free-solid-svg-icons'
 //import './Contabilidad.css'
 
 function BarraLateral() {
@@ -121,7 +119,7 @@ function BarraLateral() {
     return (
       <div className="row">
         <div className="d-flex justify-content-center">
-             <button onClick={handleUltimoActualCierre}><FontAwesomeIcon icon={faRedo} id="icons" />Actualizar Resumen</button>
+             <button onClick={handleUltimoActualCierre} className="btn btn-primary">Actualizar Resumen</button>
         </div>
         <div className="col-12 p-1">
           <h3>Resumen de caja</h3>

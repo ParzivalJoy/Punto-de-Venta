@@ -1,10 +1,12 @@
 import React,{useState} from 'react'
 import Modal from 'react-modal'
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faEye} from '@fortawesome/free-solid-svg-icons'
+//import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+//import {faEye} from '@fortawesome/free-solid-svg-icons'
 import Observacion from './Components/imgs/observaciones.jpg'
 //import './Modal.css'
 import Swal from 'sweetalert2'
+import NoteAltIcon from '@mui/icons-material/NoteAlt';
+import '../../styles.scss'
 
 const ModalCambio = () => {
 
@@ -74,12 +76,12 @@ const ModalCambio = () => {
 
   return (
     <div>
-      <div>
-        <button onClick={() => setShowobservaciones(true)}>
-                <FontAwesomeIcon icon={faEye} id="icons"/>
-                <p id="mtext">Observaciones de cierre</p>
-        </button>
-      </div>
+      <div className="card card-item" onClick={() => setShowobservaciones(true)}>
+                <span className="card-title">Observaciones de cierre</span>
+                <div className="card-money">
+                    <NoteAltIcon className="icons"/>
+                </div>
+            </div>
       <Modal isOpen={showobservaciones} ariaHideApp={false}>
         <div className="row" id="modales">
           <h4 className="bg-dark text-white">Escribe alguna observacion que tengas para el cierre de hoy:</h4>

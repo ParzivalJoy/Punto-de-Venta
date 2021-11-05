@@ -1,7 +1,7 @@
 import React,{useState} from 'react'
 import Modal from 'react-modal'
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faCoins} from '@fortawesome/free-solid-svg-icons'
+//import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+//import {faCoins} from '@fortawesome/free-solid-svg-icons'
 import mil from './Components/imgs/billetemil.jpg'
 import quinientos from './Components/imgs/billete500.jpg'
 import doscientos from './Components/imgs/billete200.png'
@@ -13,8 +13,10 @@ import cinco from './Components/imgs/5pesos.jpg'
 import dos from './Components/imgs/2Pesos.jpg'
 import uno from './Components/imgs/1Peso.jpg'
 import cincuentac from './Components/imgs/50Centavos.jpg'
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 //import './Modal.css'
 import Swal from 'sweetalert2'
+import '../../styles.scss'
 
 const ModalCambio = () => {
 
@@ -83,12 +85,12 @@ const ModalCambio = () => {
 
   return (
     <div>
-      <div>
-        <button onClick={() => setShowcambio(true)}>
-                <FontAwesomeIcon icon={faCoins} id="icons"/>
-                <p id="mtext">Añadir un Cambio</p>
-        </button>
-      </div>
+      <div className="card card-item" onClick={() => setShowcambio(true)}>
+                <span className="card-title">Añadir cambio</span>
+                <div className="card-money">
+                    <AttachMoneyIcon className="icons"/>
+                </div>
+            </div>
       <Modal isOpen={showCambio} ariaHideApp={false}>
         <div className="row" id="modales">
           <h2 className="bg-dark text-white">Inserta la cantidad de cambio:</h2>

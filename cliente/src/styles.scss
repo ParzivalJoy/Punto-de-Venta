@@ -1004,3 +1004,36 @@ thead{
 .btn-charge{
   margin: 20px;
 }
+
+
+/*------------Modales-----------*/
+img{
+  width:35vh;
+}
+
+#moneda{
+  width:5rem;
+  height:5rem;
+}
+
+@media(max-width: 1150px){
+  img{
+      width:30vh;
+  }
+}
+
+@media(max-width: 800px){
+  img{
+      width:23vh;
+  }
+}
+
+@media(max-width: 450px){
+  #moneda{
+      width:4rem;
+      height:4rem;
+  }
+  img{
+      width:20vh;
+  }
+}

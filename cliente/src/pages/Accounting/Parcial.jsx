@@ -1,6 +1,6 @@
 import React,{useState} from 'react'
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faFileInvoiceDollar} from '@fortawesome/free-solid-svg-icons'
+//import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+//import {faFileInvoiceDollar} from '@fortawesome/free-solid-svg-icons'
 import mil from './Components/imgs/billetemil.jpg'
 import quinientos from './Components/imgs/billete500.jpg'
 import doscientos from './Components/imgs/billete200.png'
@@ -15,6 +15,8 @@ import cincuentac from './Components/imgs/50Centavos.jpg'
 //import './Modal.css'
 import Modal from 'react-modal'
 import Swal from 'sweetalert2'
+import ContentCutIcon from '@mui/icons-material/ContentCut';
+import '../../styles.scss'
 
 
 function Parcial() {
@@ -85,11 +87,11 @@ function Parcial() {
     return (
       <div>
         <div>
-          <div>
-            <button onClick={()=>setShowparcial(true)}>
-              <FontAwesomeIcon icon={faFileInvoiceDollar} id="icons" />
-              <p id="mtext">Realizar un Parcial</p>
-            </button>
+          <div className="card card-item" onClick={()=>setShowparcial(true)}>
+                <span className="card-title">Realizar parcial</span>
+                <div className="card-money">
+                    <ContentCutIcon className="icons"/>
+                </div>
           </div>
           <Modal isOpen={showParcial} ariaHideApp={false}>
             <div className="row" id="modales">
