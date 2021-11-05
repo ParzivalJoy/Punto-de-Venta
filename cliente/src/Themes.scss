@@ -1,5 +1,5 @@
 [data-theme="light"]{
-    --main-color: #fff; //Color de fondo
+    --main-color: #ffffff; //Color de fondo
     --div-color: #fafafb; //Color secundario de fondo (sidebar, headers, cards, etc...)
     --txt-color: #202020; //Color del texto
     --box-shadow-color: rgba(149, 157, 165, 0.2) 0px 8px 24px; //Sombra para second-light 
@@ -18,6 +18,22 @@
     --div-color: #423d33;//Color secundario de fondo (sidebar, headers, cards, etc...)
     --input-color:#625d52;
     --txt-color: #faf9f7;//Color del texto
+    --box-shadow-color: rgba(0, 0, 0, 0.2) 0px 5px 10px; //Sombra para second-dark
+}
+
+[data-theme="purple"]{
+    --main-color: #573f4c;//Color de fondo
+    --div-color: #e4afc5;//Color secundario de fondo (sidebar, headers, cards, etc...)
+    --input-color:#933469;
+    --txt-color: #fafafb;//Color del texto
+    --box-shadow-color: rgba(0, 0, 0, 0.2) 0px 5px 10px; //Sombra para second-dark
+}
+
+[data-theme="red-dark"]{
+    --main-color: #2d132c;//Color de fondo
+    --div-color: #5f112a;//Color secundario de fondo (sidebar, headers, cards, etc...)
+    --input-color:#c72c41;
+    --txt-color: #fafafb;//Color del texto
     --box-shadow-color: rgba(0, 0, 0, 0.2) 0px 5px 10px; //Sombra para second-dark
 }
 

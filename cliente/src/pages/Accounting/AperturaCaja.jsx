@@ -178,32 +178,24 @@ function AperturaCaja() {
     return (
       <div className="container" id="layApertura">
         <div className="row d-flex justify-content-center">
-          <div className="row col-md-8 col-12">
+          <div className="row col-12">
           <form>
             <div className="card d-flex" id="colors">
               <div className="row">
-              <div className="col-md-6 mt-3">
-                <h2>Apertura de caja</h2>
+              <div className="col-md-8 mt-3">
+                <h4>Apertura de caja</h4>
               </div>
-              <div className="col-md-4 mt-3">
-                <h2>{fechaactual}</h2>
+              <div className="col-md-2 mt-3">
+                <h5>{fechaactual}</h5>
               </div>
               </div>
               
             </div>
             
-            <div className="d-flex justify-content-center" id="colors">
-              <div className="col-md-4 col-12">
-                <h4>Saldo de apertura</h4>
-                
-                <input
-                  type="text"
-                  className="form-control"
-                  id="helpApertura"
-                  aria-describedby="helpApertura"
-                  value={montoapertura}
-                  onChange={(e)=>setMontoapertura(e.target.value)}
-                />
+            <div className="card" id="colors">
+              <div className="col-md-11">
+                <h4>Saldo de apertura</h4>             
+                <input type="text" className="form-control" id="helpApertura" aria-describedby="helpApertura" value={montoapertura} onChange={(e)=>setMontoapertura(e.target.value)}/>
                 <div id="helpApertura" className="form-text">
                     {cantidadaperturavalid === 'false' ? (
                         <p className="text-danger">
@@ -219,15 +211,15 @@ function AperturaCaja() {
               </div>
             </div>
 
-            <div className="d-flex justify-content-center border">
-              <div className="col-md-4 col-12 m-2" id="colors2">
+            <div className="">
+              <div className="col-md-4 m-2" id="colors2">
                 <h4>Saldo en caja:${saldocaja}</h4>
                 {
                   saldocaja>0 ? <TrendingUpIcon id="icons" color="green"/>
                   : <TrendingDownIcon id="icons" color="red"/>
                 }
               </div>
-              <div className="col-md-4 col-12 m-2" id="colors2">
+              <div className="col-md-4 m-2" id="colors2">
                 <h4>Pérdidas y ganancias: ${gananciasperdidas}</h4>
                 {
                   gananciasperdidas>0 ? <TrendingUpIcon id="icons" color="green"/>
@@ -235,32 +227,31 @@ function AperturaCaja() {
                 }
               </div>
             </div>
-
-            <div className="border">
+            <div className="card">
               <div className="d-flex justify-content-center">
-                <div className="col-md-6 col-12 m-2 border" id="colors2">
+                <div className="col-md-6 col-12 m-2" id="colors2">
                   <h3>Resumen de cierre anterior:</h3>
                 </div>
               </div>
               <div className="d-flex justify-content-center">
-                <div className="col-md-4 col-12 m-2 border" id="colors2">
+                <div className="col-md-4 col-12 m-2" id="colors2">
                   <h4>Efectivo: ${ventasefectivo}</h4>
                 </div>
               </div>
               <div className="d-flex justify-content-center">
-                <div className="col-md-4 col-12 m-2 border" id="colors2">
+                <div className="col-md-4 col-12 m-2" id="colors2">
                   <h4>Tarjeta: ${ventastarjetas}</h4>
                 </div>
               </div>
               <div className="d-flex justify-content-center">
-                <div className="col-md-4 col-12 m-2 border" id="colors2">
+                <div className="col-md-4 col-12 m-2" id="colors2">
                   <h4>Vales de despensa: ${ventasvales}</h4>
                 </div>
               </div>
             </div>
             <div className="d-flex justify-content-center my-5">
-              <button type="submit" onClick={handleApertura} onMouseOver={handleValid} className="m-2 p-2">Abrir sesión</button>
-              <button className="m-2 p-2">Iniciar Operaciones</button>
+              <button type="submit" onClick={handleApertura} onMouseOver={handleValid} className="m-2 p-2 btn btn-primary">Abrir sesión</button>
+              <button className="m-2 p-2 btn btn-primary">Iniciar Operaciones</button>
             </div>
             </form>
           </div>

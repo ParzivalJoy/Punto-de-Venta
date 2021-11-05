@@ -32,6 +32,10 @@ function App() {
       document.documentElement.setAttribute("data-theme", "dark-blue");
     }else if(tema === 3){
       document.documentElement.setAttribute("data-theme", "dark");
+    }else if(tema === 4){
+      document.documentElement.setAttribute("data-theme", "purple");
+    }else if(tema === 5){
+      document.documentElement.setAttribute("data-theme", "red-dark");
     }
 
     if (color === 1){

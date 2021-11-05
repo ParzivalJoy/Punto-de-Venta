@@ -776,6 +776,7 @@ const expresiones = {
     },[habilitar])
 
     return (
+      <div className="add">
       <div className="container">
         {loading === true ? (
           <div
@@ -796,14 +797,8 @@ const expresiones = {
               className="mt-3 row my-3 d-flex justify-content-center"
               id="colors"
             >
-              <div className="mb-3 form-check m-3 border col-md-10 col-11">
-                <input
-                  type="checkbox"
-                  className="form-check-input"
-                  id="exampleCheck1"
-                  checked={productonuevo}
-                  onChange={handleChangeCh}
-                />
+              <div className="mb-3 form-check m-3 col-md-10 col-11">
+                <input type="checkbox"className="form-check-input" id="exampleCheck1" checked={productonuevo} onChange={handleChangeCh}/>
                 <label className="form-check-label" htmlFor="exampleCheck1" id="colors2">
                   Marca si agregas un producto/ingrediente nuevo
                 </label>
@@ -964,9 +959,9 @@ const expresiones = {
                   )}
                 </div>
               </div>
-
-              <p className="mb-0 offset-md-2">Unidad:</p>
-              <div className="form-floating col-md-4 align-self-center mb-3">
+                    <div className="card col-md-4 p-3">
+              <p className="mb-0">Unidad:</p>
+              <div className="">
                 <select
                   className="form-select"
                   id="floatingSelect"
@@ -982,8 +977,8 @@ const expresiones = {
                   <option value="6">-</option>
                 </select>
               </div>
-
-              <div className="mb-3 col-md-4 col-12 offset-md-2">
+              </div>
+              <div className="card mb-3 col-md-4 offset-md-2">
                 <label htmlFor="exampleInputStock1" className="form-label">
                   Stock:
                 </label>
@@ -1004,7 +999,7 @@ const expresiones = {
                 </div>
               </div>
 
-              <div className="mb-3 col-md-4 col-12">
+              <div className="card mb-3 col-md-4">
                 <label htmlFor="exampleInputStocknotif1" className="form-label">
                   Stock de notificación:
                 </label>
@@ -1025,7 +1020,7 @@ const expresiones = {
                 </div>
               </div>
 
-              <div className="mb-3 col-md-4 offset-md-2">
+              <div className="card mb-3 col-md-4 offset-md-2">
                 <label htmlFor="exampleInputProveedor1" className="form-label">
                   Proveedor:
                 </label>
@@ -1044,7 +1039,28 @@ const expresiones = {
                 </div>
               </div>
 
-              <div className="mb-3 col-md-4">
+            
+                  <div className="row">
+                    <div className="col-md-3 offset-md-1">
+                    <img
+                    src={ (imagebinary===null) ? imgavailable : imagebinary}
+                    className="img-thumbnail"
+                    id="showimg1"
+                  />
+                  <br/>
+                  <br/>
+                  <input type="file" className="form-control" id="file" name="file" accept="image/*" onChange={(e)=>convertiraBase64(e.target.files)} />
+                  <label className="form-label text-secondary" htmlFor="file">
+                    {
+                      (productimagenvalid==='false') ?
+                       <p className="text-danger">Inserta imagenes, no archivos</p>
+                       : (productimagenvalid==='true') ?
+                       <p>Bien</p>
+                       : <p>Agrega una imagen para tu producto</p>
+                    }
+                  </label>
+                    </div>
+                    <div className="card mb-5 col-md-7">
                 <label htmlFor="exampleInputCategoria" className="form-label">
                   Categoria:
                 </label>
@@ -1063,45 +1079,16 @@ const expresiones = {
                     <p>Bebida, comida rápida, tu elige la categoria!</p>
                   )}
                 </div>
-              </div>
-
-              <div className="form-floating my-3  offset-md-1 col-md-5">
                 <textarea
                   className="form-control"
-                  placeholder="Leave a comment here"
+                  placeholder="Descripción del producto"
                   id="floatingTextarea2"
-                  style={{ height: "100px" }}
+                  style={{ height: "200px" }}
                   value={productdescrip}
                   onChange={(e) => setProductdescrip(e.target.value)}
                 />
-                <label htmlFor="floatingTextarea2">
-                  Descripción del producto:
-                </label>
               </div>
-
-                <div className="col-md-4 col-12">
-                  <img
-                    src={ (imagebinary===null) ? imgavailable : imagebinary}
-                    className="img-thumbnail"
-                    id="showimg1"
-                  />
-                  <label className="form-check-label text-secondary" htmlFor="showimg1">
-                    Si agregaste una imagen a tu producto, aquí se mostrará
-                  </label>
-                </div>
-                <div className="col-md-5 offset-md-1 col-12">
-                  <input type="file" className="form-control" id="file" name="file" accept="image/*" onChange={(e)=>convertiraBase64(e.target.files)} />
-                  <label className="form-label text-secondary" htmlFor="file">
-                    {
-                      (productimagenvalid==='false') ?
-                       <p className="text-danger">Inserta imagenes, no archivos</p>
-                       : (productimagenvalid==='true') ?
-                       <p>Bien</p>
-                       : <p>Agrega una imagen para tu producto</p>
-                    }
-                  </label>
-                </div>
-
+                  </div>
               <div className="col-11 d-flex justify-content-center my-3">
                   <input
                     type="checkbox"
@@ -1120,7 +1107,7 @@ const expresiones = {
                 <div className="mx-2 my-4">
                   <button
                     type="submit"
-                    className="btn btn-info"
+                    className="btn btn-primary"
                     disabled={blockbutton}
                     onMouseOver={validacion}
                     onClick={ !habilitaring ? handleSubmitInsertion1 : handleSubmitInsertion2}
@@ -1132,6 +1119,7 @@ const expresiones = {
             </form>
           </div>
         )}
+      </div>
       </div>
     );
 }
