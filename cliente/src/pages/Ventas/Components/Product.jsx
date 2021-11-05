@@ -2,7 +2,6 @@ import React, {useState, useEffect} from 'react'
 import {useParams} from 'react-router-dom'
 import Header from './Header'
 import SearchIcon from '@mui/icons-material/Search'
-import imagen from '../../../assets/sin-imagen.jpg'
 import axios from 'axios'
 import Carrito from './Carrito'
 import { useHistory } from "react-router-dom";
@@ -21,6 +20,7 @@ export default function Product() {
     const [productName, setProductName] = useState('')
     const [productDescr, setProductDescr] = useState('')
     const [productPrice, setProductPrice] = useState('')
+    const[imagebinary, setImagebinary] = useState(null)
 
     const [complementlist, setComplementList] = useState([])
     const [modifierlist, setModifierList] = useState([])
@@ -31,6 +31,24 @@ export default function Product() {
         setProductName(data.nombreproducto)
         setProductDescr(data.descripcionproducto)
         setProductPrice(data.precioproducto)
+
+        var imgblob= data.imagebproducto;
+        if(imgblob===null){
+            const resb = await fetch(
+                `http://localhost:5000/inventario/bringImgs/sin-imagen.jpg`
+              );
+              const datab = await resb.blob();
+              var sauce= URL.createObjectURL(datab)
+              setImagebinary(sauce)
+          }else{
+            const resb = await fetch(
+              `http://localhost:5000/inventario/bringImgs/${imgblob}`
+            );
+            const datab = await resb.blob();
+            var sauce= URL.createObjectURL(datab)
+            setImagebinary(sauce)
+          }
+          console.log(imagebinary)
 
     }
 
@@ -130,7 +148,6 @@ export default function Product() {
           
     
     function addCart(){
-
         if(localStorage["productdatas"]){
             //Guarda los datos de localstorage en temp
             var ptemp = JSON.parse(localStorage["productdatas"])
@@ -139,11 +156,11 @@ export default function Product() {
             var carrito = length + 1
             //Push a data con los datos en localstorage
             ptemp.map(item => (
-                data.push({idcarrito: item.idcarrito, idproducto: item.idproducto, nombreproducto: item.nombreproducto, precioproducto: item.precioproducto})
+                data.push({idcarrito: item.idcarrito, idproducto: item.idproducto, nombreproducto: item.nombreproducto, precioproducto: item.precioproducto, imagen: item.imagen})
             ))
 
             //Push a data para guardar los valores
-            data.push({idcarrito: carrito, idproducto: params.id, nombreproducto: productName, precioproducto: productPrice})
+            data.push({idcarrito: carrito, idproducto: params.id, nombreproducto: productName, precioproducto: productPrice, imagen: imagebinary})
             console.log('Primer push:',data)
 
             //Se guarda data en localstore mydatas
@@ -151,7 +168,7 @@ export default function Product() {
         }else{
             carrito = 1
             //Push a data para guardar los valores
-            data.push({idcarrito: carrito, idproducto: params.id, nombreproducto: productName, precioproducto: productPrice})
+            data.push({idcarrito: carrito, idproducto: params.id, nombreproducto: productName, precioproducto: productPrice, imagen: imagebinary})
             console.log('Push localstore limpio:',data)
 
             //Se guarda data en localstore mydatas
@@ -264,8 +281,8 @@ export default function Product() {
             </div>
             <div className="row">
                 <div className="col-7">
-                    <div className="card">
-                        <img src={imagen} className="product-image" />
+                    <div className="card image-card">
+                        <img src={imagebinary} className="product-image" />
                     </div>
                     <div className="card">
                         <span className="product-name">{productName}</span>

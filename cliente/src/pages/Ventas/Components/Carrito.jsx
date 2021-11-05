@@ -60,32 +60,32 @@ export default function Carrito() {
             <div className="card products-cart"> 
             {productdata.map(item =>(
                 <div className="card">
-                    <span className="product-details-name">{item.nombreproducto}</span>
-                    {complementdata.map(comp =>(
-                        <div>
-                            {(item.idcarrito === comp.idcarrito) ? 
-                            <span className="product-descr">{comp.nombre}</span> 
-                            : '' }                         
-                        </div>
-                        
-                    ))}
-                    {modifierdata.map(mod =>(
-                        <div>
-                            {(item.idcarrito === mod.idcarrito) ? 
-                            <span className="product-descr">{mod.nombre}</span>   
-                            : '' }                  
-                        </div>
-                   
-                    ))}
-                    {multipledata.map(comp =>(
-                        <div>
-                            {(item.idcarrito === comp.idcarrito) ? 
-                            <span className="product-descr">{comp.nombre}</span>    
-                            : '' }                        
-                        </div>
+                <span className="product-details-name">{item.nombreproducto}</span>
+                {complementdata.map(comp =>(
+                    <div>
+                        {(item.idcarrito === comp.idcarrito) ? 
+                        <span className="product-descr">{comp.nombre}</span> 
+                        : '' }                         
+                    </div>
+                    
+                ))}
+                {modifierdata.map(mod =>(
+                    <div>
+                        {(item.idcarrito === mod.idcarrito) ? 
+                        <span className="product-descr">{mod.nombre}</span>   
+                        : '' }                  
+                    </div>
+               
+                ))}
+                {multipledata.map(comp =>(
+                    <div>
+                        {(item.idcarrito === comp.idcarrito) ? 
+                        <span className="product-descr">{comp.nombre}</span>    
+                        : '' }                        
+                    </div>
 
-                    ))}
-                </div>  
+                ))}
+            </div>  
             ))}
             </div>
             <div className="input-cart">

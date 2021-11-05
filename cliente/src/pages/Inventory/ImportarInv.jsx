@@ -323,6 +323,7 @@ export default function ImportarInv() {
   };
 
   return (
+    <div className="import">
     <div className="container">
       {loading === true ? (
         <div
@@ -335,15 +336,12 @@ export default function ImportarInv() {
         </div>
       ) : (
         <div className="row py-3">
-          <div className="py-2 m-3 border" id="colors">
-            <h1>Importa tus inventarios de un Excel!</h1>
+          <div className="card py-2 m-3" id="colors">
+            <h4>Importa tus inventarios de un Excel!</h4>
           </div>
           <div id="colors">
-            <h5>Instrucciones:</h5>
-          </div>
-          <div id="colors">
-          <div className="m-2 border">
-            <h6>1. Recuerda que tu excel debe llevar el siguiente formato:</h6>
+          <div className="card">
+            <h6>Recuerda que tu excel debe llevar el siguiente formato:</h6>
             <div className="d-flex justify-content-center">
               <img
                 src={formato}
@@ -351,37 +349,25 @@ export default function ImportarInv() {
                 alt="formato del excel"
               />
             </div>
+            <div className="m-2">
+            <h6>Las equivalencias de las unidades son: 1.Kg, 2.gramos, 3.Litros,4.Mililitros, 5.Unidad</h6>
           </div>
-          <div className="m-2 border">
-            <h6>
-              Las equivalencias de las unidades son: 1.Kg, 2.gramos, 3.Litros,
-              4.Mililitros, 5.Unidad
-            </h6>
           </div>
-          <div className="py-2 m-2 border">
-            <h6>2.Carga tu archivo:</h6>
+    
+          <div className="card py-2 m-2">
+            <h6>Carga tu archivo:</h6>
             <input
               type="file"
               accept=".xlsx"
-              className="form-control"
+              className="form-control file-control"
               onChange={importExcel}
             />
-          </div>
-          <div className="py-2 m-3 border">
-            <h6>
-              3.Presiona el botón para mostrar la información en la tabla:
-            </h6>
-            <button className="btn btn-outline-dark" onClick={showProducts}>
+            <button className="btn btn-primary btn-charge" onClick={showProducts}>
               Cargar información en tabla
             </button>
           </div>
 
-          <div className="border">
-            <h6>
-              4.Presiona la casilla si lo que se importan son ingredientes y no
-              productos que se venderán
-            </h6>
-
+          <div className="card">
             <div className="mb-3 form-check m-3 col-md-10 col-11 d-flex justify-content-center">
               <input
                 type="checkbox"
@@ -391,18 +377,18 @@ export default function ImportarInv() {
                 onChange={handleImportIngredients}
               />
               <label className="form-check-label" htmlFor="exampleCheck1">
-                Se agrega como ingrediente???
+                  ¿Los datos que se importarán son ingredientes? Si es el caso, marca la casilla
               </label>
             </div>
           </div>
 
-          <div className="m-2 border">
+          <div className="card m-2">
             <h6>
-              5.Si la información que quieres importar es correcta, presiona
+              Si la información que quieres importar es correcta, presiona
               este botón para insertar la información:
             </h6>
             <button
-              className="btn btn-outline-dark"
+              className="btn btn-primary btn-charge"
               disabled={registrarhab}
               onClick={importInf}
             >
@@ -411,7 +397,7 @@ export default function ImportarInv() {
           </div>
 
           <div className="col-12 table-responsive">
-            <table className="table bg-white rounded shadow-sm table-hover">
+            <table className="table rounded shadow-sm table-hover">
               <thead>
                 <tr>
                   <th scope="col">Código</th>
@@ -453,6 +439,7 @@ export default function ImportarInv() {
         </div>
       </div>
       )}
+    </div>
     </div>
   );
 }

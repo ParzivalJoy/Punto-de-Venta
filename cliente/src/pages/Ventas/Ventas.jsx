@@ -16,6 +16,7 @@ export default function Ventas() {
     const [ListCategories, setCategories] = useState([])
     const [category, setCategory] = useState('Categorias')
     const [search, setSearch] = useState('')
+   
 
 
     async function getAllProducts(){
@@ -23,7 +24,9 @@ export default function Ventas() {
         clear()
         setCategory('Categorias')
         setAllProducts(data)
+        
     }
+
 
     async function getCategories(){
         const {data} = await axios.get('http://localhost:5000/api/sales/categories')
@@ -136,10 +139,11 @@ export default function Ventas() {
                         </div>
                     </div>
                     <div className="card catalogue-card">
+                        <div className="row">
                         {ListAllProducts.map(item => (
-                            <div className="card product-card">
+                            <div className="card product-card col-5">
                                 <div className="row">
-                                    <div className="col-6 product-info">
+                                    <div className="col-12 product-info">
                                         <span className="product-name">{item.nombreproducto}</span>
                                         <span className="product-descr">{item.descripcionproducto}</span>
                                         <br/>
@@ -149,14 +153,11 @@ export default function Ventas() {
                                                 Agregar
                                         </Link>     
                                     </div>   
-                                    <div className="col-6 product-inputs">
-                                        <img src={imagen} className="product-image" />
-                                        
-                                    </div>
                                 </div>
                                 <hr/>
                             </div>
                         ))}
+                    </div>
                     </div>
                 </div>
                 <div className="col-5">

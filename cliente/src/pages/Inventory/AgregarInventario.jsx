@@ -788,12 +788,12 @@ const expresiones = {
           </div>
         ) : (
           <div>
-            <div className="p-2 border mt-3" id="colors">
-              <h2>Llene el formulario</h2>
+            <div className="card p-2 mt-3" id="colors">
+              <h4>Llene el formulario</h4>
             </div>
 
             <form
-              className="mt-3 row my-3 d-flex justify-content-center border"
+              className="mt-3 row my-3 d-flex justify-content-center"
               id="colors"
             >
               <div className="mb-3 form-check m-3 border col-md-10 col-11">
@@ -809,14 +809,14 @@ const expresiones = {
                 </label>
               </div>
 
-              <div className=" row d-flex justify-content-center border" id="colors2">
+              <div className="row d-flex justify-content-center" id="colors2">
                 {habilitar ? (
                   <h6>No necesitas este menú por ahora ;)</h6>
                 ) : (
                   <h6>Selecciona un producto o ingrediente!</h6>
                 )}
                 <div
-                  className="form-floating col-md-4 align-self-center p-3"
+                  className="card col-md-4 p-3"
                   style={
                     esproducto === 1
                       ? { background: "#CCFFC0" }
@@ -844,7 +844,7 @@ const expresiones = {
                 </div>
 
                 <div
-                  className="form-floating col-md-4 offset-md-2 align-self-center p-3"
+                  className="card col-md-4 offset-md-2 p-3"
                   style={
                     esproducto === 2
                       ? { background: "#CCFFC0" }
@@ -880,7 +880,7 @@ const expresiones = {
                 )}
               </div>
 
-              <div className="mb-3 col-md-4 mt-2">
+              <div className="card mb-3 col-md-4 mt-2">
                 <label htmlFor="exampleInputNuevoP1" className="form-label">
                   Nombre:
                 </label>
@@ -901,7 +901,7 @@ const expresiones = {
                 </div>
               </div>
 
-              <div className="mb-3 mt-3 col-md-4 offset-md-2">
+              <div className="card mb-3 mt-3 col-md-4 offset-md-2">
                 <label htmlFor="exampleInputCode1" className="form-label">
                   Código:
                 </label>
@@ -923,7 +923,7 @@ const expresiones = {
                 </div>
               </div>
 
-              <div className="mb-3 col-md-4 col-12">
+              <div className="card mb-3 col-md-4">
                 <label htmlFor="exampleInputCosto1" className="form-label">
                   Costo:
                 </label>
@@ -944,7 +944,7 @@ const expresiones = {
                 </div>
               </div>
 
-              <div className="mb-3 col-md-4 col-12 offset-md-2">
+              <div className="card mb-3 col-md-4 offset-md-2">
                 <label htmlFor="exampleInputPrecio1" className="form-label">
                   Precio:
                 </label>

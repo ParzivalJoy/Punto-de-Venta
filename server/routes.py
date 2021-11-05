@@ -170,7 +170,7 @@ def getTransactions(fecha):
 def getAllProducts():
     conn = conexion()
     cur = conn.cursor(cursor_factory=RealDictCursor)
-    cur.execute("SELECT idproducto, nombreproducto, precioproducto, descripcionproducto FROM productos")
+    cur.execute("SELECT idproducto, nombreproducto, precioproducto, descripcionproducto, imagebproducto FROM productos")
     rows = cur.fetchall()
     conn.close()
     return jsonify(rows)
@@ -227,7 +227,7 @@ def getProductByName(search):
 def getProduct(id):
     conn = conexion()
     cur = conn.cursor(cursor_factory=RealDictCursor)
-    sql = ("SELECT idproducto, nombreproducto, precioproducto, descripcionproducto FROM productos WHERE idproducto = '{0}'".format(id))
+    sql = ("SELECT idproducto, nombreproducto, precioproducto, descripcionproducto, imagebproducto FROM productos WHERE idproducto = '{0}'".format(id))
     cur.execute(sql, id)
     rows = cur.fetchone()
     conn.close()

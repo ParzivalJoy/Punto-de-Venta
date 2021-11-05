@@ -229,16 +229,16 @@ const expresiones = {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
     return (
-      <div>
+      <div className="report">
         <div className="container" id="colors">
           <div className="row d-flex justify-content-center">
-            <h1 className="border p-3" id="colors2">
+            <h4 className="card p-3" id="colors2">
               Llene el formulario para reportar la merma:
-            </h1>
-            <form className="mt-4 row border border-radius d-flex justify-content-center">
-            <div className=" row d-flex justify-content-center border" id="colors2">
+            </h4>
+            <form className="card mt-4 row">
+            <div className="row " id="colors2">
               <h6>Selecciona un producto o ingrediente!</h6>
-              <div className="form-floating col-md-4 align-self-center p-3" style={esproducto===1 ? {background: '#CCFFC0'}: {background: 'white'}}>
+              <div className="card col-md-4 p-3" style={esproducto===1 ? {background: '#CCFFC0'}: {background: 'white'}}>
                 <p className="mb-0">Productos:</p>
                 <select
                   className="form-select"
@@ -255,7 +255,7 @@ const expresiones = {
                 </select>
               </div>
 
-              <div className="form-floating col-md-4 offset-md-2 align-self-center p-3" style={esproducto===2 ? {background: '#CCFFC0'}: {background: 'white'}}>
+              <div className="card col-md-4 offset-md-3 p-3" style={esproducto===2 ? {background: '#CCFFC0'}: {background: 'white'}}>
                 <p className="mb-0">Ingredientes:</p>
                 <select
                   className="form-select"
@@ -275,8 +275,8 @@ const expresiones = {
                 </select>
               </div>
             </div>
-
-              <div className="mb-3 col-md-4 col-12 my-3">
+                    <div className="row">
+              <div className="card mb-3 col-md-4 my-3">
                 <label htmlFor="exampleInputCantidad1" className="form-label">
                   Cantidad de pérdida:
                 </label>
@@ -293,7 +293,7 @@ const expresiones = {
                 </div>
               </div>
 
-              <div className="mb-3 col-md-4 offset-md-2 my-3">
+              <div className="card col-md-4 offset-md-3 my-3">
                 <label htmlFor="exampleInputUnidad1" className="form-label">
                   Unidad:
                 </label>
@@ -306,13 +306,15 @@ const expresiones = {
                   value={(productunidad===1) ? "Kg" : (productunidad===2) ? "gramos" : (productunidad===3) ? "litros" : (productunidad===4) ? "mililitros" : (productunidad===5) ? "unidad" : "desconocido"}
           
                 />
+               
                 <div id="UnidadHelp" className="form-text">
                       {(productunidadvalid)==='false' ? <p className="text-danger">Selecciona un producto para hacer una merma</p> : <p>Bien</p> }
                 </div>
               </div>
-
-              <p className="mb-0 mt-3 offset-md-6">Descripción:</p>
-              <div className="form-floating my-3 col-md-6">
+              </div>
+                    <div className="card col-md-11">
+              <p className="mb-0 mt-3">Descripción:</p>
+              <div className="form-floating my-3 col-md-12">
                 <textarea
                   className="form-control"
                   aria-describedby="descripHelp"
@@ -328,10 +330,10 @@ const expresiones = {
                   {(productdescripvalid)==='false' ? <p className="text-danger">Solo letras y números, no caracteres raros</p> : <p>Bien</p> }
                 </div>
               </div>
-
+              </div>
               <div className="d-flex justify-content-center">
                 <div className="mx-2 my-4">
-                  <button type="submit" className="btn btn-info btn-lg" onMouseOver={validacion} onClick={handleinsert}>
+                  <button type="submit" className="btn btn-primary" onMouseOver={validacion} onClick={handleinsert}>
                     Enviar
                   </button>
                 </div>
@@ -339,6 +341,7 @@ const expresiones = {
             </form>
           </div>
         </div>
+        
       </div>
     );
 }

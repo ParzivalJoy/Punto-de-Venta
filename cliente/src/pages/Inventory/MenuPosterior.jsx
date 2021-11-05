@@ -85,7 +85,7 @@ function MenuPosterior() {
     <div className="card container" ref={componentRef}>
       <div className="container row my-5">
         <h3 className="fs-4 mh-3">Inventario</h3>
-        <div className="form-floating mb-3 align-self-center">
+        <div className="mb-3 align-self-center">
           <select
             className="form-select"
             id="floatingSelect"
@@ -210,7 +210,7 @@ function MenuPosterior() {
         <div className="d-flex justify-content-end mt-3">
           <button
             onClick={handlePrint}
-            className="p-2 col-md-3 col-12 btn btn-primary"
+            className="p-2 btn btn-primary"
           >
             Reporte
           </button>
