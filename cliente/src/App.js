@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import Dashboard from './pages/Dashboard/dashboard';
 import Inventory from './pages/Inventory/MenuPosterior'
 import Form from './pages/Login/Components/Form';
@@ -19,9 +19,6 @@ import FinalizarCierre from './pages/Accounting/FinalizarCierre'
 import Accounting from './pages/Accounting/Accounting'
 
 function App() {
-
-  const [huboapertura,setHuboapertura]=useState('null')
-  const [loading, setLoading]=useState(true)
 
   var tema = 2;
   var color = 1;

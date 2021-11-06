@@ -5,9 +5,6 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
 
 export default function Header(props) {
 
-    function AgregarCliente(){
-    }
-
     return (
         <div className="sales-header-container">
             <div className="header-left">

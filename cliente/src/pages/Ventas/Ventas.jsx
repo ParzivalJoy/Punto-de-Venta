@@ -2,7 +2,6 @@ import React, {useEffect, useState, Component} from 'react'
 import Header from './Components/Header'
 import SearchIcon from '@mui/icons-material/Search'
 import axios from 'axios'
-import imagen from '../../assets/sin-imagen.jpg'
 import Dropdown from 'react-bootstrap/Dropdown'
 import DropdownButton from 'react-bootstrap/DropdownButton'
 import DropdownItem from 'react-bootstrap/esm/DropdownItem'
@@ -24,9 +23,7 @@ export default function Ventas() {
         clear()
         setCategory('Categorias')
         setAllProducts(data)
-        
     }
-
 
     async function getCategories(){
         const {data} = await axios.get('http://localhost:5000/api/sales/categories')
@@ -37,12 +34,21 @@ export default function Ventas() {
         const {data} = await axios.get('http://localhost:5000/api/sales/products/category'+`/${idcategoria}`)
         clear()
         setCategory(nombrecategoria)
-        console.log(category)
         setAllProducts(data)
     }
 
     async function getProductByName(){
         const {data} = await axios.get('http://localhost:5000/api/sales/products'+`/${search}`)
+        if (Object.entries(data).length === 0){
+            getProductById()
+        }else{
+            clear()
+            setAllProducts(data)
+        }
+    }
+
+    async function getProductById(){
+        const {data} = await axios.get('http://localhost:5000/api/sales/products/id'+`/${search}`)
         if (Object.entries(data).length === 0){
             Swal.fire({
                 icon: 'error',
@@ -51,8 +57,6 @@ export default function Ventas() {
                 text: 'No se encuentra el producto en el sistema',
                 timer: 1500
               })
-            clear()
-            getAllProducts()
         }else{
             clear()
             setAllProducts(data)
@@ -88,7 +92,6 @@ export default function Ventas() {
         }
     }
 
-
     function clear(){
         setAllProducts([])
         setCategory('Categorias')
@@ -105,11 +108,11 @@ export default function Ventas() {
             <Header/>
             <div className="search-bar">
                 <div className="card search-card">
-                    <div class="row">  
-                        <div class="col-11">
+                    <div className="row">  
+                        <div className="col-11">
                             <input type="text" placeholder="Buscar" className="search-input" onChange={ e=> setSearch(e.target.value)}/>
                         </div>
-                        <div class="col-1"><button className="btn btn-primary" onClick={getProductByName.bind(this)}><SearchIcon/></button></div>
+                        <div className="col-1"><button className="btn btn-primary" onClick={getProductByName.bind(this)}><SearchIcon/></button></div>
                     </div>
                 </div> 
             </div>
@@ -124,7 +127,7 @@ export default function Ventas() {
                                     <DropdownItem onClick={getAllProducts.bind(this)}>Todos los productos</DropdownItem>
                                     {ListCategories.map(item =>(
                                     <div>     
-                                        <Dropdown.Item onClick={getProductsByCategory.bind(this, item.idcategoria, item.nombrecategoria)}>{item.nombrecategoria}</Dropdown.Item>       
+                                        <Dropdown.Item onClick={getProductsByCategory.bind(this, item.idcategoria, item.nombrecategoria)} key={item.nombrecategoria}>{item.nombrecategoria}</Dropdown.Item>       
                                     </div>
                                     ))}
                                 </DropdownButton>
@@ -144,12 +147,12 @@ export default function Ventas() {
                             <div className="card product-card col-5">
                                 <div className="row">
                                     <div className="col-12 product-info">
-                                        <span className="product-name">{item.nombreproducto}</span>
-                                        <span className="product-descr">{item.descripcionproducto}</span>
+                                        <span className="product-name" key={item.nombreproducto}>{item.nombreproducto}</span>
+                                        <span className="product-descr" key={item.descripcionproducto}>{item.descripcionproducto}</span>
                                         <br/>
-                                        <span className="product-price">MX ${item.precioproducto}</span>
+                                        <span className="product-price" key={item.precioproducto}>MX ${item.precioproducto}</span>
                                         <br/>
-                                        <Link to={'/product'+`/${item.idproducto}`} className="btn btn-primary">
+                                        <Link to={'/product'+`/${item.idproducto}`} className="btn btn-primary" key={item.idproducto}>
                                                 Agregar
                                         </Link>     
                                     </div>   

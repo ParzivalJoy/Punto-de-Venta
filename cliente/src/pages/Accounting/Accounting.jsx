@@ -1,5 +1,4 @@
 import React, {useState, useEffect} from 'react'
-import MenuContabilidad from './MenuContabilidad'
 import BarraLateral from './BarraLateral'
 import CierreCaja from './CierreCaja'
 import { Link } from 'react-router-dom';

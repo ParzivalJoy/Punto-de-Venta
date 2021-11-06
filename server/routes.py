@@ -213,11 +213,21 @@ def getProductsByCategory(idcategoria):
     conn.close()
     return jsonify(rows)
 
-@app.route('/api/sales/products/<search>',  methods=['GET'])
+@app.route('/api/sales/products/id/<search>',  methods=['GET'])
 def getProductByName(search):
     conn = conexion()
     cur = conn.cursor(cursor_factory=RealDictCursor)
     sql = ("SELECT idproducto, nombreproducto, precioproducto, descripcionproducto FROM productos WHERE nombreproducto = '{0}'".format(search))
+    cur.execute(sql, search)
+    rows = cur.fetchall()
+    conn.close()
+    return jsonify(rows)
+
+@app.route('/api/sales/products/<search>',  methods=['GET'])
+def getProductById(search):
+    conn = conexion()
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+    sql = ("SELECT idproducto, nombreproducto, precioproducto, descripcionproducto FROM productos WHERE idproducto = '{0}'".format(search))
     cur.execute(sql, search)
     rows = cur.fetchall()
     conn.close()

@@ -15,7 +15,6 @@ export default function Product() {
 
     let history = useHistory();
     const params = useParams();
-    const id = params.id
 
     const [productName, setProductName] = useState('')
     const [productDescr, setProductDescr] = useState('')
@@ -26,7 +25,7 @@ export default function Product() {
     const [modifierlist, setModifierList] = useState([])
     const [optionlist, setOptionList] = useState([])
 
-    async function getProduct(id){
+    async function getProduct(){
         const {data} = await axios.get('http://localhost:5000/api/products'+`/${params.id}`)
         setProductName(data.nombreproducto)
         setProductDescr(data.descripcionproducto)
@@ -52,12 +51,12 @@ export default function Product() {
 
     }
 
-    async function getListComplements(id){
+    async function getListComplements(){
         const {data} = await axios.get('http://localhost:5000/api/complements'+`/${params.id}`)
         setComplementList(data)
     }
 
-    async function getListModifiers(id){
+    async function getListModifiers(){
         const {data} = await axios.get('http://localhost:5000/api/modifiers'+`/${params.id}`)
         setModifierList(data)
     }
@@ -70,12 +69,12 @@ export default function Product() {
 
     const selectedRadio = (e, idmod, id, name, price) => {
         var length = ''
-        length = dataMultiple.filter(p => p.idmod == idmod).length 
+        length = dataMultiple.filter(p => p.idmod === idmod).length 
 
         if (length === 0){
             dataMultiple.push({idcarrito: '', idproducto: params.id, idmod: idmod, id: id, nombre: name, precio: price})
         }else{
-            var index = dataMultiple.findIndex((obj => obj.idmod == idmod))
+            var index = dataMultiple.findIndex((obj => obj.idmod === idmod))
             console.log("Indice:", index)
             if(index >= 0){
                 dataMultiple[index].precio = price

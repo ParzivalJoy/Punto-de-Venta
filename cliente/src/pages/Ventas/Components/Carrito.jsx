@@ -90,7 +90,7 @@ export default function Carrito() {
             </div>
             <div className="input-cart">
                 <button className="btn btn-primary btn-carrito" onClick={LimpiarCarrito.bind(this)}>Limpiar</button>
-                <button className="btn btn-primary btn-carrito">Pagar</button>
+                <button className="btn btn-primary btn-carrito">Cobrar</button>
             </div>
         </div>
     )

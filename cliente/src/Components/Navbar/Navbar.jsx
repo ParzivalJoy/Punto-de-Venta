@@ -3,12 +3,7 @@ import "../../styles.scss"
 import "./Components/themes.css"
 import StarsIcon from '@mui/icons-material/Stars';
 
-
-
 export default function Navbar() {
-    console.log ("This is your token", sessionStorage.getItem("token"))
-
-
     return (
         <div className='navbar'>
             <div className="navbar-wrapper">
