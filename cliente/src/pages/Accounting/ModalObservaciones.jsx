@@ -77,7 +77,7 @@ const ModalCambio = () => {
   return (
     <div>
       <div className="card card-item" onClick={() => setShowobservaciones(true)}>
-                <span className="card-title">Observaciones de cierre</span>
+                <span className="card-title">Observaciones</span>
                 <div className="card-money">
                     <NoteAltIcon className="icons"/>
                 </div>

@@ -1007,7 +1007,7 @@ thead{
 
 
 /*------------Modales-----------*/
-img{
+.p-1{
   width:35vh;
 }
 
@@ -1017,13 +1017,13 @@ img{
 }
 
 @media(max-width: 1150px){
-  img{
+  .p-1{
       width:30vh;
   }
 }
 
 @media(max-width: 800px){
-  img{
+  .p-1{
       width:23vh;
   }
 }
@@ -1033,7 +1033,7 @@ img{
       width:4rem;
       height:4rem;
   }
-  img{
+  .p-1{
       width:20vh;
   }
 }

@@ -65,15 +65,17 @@ function Sidebar() {
                         </li>
                         <hr/>
                         <li className="sidebar-items">
-                            <MoneyOffIcon className="sidebar-icons"/> <span className="sidebar-pages">Contabilidad</span>
+                            <Link to = "/accounting" className="link">
+                                <MoneyOffIcon className="icons sidebar-icons"/> <span className="sidebar-pages">Contabilidad</span>
+                            </Link>
                         </li>
                         <hr/>
                         <li className="sidebar-items">
-                            <MailOutlineIcon className="sidebar-icons"/> <span className="sidebar-pages">Gestor de campañas</span>
+                            <MailOutlineIcon className="icons sidebar-icons"/> <span className="sidebar-pages">Gestor de campañas</span>
                         </li>
                         <hr/>
                         <li className="sidebar-items">
-                            <SettingsIcon className="sidebar-icons"/> <span className="sidebar-pages">Configuración</span>
+                            <SettingsIcon className="icons sidebar-icons"/> <span className="sidebar-pages">Configuración</span>
                         </li>
                     </ul>
                 </div>

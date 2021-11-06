@@ -140,7 +140,7 @@ useEffect(() => {
             <h2>Visualizador del reporte de cierre:</h2>
           </div>
           <div
-            className="col-md-6 col-12 mt-4 border d-flex flex-row justify-content-between"
+            className="card col-md-6 mt-4 d-flex flex-row justify-content-between"
             id="colors"
           >
             <h5>Total en la caja=${cajacobrado}</h5>
@@ -148,7 +148,7 @@ useEffect(() => {
           </div>
           <div className="p-2 d-flex justify-content-center">
             <div
-              className="col-md-6 d-flex justify-content-center border"
+              className="card col-md-6 d-flex justify-content-center"
               id="colors"
             >
               <h5>
@@ -159,7 +159,7 @@ useEffect(() => {
             </div>
           </div>
 
-          <div className="col-md-6 col-12 m-1 border" id="colors">
+          <div className="card col-md-6 m-1" id="colors">
             <div className="d-flex justify-content-center my-3">
               <h5>Ventas en el sistema:</h5>
             </div>
@@ -186,7 +186,7 @@ useEffect(() => {
               </div>
             </div>
           </div>
-          <div className="col-md-6 col-12 m-1 border" id="colors">
+          <div className="card col-md-6 m-1" id="colors">
             <div className="d-flex justify-content-center my-2">
               <h5>Revisión en caja:</h5>
             </div>
@@ -202,7 +202,7 @@ useEffect(() => {
             </div>
           </div>
 
-          <div className="col-md-6 col-12 m-1 border" id="colors">
+          <div className="card col-md-6 col-12 m-1" id="colors">
             <div className="d-flex justify-content-center my-2">
               <h5>Datos de sesión:</h5>
             </div>
@@ -216,7 +216,7 @@ useEffect(() => {
                 <p>Cuenta: XXXXXXX</p>
               </div>
               <div className="d-flex justify-content-center m-2 col-12 table-responsive">
-                <table className="table bg-white rounded shadow-sm table-hover">
+                <table className="table rounded shadow-sm table-hover">
                   <thead>
                     <tr>
                       <th scope="col" width="50">
@@ -255,11 +255,11 @@ useEffect(() => {
           </div>
         </div>
         <div className="d-flex justify-content-center my-5">
-          <button className="m-2 p-2" onClick={generatePDF}>
+          <button className="m-2 p-2 btn btn-primary" onClick={generatePDF}>
             Guardar Reporte
           </button>
           <Link to="/">
-            <button className="m-2 p-2">Regresar</button>
+            <button className="m-2 p-2 btn btn-primary">Regresar</button>
           </Link>
         </div>
       </div>

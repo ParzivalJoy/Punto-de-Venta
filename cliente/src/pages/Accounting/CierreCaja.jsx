@@ -406,7 +406,7 @@ const expresiones = {
           </div>
 
           <div className="mx-2 my-4">
-                <button type="submit" className="btn btn-info" onMouseOver={validacion} onClick={insertCierre}>
+                <button type="submit" className="btn btn-primary" onMouseOver={validacion} onClick={insertCierre}>
                   Término de cierre
                 </button>
           </div>
