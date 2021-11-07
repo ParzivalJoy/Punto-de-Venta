@@ -47,7 +47,6 @@ export default function Product() {
             var sauce= URL.createObjectURL(datab)
             setImagebinary(sauce)
           }
-          console.log(imagebinary)
 
     }
 

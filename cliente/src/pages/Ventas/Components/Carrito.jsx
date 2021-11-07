@@ -1,10 +1,12 @@
 import React, {useEffect} from 'react'
 import Swal from 'sweetalert2'
+import { Link } from 'react-router-dom';
 
 var productdata = []
 var complementdata = []
 var modifierdata = []
 var multipledata = []
+var TotalCarrito = 0
 
 export default function Carrito() {
     
@@ -21,6 +23,24 @@ export default function Carrito() {
         if(localStorage["multipledatas"]){
             multipledata = JSON.parse(localStorage["multipledatas"])
         }
+
+        productdata.map(item =>(
+            TotalCarrito += item.precioproducto
+        ))
+
+        complementdata.map(item =>(
+            TotalCarrito += item.precio
+        ))
+
+        modifierdata.map(item =>(
+            TotalCarrito += item.precio
+        ))
+
+        multipledata.map(item =>(
+            TotalCarrito += item.precio
+        ))
+  
+        localStorage.setItem('Totalpagar',TotalCarrito)
     }
 
     function LimpiarCarrito(){
@@ -40,7 +60,7 @@ export default function Carrito() {
                 'success'
               )
                 localStorage.removeItem("productdatas")
-                localStorage.removeItem("modifierdaatas")
+                localStorage.removeItem("modifierdatas")
                 localStorage.removeItem("complementdatas")
                 localStorage.removeItem("multipledatas")
                 window.location.reload(true);
@@ -61,6 +81,7 @@ export default function Carrito() {
             {productdata.map(item =>(
                 <div className="card">
                 <span className="product-details-name">{item.nombreproducto}</span>
+                <span className="product-details-name">{item.precioproducto}</span>
                 {complementdata.map(comp =>(
                     <div>
                         {(item.idcarrito === comp.idcarrito) ? 
@@ -90,7 +111,7 @@ export default function Carrito() {
             </div>
             <div className="input-cart">
                 <button className="btn btn-primary btn-carrito" onClick={LimpiarCarrito.bind(this)}>Limpiar</button>
-                <button className="btn btn-primary btn-carrito">Cobrar</button>
+                <Link to="/cobrocarrito" className="btn btn-primary">Cobrar {TotalCarrito}</Link> 
             </div>
         </div>
     )

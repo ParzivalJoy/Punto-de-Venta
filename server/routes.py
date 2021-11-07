@@ -26,9 +26,34 @@ def conexion():
 app.config["JWT_SECRET_KEY"] = "dsankldqwp2310953nc812245" 
 jwt = JWTManager(app)
 
+
+
+##--------------Operaciones al realizar una venta----------##
+@app.route('/api/sales/updateproduct/<id>', methods=['PUT'])
+def updateProducts(id):
+    conn = conexion()
+    cur = conn.cursor()
+    sql = "UPDATE productos SET cantidadproducto = cantidadproducto - 1 WHERE idproducto='{0}'".format(id)
+    cur.execute(sql, id) 
+    conn.commit()
+    conn.close()
+    cur.close()
+    return jsonify(msg="employee updated")
+
+@app.route('/api/sales/venta', methods=['POST'])
+def addSale():
+	conn = conexion()
+	cur = conn.cursor()
+	data = request.json
+	sql = """INSERT INTO ventas (fechaventa, totalventa, idpago, descuento, idusuario, qr )
+             VALUES (%(fecha)s,%(totalventa)s, %(idpago)s, %(descuento)s, %(idusuario)s,NULL)"""
+	cur.execute(sql, data)
+	conn.commit()
+	conn.close()
+	cur.close()
+	return jsonify(msg='added successfully!')
+
 ##------- Operaciones de la interfaz Dashboard ------##
-
-
 
 # ----------------  Gráfica ----------------#
 @app.route('/api/dashboard/salesEnero/<year>',  methods=['GET'])
@@ -267,7 +292,7 @@ def verifyLogin():
     cur = conn.cursor(cursor_factory=RealDictCursor)
     data=request.json
     print(data)
-    sql="SELECT a.nombreempleado as nombreempleado, c.nombrecargo as nombrecargo FROM empleados a LEFT JOIN usuarios b ON a.idempleado=b.idempleado LEFT JOIN perfil c ON a.idcargo=c.idcargo WHERE b.usuario='{0}' AND b.contrasena='{1}'".format(data['username'],data['password'])
+    sql="SELECT a.nombreempleado as nombreempleado, c.nombrecargo as nombrecargo, b.idusuario as id FROM empleados a LEFT JOIN usuarios b ON a.idempleado=b.idempleado LEFT JOIN perfil c ON a.idcargo=c.idcargo WHERE b.usuario='{0}' AND b.contrasena='{1}'".format(data['username'],data['password'])
     cur.execute(sql)
     row = cur.fetchone()
     conn.close()
