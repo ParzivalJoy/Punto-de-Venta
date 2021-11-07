@@ -27,7 +27,7 @@ app.config["JWT_SECRET_KEY"] = "dsankldqwp2310953nc812245"
 jwt = JWTManager(app)
 
 
-
+##Comentario
 ##--------------Operaciones al realizar una venta----------##
 @app.route('/api/sales/updateproduct/<id>', methods=['PUT'])
 def updateProducts(id):
