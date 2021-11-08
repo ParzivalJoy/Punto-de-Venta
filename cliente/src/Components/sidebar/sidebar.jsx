@@ -61,7 +61,9 @@ function Sidebar() {
                         </li>
                         <hr/>
                         <li className="sidebar-items">
-                            <FastfoodIcon className="sidebar-icons"/> <span className="sidebar-pages">Flujo de venta</span>
+                        <Link to = '/addproduct' className= "link">
+                            <FastfoodIcon className="icons sidebar-icons"/> <span className="sidebar-pages">Flujo de venta</span>
+                        </Link>
                         </li>
                         <hr/>
                         <li className="sidebar-items">

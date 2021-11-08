@@ -20,13 +20,15 @@ export default function Product() {
     const [productDescr, setProductDescr] = useState('')
     const [productPrice, setProductPrice] = useState('')
     const[imagebinary, setImagebinary] = useState(null)
+    const [cant, setCant] = useState(1)
+    const [nota, setNota] = useState('')
 
     const [complementlist, setComplementList] = useState([])
     const [modifierlist, setModifierList] = useState([])
     const [optionlist, setOptionList] = useState([])
 
     async function getProduct(){
-        const {data} = await axios.get('http://localhost:5000/api/products'+`/${params.id}`)
+        const {data} = await axios.get('http://localhost:5000/api/getproducts'+`/${params.id}`)
         setProductName(data.nombreproducto)
         setProductDescr(data.descripcionproducto)
         setProductPrice(data.precioproducto)
@@ -49,7 +51,7 @@ export default function Product() {
           }
 
     }
-
+    console.log(cant)
     async function getListComplements(){
         const {data} = await axios.get('http://localhost:5000/api/complements'+`/${params.id}`)
         setComplementList(data)
@@ -66,12 +68,12 @@ export default function Product() {
         console.log(dataMultiple)
     } 
 
-    const selectedRadio = (e, idmod, id, name, price) => {
+    const selectedRadio = (e, idmod, nombremod, id, name, price, ingrediente, porcion) => {
         var length = ''
         length = dataMultiple.filter(p => p.idmod === idmod).length 
 
         if (length === 0){
-            dataMultiple.push({idcarrito: '', idproducto: params.id, idmod: idmod, id: id, nombre: name, precio: price})
+            dataMultiple.push({idcarrito: '', idproducto: params.id, idmod: idmod, nombremodificador: nombremod, id: id, nombre: name, precio: price, idingrediente: ingrediente, porcion: porcion})
         }else{
             var index = dataMultiple.findIndex((obj => obj.idmod === idmod))
             console.log("Indice:", index)
@@ -81,37 +83,10 @@ export default function Product() {
                 dataMultiple[index].nombre = name
                 console.log("Elegir otra opcion:", dataMultiple) 
             }else{
-                dataMultiple.push({idcarrito: '', idproducto: params.id, idmod: idmod, id: id, nombre: name, precio: price})
+                dataMultiple.push({idcarrito: '', idproducto: params.id, idmod: idmod, nombremodificador: nombremod, id: id, nombre: name, precio: price, idingrediente: ingrediente, porcion: porcion})
             }          
         }
         
-    };
-
-    const selectedCheckbox = (e, id, name, price) => {
-        const checked = e.target.checked
-
-        if (checked) {
-            var length = ''
-            length = dataModifier.filter(p => p.id == id).length 
-            if (length === 0){
-                dataModifier.push({idcarrito: '', idproducto: params.id, id: id, nombre: name, precio:price}) 
-            }
-            console.log(length)
-            console.log(dataModifier)
-
-        } else {
-            var length = ''
-            length = dataModifier.filter(p => p.id == id).length 
-
-            if (length !== 0){
-                var index = dataModifier.findIndex((obj => obj.id == id))
-                console.log(id)
-                console.log(index)
-                dataModifier.splice(index, 1)
-            }
-            console.log(dataModifier)
-        }
-       
     };
 
     const selectedComplement = (e, id, name, price) => {
@@ -123,7 +98,7 @@ export default function Product() {
                 length = dataComplement.filter(p => p.id == id).length 
                 //Si no existe en el arreglo se hace un push
                 if (length === 0){
-                    dataComplement.push({idcarrito: '', idproducto: params.id, id: id, nombre: name, precio: price * value}) 
+                    dataComplement.push({idcarrito: '', idproducto: params.id, id: id, nombre: name, precio: price, cantidad: value, total: price * value}) 
                 //Si existe en el arreglo
                 }else{
                     var index = dataComplement.findIndex((obj => obj.id == id))
@@ -131,7 +106,7 @@ export default function Product() {
                     if(index >= 0){
                         dataComplement[index].precio = price * value
                     }else{
-                        dataComplement.push({idcarrito: '', idproducto: params.id, id: id, nombre: name, precio: price * value})
+                        dataComplement.push({idcarrito: '', idproducto: params.id, id: id, nombre: name, precio: price, cantidad: value, total: price * value})
                     }          
                 }
           }else{
@@ -154,11 +129,12 @@ export default function Product() {
             var carrito = length + 1
             //Push a data con los datos en localstorage
             ptemp.map(item => (
-                data.push({idcarrito: item.idcarrito, idproducto: item.idproducto, nombreproducto: item.nombreproducto, precioproducto: item.precioproducto, imagen: item.imagen})
+                data.push({idcarrito: item.idcarrito, idproducto: item.idproducto, nombreproducto: item.nombreproducto, precioproducto: item.precioproducto, cantidad: item.cantidad, total: item.total, nota: item.nota})
             ))
 
             //Push a data para guardar los valores
-            data.push({idcarrito: carrito, idproducto: params.id, nombreproducto: productName, precioproducto: productPrice, imagen: imagebinary})
+            let totalproducto = parseInt(productPrice) * parseInt(cant)
+            data.push({idcarrito: carrito, idproducto: params.id, nombreproducto: productName, precioproducto: productPrice, cantidad: parseInt(cant), total: totalproducto, nota: nota})
             console.log('Primer push:',data)
 
             //Se guarda data en localstore mydatas
@@ -166,7 +142,8 @@ export default function Product() {
         }else{
             carrito = 1
             //Push a data para guardar los valores
-            data.push({idcarrito: carrito, idproducto: params.id, nombreproducto: productName, precioproducto: productPrice, imagen: imagebinary})
+            let totalproducto = parseInt(productPrice) * parseInt(cant)
+            data.push({idcarrito: carrito, idproducto: params.id, nombreproducto: productName, precioproducto: productPrice, cantidad: parseInt(cant), total: totalproducto, nota: nota})
             console.log('Push localstore limpio:',data)
 
             //Se guarda data en localstore mydatas
@@ -189,38 +166,13 @@ export default function Product() {
                 length = ctemp.length                 
                 //Push a data con los datos en localstorage
                 ctemp.map(item => (
-                    dataComplement.push({idcarrito: item.idcarrito, idproducto: item.idproducto, id: item.id, nombre: item.nombre, precio: item.precio})
+                    dataComplement.push({idcarrito: item.idcarrito, idproducto: item.idproducto, id: item.id, nombre: item.nombre, precio: item.precio, cantidad: item.cantidad, total: item.total})
                 ))
                 //Se guarda data en localstore mydatas
                 localStorage["complementdatas"] = JSON.stringify(dataComplement)
             }else{
                 //Se guarda data en localstore mydatas
                 localStorage["complementdatas"] = JSON.stringify(dataComplement)
-            }
-        }
-
-        if(dataModifier.length !== 0){
-            var index = 0
-            dataModifier.map(item =>(
-                (item.idcarrito === '') ? 
-                    item.idcarrito = carrito
-                : ''
-            ))
-            if(localStorage["modifierdatas"]){
-                //Guarda los datos de localstorage en temp
-                var mtemp = JSON.parse(localStorage["modifierdatas"])
-
-                var length = ''
-                length = mtemp.length                 
-                //Push a data con los datos en localstorage
-                mtemp.map(item => (
-                    dataModifier.push({idcarrito: item.idcarrito, idproducto: item.idproducto, id: item.id, nombre: item.nombre, precio: item.precio}) 
-                ))
-                //Se guarda data en localstore mydatas
-                localStorage["modifierdatas"] = JSON.stringify(dataModifier)
-            }else{
-                //Se guarda data en localstore mydatas
-                localStorage["modifierdatas"] = JSON.stringify(dataModifier)
             }
         }
 
@@ -239,7 +191,7 @@ export default function Product() {
                 length = multemp.length                 
                 //Push a data con los datos en localstorage
                 multemp.map(item => (
-                    dataMultiple.push({idcarrito: item.idcarrito, idproducto: item.idproducto, idmod: item.idmod, id: item.id, nombre: item.nombre, precio: item.precio})
+                    dataMultiple.push({idcarrito: item.idcarrito, idproducto: item.idproducto, idmod: item.idmod, nombremodificador: item.nombremodificador, id: item.id, nombre: item.nombre, precio: item.precio, idingrediente: item.idingrediente, porcion: item.porcion})
                 ))
                 //Se guarda data en localstore mydatas
                 localStorage["multipledatas"] = JSON.stringify(dataMultiple)
@@ -283,7 +235,7 @@ export default function Product() {
                         <img src={imagebinary} className="product-image" />
                     </div>
                     <div className="card">
-                        <span className="product-name">{productName}</span>
+                        <span className="product-name">{productName} | Precio: ${productPrice}</span>
                         <span className="product-descr">{productDescr}</span>
                         <hr/>
                         {(complementlist.length === 0) ? '' : 
@@ -311,7 +263,6 @@ export default function Product() {
                         <div>
                             {modifierlist.map(item =>(
                                 (item.obligatorio === true) ? 
-                                    (item.multiple === true) ?
                                     <div>
                                         <div className="row">
                                             <br/>
@@ -331,7 +282,7 @@ export default function Product() {
                                                     </div>
                                                     <div className="col-4">
                                                         +MX $ {op.precioopcionmodificador}
-                                                        <button className="btn btn-primary" onClick={(e) => {selectedRadio(e, item.idmodificador, op.idopcionmodificador, op.nombreopcion, op.precioopcionmodificador);}}>Elegir</button>
+                                                        <button className="btn btn-primary" onClick={(e) => {selectedRadio(e, item.idmodificador, item.nombremodificador, op.idopcionmodificador, op.nombreopcion, op.precioopcionmodificador, op.idingrediente, op.opcionporcion);}}>Elegir</button>
                                                     </div>
                                                     <br/>
                                                     <br/>
@@ -341,23 +292,7 @@ export default function Product() {
                                             ))}
                                             <hr/>
                                          </div>
-                                    :
-                                        <div className="row">
-                                            <br/>
-                                            <div className="col-4">
-                                            <span className="product-details-name">{item.nombremodificador}</span>
-                                            </div>
-                                            <div className="col-4">
-                                                <span className="product-obligatory">Obligatorio</span>
-                                            </div>
-                                            <div className="col-4">
-                                                <span className="product-price">+MX ${item.preciomodificador}</span>
-                                                <input type="checkbox" className="checkbox disable-team team_values" value="1"
-                                                    onClick={(e) => {selectedCheckbox(e, item.idmodificador, item.nombremodificador, item.preciomodificador);}}/>            
-                                            </div>
-                                            <br/><br/>
-                                        </div>
-                                :(item.multiple === true) ?
+                                :
                                 <div>
                                         <div className="row">
                                             <br/>
@@ -376,38 +311,24 @@ export default function Product() {
                                                     </div>
                                                     <div className="col-4">
                                                         +MX $ {op.precioopcionmodificador}
-                                                        <input type="radio" name="modifier" className="product-radio" onChange={(e) => {selectedRadio(e, item.idmodificador, op.idopcionmodificador, op.nombreopcion, op.precioopcionmodificador);}}/>
+                                                        <button className="btn btn-primary" onClick={(e) => {selectedRadio(e, item.idmodificador, item.nombremodificador, op.idopcionmodificador, op.nombreopcion, op.precioopcionmodificador, op.idingrediente, op.opcionporcion);}}>Elegir</button>
                                                     </div>
                                                     <br/>
                                                 </div>
                                             ))}
                                             <hr/>
                                          </div>
-                                :
-                                <div className="row">
-                                            <br/>
-                                            <div className="col-4">
-                                            <span className="product-details-name">{item.nombremodificador}</span>
-                                            </div>
-                                            <div className="col-4">
-                                                <span className="product-obligatory">Opcional</span>
-                                            </div>
-                                            <div className="col-4">
-                                                <span className="product-price">+MX ${item.preciomodificador}</span>
-                                                <input type="checkbox" className="checkbox disable-team team_values" value="1"
-                                                    onClick={(e) => {selectedCheckbox(e, item.idmodificador, item.nombremodificador, item.preciomodificador);}}/>            
-                                            </div>
-                                            <br/><br/>
-                                        </div>
                             ))}
                         </div>
                         }
                         <br/>
-                        <textarea className="product-coments" rows="3" placeholder="Añade especificaciones y/o comentarios"></textarea>
+                        <textarea className="product-coments" rows="3" placeholder="Añade especificaciones y/o comentarios" onChange={(e) => {setNota(e.target.value)}}></textarea>
                         <br/>
                         <div className="product-buttons">
-                            <button className="btn btn-primary">Cantidad</button>
-                            <button className="btn btn-primary" onClick={addCart.bind(this)}>Añadir al carrito: {productPrice}</button>
+                            <span className="product-name">Cantidad: 
+                                <input type="number" className="product-cant-input" placeholder="1" min="1" max="10" onChange={(e) => {setCant(e.target.value)}}/>
+                            </span>
+                            <button className="btn btn-primary" onClick={addCart.bind(this)}>Añadir al carrito:</button>
                         </div>
                     </div> 
                 </div>

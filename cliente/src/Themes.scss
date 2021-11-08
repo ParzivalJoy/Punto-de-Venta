@@ -1,6 +1,7 @@
 [data-theme="light"]{
     --main-color: #ffffff; //Color de fondo
-    --div-color: #fafafb; //Color secundario de fondo (sidebar, headers, cards, etc...)
+    --div-color: #f3f3f5; //Color secundario de fondo (sidebar, headers, cards, etc...)
+    --input-color: #d3d3d3;
     --txt-color: #202020; //Color del texto
     --box-shadow-color: rgba(149, 157, 165, 0.2) 0px 8px 24px; //Sombra para second-light 
 }
@@ -81,18 +82,25 @@ body{
     -moz-box-shadow: 0px 6px 16px 0px rgba(0,0,0,0.43);
 }
 
-.card{
+.card, .accordion-body, .accordion-item, .accordion-item{
       background-color: var(--div-color)!important;
       border-radius: 12px!important;
       box-shadow: var(--box-shadow-color)!important;
   }
+
+.accordion-button{
+
+    background-color: var(--main-color)!important;
+    border-radius: 12px!important;
+    box-shadow: var(--box-shadow-color)!important;
+}
 
   .search-card{
     background-color: var(--main-color)!important;
     box-shadow: none!important;
 }
 
-  .icons, span{
+  .icons, span, b, p, label{
       color: var(--txt-color)!important;
   }
 

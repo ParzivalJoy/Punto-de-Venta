@@ -6,10 +6,11 @@ var productdata = []
 var complementdata = []
 var modifierdata = []
 var multipledata = []
-var TotalCarrito = 0
 
 export default function Carrito() {
     
+    var TotalCarrito = 0
+
     function getDatos(){
         if(localStorage["productdatas"]){
             productdata = JSON.parse(localStorage["productdatas"])
@@ -23,7 +24,6 @@ export default function Carrito() {
         if(localStorage["multipledatas"]){
             multipledata = JSON.parse(localStorage["multipledatas"])
         }
-
         productdata.map(item =>(
             TotalCarrito += item.precioproducto
         ))
@@ -111,7 +111,7 @@ export default function Carrito() {
             </div>
             <div className="input-cart">
                 <button className="btn btn-primary btn-carrito" onClick={LimpiarCarrito.bind(this)}>Limpiar</button>
-                <Link to="/cobrocarrito" className="btn btn-primary">Cobrar {TotalCarrito}</Link> 
+                <Link to="/cobrocarrito" className="btn btn-primary">Cobrar</Link> 
             </div>
         </div>
     )

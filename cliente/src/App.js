@@ -17,7 +17,8 @@ import './Themes.scss'
 import AperturaCaja from './pages/Accounting/AperturaCaja'
 import FinalizarCierre from './pages/Accounting/FinalizarCierre'
 import Accounting from './pages/Accounting/Accounting'
-import Cobro from './pages/Ventas/Components/Cobro';
+import Cobro from './pages/Ventas/Components/Cobro'
+import Addproducts from './pages/AddProducts/Addproducts'
 
 function App() {
 
@@ -65,6 +66,7 @@ function App() {
           <ProtectedRoute exact path="/reporteCierre" component={FinalizarCierre}/>
           <ProtectedRoute exact path="/accounting" component={Accounting}/>
           <ProtectedRoute exact path="/cobrocarrito" component={Cobro}/>
+          <ProtectedRoute exact path="/addproduct" component={Addproducts}/>
           <Route exact path ="/logout"><Logout/></Route> 
         </Switch>
         </BrowserRouter>

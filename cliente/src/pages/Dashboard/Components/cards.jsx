@@ -73,10 +73,7 @@ export default function Cards() {
                             $ {salestoday-salesyes}
                             <TrendingDownIcon className="icons downarrow"/>
                         </span>
-                        : 
-                        <div>
-                            <span className="card-money-sub">No hay ventas por el momento</span>
-                        </div>
+                        : ''
                         } 
                 </div>
             </div>    
