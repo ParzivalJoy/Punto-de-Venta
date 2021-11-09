@@ -10,11 +10,11 @@ import CheckIcon from '@mui/icons-material/Check';
 
 const baseURL = process.env.REACT_APP_API_URL //npm i dotenv
 
-function Addproducts() {
+function Products() {
 
     const [listunits, setListUnits] = useState([])
     const [listingredients, setListIngredients] = useState([])
-    const [modifierschecked, setModifiersChecked] = useState(false)
+    const [modifierschecked, setModifiersChecked] = useState(true)
     const [complementschecked, setComplementsChecked] = useState(false)
     const [ingredientschecked, setIngredientsChecked] = useState(false)
     const [stockchecked, setStockChecked] = useState(false)
@@ -57,7 +57,9 @@ function Addproducts() {
         pricemodifier:'0.0',
         optionsmodifier:[],
         pricemodifierchecked:false,
-        requiredchecked:false
+        requiredchecked:false,
+        idmodifieroriginal:0,
+        name:''
     })
     const [listcomplements, setListComplements]= useState([])
     const [listingredientsproducts, setListIngredientsProducts]= useState([])
@@ -121,9 +123,10 @@ function Addproducts() {
                         namemodifier:'',
                         pricemodifier:'0.0',
                         optionsmodifier:[],
-                        multiplechecked:false,
                         pricemodifierchecked:false,
-                        requiredchecked:false
+                        requiredchecked:false,
+                        idmodifieroriginal:0,
+                        name:''
                     })
                 }
             }
@@ -281,4 +284,4 @@ function Addproducts() {
     )
 }
 
-export default Addproducts
+export default Products

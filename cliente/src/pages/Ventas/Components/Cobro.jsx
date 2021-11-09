@@ -1,7 +1,9 @@
 import React, {useState} from 'react'
 import Carrito from './Carrito'
 import Header from './Header'
-import axios from 'axios' //npm i axios
+import axios from 'axios' //npm i 
+import { useHistory } from "react-router-dom";
+import Swal from 'sweetalert2';
 
 var productdata = []
 var complementdata = []
@@ -10,6 +12,8 @@ var multipledata = []
 var idpago = 0
 
 export default function Cobro() {
+
+    let history = useHistory();
 
     if(localStorage["productdatas"]){
         productdata = JSON.parse(localStorage["productdatas"])
@@ -43,9 +47,8 @@ export default function Cobro() {
 
     async function Transaccion(){
         let idusuario = localStorage.getItem('userid')
-    
-        addSale()
-
+        //Se agrega la venta como ticket de compra
+            addSale()
         //Si hay productos en el carrito
         if (Object.entries(productdata).length !== 0){
             productdata.map(item =>(
@@ -56,6 +59,7 @@ export default function Cobro() {
                 complementdata.map(item =>(
                     updateComplement(idusuario, item.id, item.cantidad, item.nombre, item.precio, item.total)
                 ))
+                localStorage.removeItem("complementdatas")
             }
 
             //Si hay modificadores en el carrito 
@@ -63,8 +67,22 @@ export default function Cobro() {
                 multipledata.map(item =>(
                     updateModifier(idusuario, item.idmod, item.id, item.nombremodificador, item.nombre, item.precio, item.idingrediente, item.porcion)
                 ))
+                localStorage.removeItem("multipledatas")
             }
+            localStorage.removeItem("productdatas")
         }
+
+        Swal.fire({
+            icon: 'success',
+            title: 'Venta realizada con éxito',
+            showConfirmButton: false,
+            timer: 500
+          })
+
+        history.push("/ventas");  
+        window.location.reload(true);
+
+        
     }
 
     async function updateProduct(idusuario, idproducto, cantidad, precio, nombre, nota, total){
@@ -89,6 +107,7 @@ export default function Cobro() {
         //Agregar detalles de la venta de modificadores
         const obj = {idusuario, idmod, idop, nombremod, nombreop, precio, idingrediente, porcion}
         await axios.post('http://localhost:5000/api/sales/addsalemodifier',obj)
+        await axios.put('http://localhost:5000/api/sales/modifier/updateingredient',obj)
     }
 
     async function updateComplement(idusuario, idcomplemento, cantidad, nombre, precio, total){

@@ -8,6 +8,7 @@ import DropdownItem from 'react-bootstrap/esm/DropdownItem'
 import Swal from 'sweetalert2'
 import { Link } from 'react-router-dom';
 import Carrito from './Components/Carrito'
+import { useHistory } from "react-router-dom";
 
 export default function Ventas() {
 
@@ -16,7 +17,7 @@ export default function Ventas() {
     const [category, setCategory] = useState('Categorias')
     const [search, setSearch] = useState('')
    
-
+    let history = useHistory();
 
     async function getAllProducts(){
         const {data} = await axios.get('http://localhost:5000/api/sales/products')
@@ -38,7 +39,9 @@ export default function Ventas() {
     }
 
     async function getProductByName(){
-        const {data} = await axios.get('http://localhost:5000/api/sales/products'+`/${search}`)
+        const {data} = await axios.get('http://localhost:5000/api/sales/products/name'+`/${search}`)
+
+        //Si no encuentra nada en la consulta de nombre, hace la consulta por código
         if (Object.entries(data).length === 0){
             getProductById()
         }else{
@@ -49,6 +52,7 @@ export default function Ventas() {
 
     async function getProductById(){
         const {data} = await axios.get('http://localhost:5000/api/sales/products/id'+`/${search}`)
+        console.log(data)       
         if (Object.entries(data).length === 0){
             Swal.fire({
                 icon: 'error',
@@ -62,7 +66,7 @@ export default function Ventas() {
             setAllProducts(data)
         }
     }
-
+    
     async function getProductsByPrice1(){
         const {data} = await axios.get('http://localhost:5000/api/sales/products/price1')
         setAllProducts(data)

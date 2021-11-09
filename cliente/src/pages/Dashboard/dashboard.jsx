@@ -5,6 +5,7 @@ import '../../styles.scss';
 import LeftTable from "./Components/lefttable"
 import RightTable from "./Components/righttable"
 import axios from 'axios'
+import Graph from './Components/Graph';
 
 export default function Dashboard() {
 
@@ -175,11 +176,15 @@ export default function Dashboard() {
     return (
         <div className="dashboard">
             <Cards/>
+            <div className="second-bar">
+            <Graph/>
             <Chart data={userdata} title="Gráfica de Ventas (Anual)" grid dataKey="sales"/>
+            </div>
             <div className="dash-tables">
                 <LeftTable/>
                 <RightTable/>
             </div>
+            
         </div>
     )
 }

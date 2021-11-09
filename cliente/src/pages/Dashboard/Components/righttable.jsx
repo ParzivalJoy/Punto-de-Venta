@@ -44,7 +44,7 @@ export default function Righttable() {
                 {transacciones.map(item =>(
                 <tr className="right-tr">
                     <td><span className="td-username">{item.idusuario}</span></td>
-                    <td className="right-td-user">
+                    <td>
                         <span className="td-username">{item.usuario}</span>
                     </td>
                     <td className="td-date">{item.fechaventa}</td>

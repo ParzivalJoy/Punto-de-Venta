@@ -27,6 +27,7 @@ function Modificador(props) {
         });
     };
 
+
     const [errorform, setErrorForm] = useState('');
     
     function  inputValidation(){
@@ -79,13 +80,14 @@ function Modificador(props) {
             price:'0.0',
             idingredient:'',
             nameingredient:'',
-            portion:'0.0'
+            portion:'0.0',
+            idoptionmodifieroriginal:''
         })
     }
     function removeOptionModifier(i){
         props.setListOptionsModifier(props.listoptionsmodifier.filter(item => item.idoptionmodifier !== i))
     }
-
+    console.log(props.modifier)
     return (
             <div className="row d-flex justify-content-center border">
             <div className="">
@@ -100,13 +102,36 @@ function Modificador(props) {
                     ?<div className="mb-2 col-md-4  ">
                         <label className="col-form-label"><b> Nombre modificador:</b></label>
                         <label className="col-form-label">&nbsp; {props.modifier.namemodifier}</label>
-                        {errors.namemodifier && <p className="text-danger">{errors.namemodifier}</p>}
                     </div>
-                    :<div className="mb-2 col-md-3 mt-2 ">
+                    :<div className="mb-2 col-md-4 mt-2 ">
+                        <label className="col-form-label"><b> Seleccione un modificador:</b></label>
+                        <select
+                            className="form-select" aria-label="Floating label select example"  value={props.modifier.idmodifieroriginal} onChange={props.handleChangeModifier}>
+                            <option value=""></option>
+                            <option value="-1">Nuevo Modificador</option>
+                            {props.modifiers.map((modifier) => (
+                            <option
+                                value={modifier.idmodifieroriginal}
+                                key={modifier.idmodifieroriginal}
+                            >
+                                {modifier.name}
+                            </option>
+                            ))}
+                        </select>
+                        {props.newmodifierselect
+                        ?<></>
+                        : <>{errors.namemodifier && <p className="text-danger">{errors.namemodifier}</p>}</>
+                        }
+                    </div>}
+                    {props.newmodifierselect
+                    ?<><div className="mb-2 col-md-4 mt-2 ">
                         <label className="col-form-label"><b> Nombre modificador:</b></label>
                         <input type="text" className="form-control" name="namemodifier" value={props.modifier.namemodifier} onChange={handleChange} />
                         {errors.namemodifier && <p className="text-danger">{errors.namemodifier}</p>}
-                    </div>}
+                    </div>
+                    <div className="mb-2 col-md-4 mt-2 "></div></>
+                    :<></>
+                    } 
                 {props.newmodifier
                 ?<div className="mb-2 col-md-3" align="center" >
                     <label className="col-form-label" for="flexCheckDefault">
@@ -117,13 +142,15 @@ function Modificador(props) {
                         }
                     </label>
                 </div>
-                :<div className="mb-2 col-md-2 mt-4 "  align="center" >
+                :props.newmodifierselect
+                ?<div className="mb-2 col-md-2 "  align="center" >
                     <br/>
                     <input className="form-check-input" type="checkbox" id="flexCheckDefault" checked={props.modifier.requiredchecked} name="requiredchecked" onChange={ e=> props.setModifier({...props.modifier,['requiredchecked']: !props.modifier.requiredchecked})}/>
                     <label className="form-check-label" >
                         Obligatorio
                     </label>
                 </div>
+                :<></>
                 }
                 {props.newmodifier
                 ?<div className="mb-2 col-md-2" >
@@ -131,24 +158,27 @@ function Modificador(props) {
                     <label className="col-form-label">&nbsp; {props.modifier.pricemodifier}</label>
                     {errors.pricemodifier && <p className="text-danger">{errors.pricemodifier}</p>}
                 </div>
-                :
-                <div className="mb-3 col-md-5 ">
-                <div className="row d-flex justify-content-center">
-                <div className="mb-2 col-md-5 mt-5 "  align="center" >
+                :props.newmodifierselect
+                ?<div className="mb-3 col-md-5 ">
+                    <div className="row d-flex justify-content-center">
+                    <div className="mb-2 col-md-6 mt-4 "  align="center" >
                         <input className="form-check-input" type="checkbox" name="pricemodifierchecked" checked={props.modifier.pricemodifierchecked} onChange={e=> props.setModifier({...props.modifier,['pricemodifierchecked']: !props.modifier.pricemodifierchecked})}/>
                         <label className="form-check-label" for="flexCheckDefault">
                             Habilitar Precio
                         </label>
+                    </div>
+                    {props.modifier.pricemodifierchecked
+                    ?<div className="mb-2 col-md-6" >
+                        <label className="col-form-label"><b> Precio:</b></label>
+                        <input type="text" className="form-control" name="pricemodifier" value={props.modifier.pricemodifier} onChange={handleChange}/>
+                        {errors.pricemodifier && <p className="text-danger">{errors.pricemodifier}</p>}
+                    </div>
+                    :<div/>}
+                    </div>
                 </div>
-                        {props.modifier.pricemodifierchecked
-                        ?<div className="mb-2 col-md-3 mt-2" >
-                            <label className="col-form-label"><b> Precio:</b></label>
-                            <input type="text" className="form-control" name="pricemodifier" value={props.modifier.pricemodifier} onChange={handleChange}/>
-                            {errors.pricemodifier && <p className="text-danger">{errors.pricemodifier}</p>}
-                        </div>
-                        :<div/>}
-                </div>
-                </div>}
+                :<></>
+
+                }
             
                 </div>
                 </div>
@@ -170,10 +200,10 @@ function Modificador(props) {
                         />
                     </div>
                     </>
-                    :<></>
-                    }
-                        
-                
+                    :<></>}
+                    {props.newmodifieroptions
+                    
+                    ?<>
                     {props.listoptionsmodifier.map((item)=>(
                         <div className="row d-flex justify-content-center " >
                         <div className="mb-2 col-md-2 "  align="center"></div>
@@ -192,7 +222,30 @@ function Modificador(props) {
                             />
                         </div>
                         </div>
+                    ))
+                    }
+                    </>
+                    :<> {props.modifier.optionsmodifier.map((item,index)=>(
+                        <div className="row d-flex justify-content-center " >
+                        <div className="mb-2 col-md-2 "  align="center"></div>
+                        <div className="mb-2 col-md-10 "  align="center" key={index} >
+                            <OpcionModificador
+                                index={index}
+                                listingredients={props.listingredients}
+                                optionmodifier={item}
+                                setOptionModifier={props.setOptionModifier}
+                                setFormValidOptions={setFormValidOptions}
+                                removeOptionModifier={removeOptionModifier}
+                                newoptionmodifier={props.newoptionmodifier}
+                                newOptionModifier={newOptionModifier}
+                                errorform={errorform}
+                                newmodifieroptions={props.newmodifieroptions}
+                            />
+                        </div>
+                        </div>
                     ))}
+                    </>
+                    }
                 <br/>
                 {props.newmodifier
                 ?<div/>

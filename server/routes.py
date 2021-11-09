@@ -88,6 +88,18 @@ def updateIngredients():
     cur.close()
     return jsonify(msg="ingredient updated")
 
+@app.route('/api/sales/modifier/updateingredient', methods=['PUT'])
+def updateModifierIngredients():
+    conn = conexion()
+    cur = conn.cursor()
+    data = request.json
+    sql = "UPDATE ingredientes SET cantidadingrediente = cantidadingrediente - {0} WHERE idingrediente = '{1}'"-format(data['porcion'], data['idingrediente'])
+    cur.execute(sql, data) 
+    conn.commit()
+    conn.close()
+    cur.close()
+    return jsonify(msg="ingredient updated")
+
 ##---------------Inserciones en las tablas de ventas--------------##
 @app.route('/api/sales/venta', methods=['POST'])
 def addSale():
@@ -264,6 +276,18 @@ def getSalesDiciembre(year):
     conn.close()
     return jsonify(row)
 
+#-----------------Gráficas de barras (Productos más vendidos)---------##
+@app.route('/api/dashboard/graphdata',  methods=['GET'])
+def getGraphData():
+    conn = conexion()
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+    sql="SELECT nombreproducto, count(nombreproducto) FROM ventasproducto GROUP BY nombreproducto LIMIT 5"
+    cur.execute(sql) 
+    row = cur.fetchall()
+    conn.close()
+    return jsonify(row)
+
+
 # ---------------- Tabla de transacciones ----------------#
 @app.route('/api/dashboard/transactions/<fecha>',  methods=['GET'])
 def getTransactions(fecha):
@@ -326,7 +350,7 @@ def getProductsByCategory(idcategoria):
     conn.close()
     return jsonify(rows)
 
-@app.route('/api/sales/products/id/<search>',  methods=['GET'])
+@app.route('/api/sales/products/name/<search>',  methods=['GET'])
 def getProductByName(search):
     conn = conexion()
     cur = conn.cursor(cursor_factory=RealDictCursor)
@@ -336,7 +360,7 @@ def getProductByName(search):
     conn.close()
     return jsonify(rows)
 
-@app.route('/api/sales/products/<search>',  methods=['GET'])
+@app.route('/api/sales/products/id/<search>',  methods=['GET'])
 def getProductById(search):
     conn = conexion()
     cur = conn.cursor(cursor_factory=RealDictCursor)
@@ -345,6 +369,17 @@ def getProductById(search):
     rows = cur.fetchall()
     conn.close()
     return jsonify(rows)
+
+@app.route('/api/sales/verification/products/complements/<search>',  methods=['GET'])
+def verifyProductComplement(search):
+    conn = conexion()
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+    sql = ("SELECT idcomplemento FROM complementos WHERE idproducto = '{0}'".format(search))
+    cur.execute(sql, search)
+    rows = cur.fetchone()
+    conn.close()
+    return jsonify(rows)
+
 
 @app.route('/api/getproducts/<id>',  methods=['GET'])
 def getProduct(id):
@@ -1102,12 +1137,18 @@ def newModifier(idproducto):
     conn = conexion()
     cur = conn.cursor()
     data = request.json
-    sql = "INSERT INTO modificadores (nombremodificador, preciomodificador,obligatorio) VALUES ('{0}', '{1}', '{2}','{3}') RETURNING idmodificador".format(data['namemodifier'],data['pricemodifier'],data['requiredchecked'])
-    cur.execute(sql, data)
-    idmodificador= cur.fetchone()
-    d = {}
-    d['idproduct'] = idproducto
-    d['idmodifier'] = idmodificador[0]
+    sql = "INSERT INTO modificadores (nombremodificador, preciomodificador,obligatorio) VALUES ('{0}', '{1}', '{2}') RETURNING idmodificador".format(data['namemodifier'],data['pricemodifier'],data['requiredchecked'])
+    if(data['idmodifieroriginal']==''):
+        cur.execute(sql, data)
+        idmodificador= cur.fetchone()
+        d = {}
+        d['idproduct'] = idproducto
+        d['idmodifier'] = idmodificador[0]
+    else:
+        d = {}
+        d['idmodifier']=data['idmodifieroriginal']
+        d['idproduct'] = idproducto
+        idmodificador=[1]
     sql2 = "INSERT INTO productosmodificadores (idproducto, idmodificador) VALUES ('{0}', '{1}')".format(d['idproduct'],d['idmodifier'])
     cur.execute(sql2, d)
     conn.commit()
@@ -1121,17 +1162,18 @@ def newOptionModifier(idmodificador):
     conn = conexion()
     cur = conn.cursor()
     data = request.json
-    sql = "INSERT INTO opciones (nombreopcion, precioopcionmodificador,idingrediente,opcionporcion) VALUES ('{0}', '{1}','{2}','{3}') RETURNING idopcionmodificador".format(data['name'],data['price'],data['idingredient'],data['portion'])
-    cur.execute(sql, data)
-    idopcion= cur.fetchone()
-    d = {}
-    d['idoption'] = idopcion[0]
-    d['idmodifier'] = idmodificador
-    sql2 = "INSERT INTO modificadoresopciones (idmodificador, idopcionmodificador) VALUES ('{0}', '{1}')".format(d['idmodifier'],d['idoption'])
-    cur.execute(sql2, d)
-    conn.commit()
-    conn.close()
-    cur.close()
+    if(data['idoptionmodifieroriginal']==''):
+        sql = "INSERT INTO opciones (nombreopcion, precioopcionmodificador,idingrediente,opcionporcion) VALUES ('{0}', '{1}','{2}','{3}') RETURNING idopcionmodificador".format(data['name'],data['price'],data['idingredient'],data['portion'])
+        cur.execute(sql, data)
+        idopcion= cur.fetchone()
+        d = {}
+        d['idoption'] = idopcion[0]
+        d['idmodifier'] = idmodificador
+        sql2 = "INSERT INTO modificadoresopciones (idmodificador, idopcionmodificador) VALUES ('{0}', '{1}')".format(d['idmodifier'],d['idoption'])
+        cur.execute(sql2, d)
+        conn.commit()
+        conn.close()
+        cur.close()
     return jsonify(1)
 
 #Inserta un nuevo complemento
@@ -1182,6 +1224,25 @@ def getCategoriesProducts():
     conn.close()
     return jsonify(rows)
 
+@app.route('/api/products/modifiers',  methods=['GET'])
+def getModifiers():
+    conn = conexion()
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+    cur.execute("SELECT idmodificador as idmodifieroriginal, nombremodificador as namemodifier, preciomodificador as pricemodifier, obligatorio as requiredchecked FROM modificadores ")
+    modifiers = cur.fetchall()
+    cur2 = conn.cursor(cursor_factory=RealDictCursor)
+    cur2.execute("SELECT a.idmodificador as idmodifier, a.idopcionmodificador as idoptionmodifieroriginal, b.nombreopcion as name, b.idingrediente as idingredient, c.nombreingrediente as nameingredient, b.precioopcionmodificador as price, b.opcionporcion as portion FROM modificadoresopciones a LEFT JOIN opciones b ON a.idopcionmodificador=b.idopcionmodificador LEFT JOIN ingredientes c ON b.idingrediente=c.idingrediente")
+    options =cur2.fetchall()
+    for modifier in modifiers:
+       print(modifier)
+       modifier['optionsmodifier']=[]
+       modifier['idmodifier']=0
+       modifier['name']=modifier['namemodifier']
+       for option in options:
+        if(option['idmodifier']==modifier['idmodifieroriginal']):
+            modifier['optionsmodifier'].append(option)
+    conn.close()
+    return jsonify(modifiers)
 
 ##---------- Configuraciones de los Temas ---------------##
 #@app.route('/general/getActualTheme/<nombre>',  methods=['GET'])

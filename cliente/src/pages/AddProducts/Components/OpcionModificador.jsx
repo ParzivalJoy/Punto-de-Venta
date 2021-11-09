@@ -16,11 +16,12 @@ export default function OpcionModificador(props) {
 
         inputValidation()
     const handleChange = e => {
-        const { name, value } = e.target;
-        props.setOptionModifier({
-            ...props.optionmodifier,
-            [name]: value
-        });
+            const { name, value } = e.target;
+            props.setOptionModifier({
+                ...props.optionmodifier,
+                [name]: value
+            });
+        
     };
 
     function  inputValidation(){
@@ -60,14 +61,14 @@ export default function OpcionModificador(props) {
         }
     }
     const handleChangeIngredient = e => {
-        const ingredient = props.listingredients[e.target.value];
-        console.log(ingredient)
-        props.setOptionModifier({
-            ...props.optionmodifier,
-            ['index']:e.target.value,
-            ['idingredient']: ingredient.idingrediente,
-            ['nameingredient']: ingredient.nombreingrediente,
-        });
+            const ingredient = props.listingredients[e.target.value];
+            console.log(ingredient)
+            props.setOptionModifier({
+                ...props.optionmodifier,
+                ['index']:e.target.value,
+                ['idingredient']: ingredient.idingrediente,
+                ['nameingredient']: ingredient.nombreingrediente,
+            });
     };
 
 
@@ -126,9 +127,11 @@ export default function OpcionModificador(props) {
                     <label className="col-form-label"><b> Porción utilizada:</b></label>
                     {props.newoptionmodifier
                         ? <label className="col-form-label">&nbsp; {props.optionmodifier.portion}</label>
-                        :<input type="text" className="form-control" name="portion" value={props.optionmodifier.portion} onChange={ handleChange}/>
+                        :<>
+                            <input type="text" className="form-control" name="portion" value={props.optionmodifier.portion} onChange={ handleChange}/>
+                            {errors.portionoption && <p className="text-danger">{errors.portionoption}</p>}
+                        </>
                     }
-                    {errors.portionoption && <p className="text-danger">{errors.portionoption}</p>}
                     <br/>
                 </div>
                 {props.newoptionmodifier

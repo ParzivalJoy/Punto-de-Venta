@@ -1,6 +1,6 @@
 import React from 'react'
 import ControlPointIcon from '@mui/icons-material/ControlPoint';
-import   {useState}  from 'react'
+import   {useState, useEffect}  from 'react'
 import Modificador from './Components/Modificador'
 import Collapse from 'react-bootstrap/Collapse'
 import axios from 'axios' //npm i axios
@@ -16,6 +16,7 @@ function Modificadores(props) {
     const [listoptionsmodifier, setListOptionsModifier]= useState([])
     const [newoptionmodifier,setNewOptionModifier]=useState(false)
     const [newmodifieroptions, setNewModifierOptions] = useState(false)
+    const [newmodifierselect, setNewModifierSelect] = useState(false)
     const [optionmodifier,setOptionModifier] = useState({
         idoptionmodifier:0,
         index:'',
@@ -23,9 +24,25 @@ function Modificadores(props) {
         price:'0.0',
         idingredient:'',
         nameingredient:'',
-        portion:'0.0'
+        portion:'0.0',
     })
-    function newModifier(e){
+    useEffect(() => {
+        getModifiers()
+    },[])
+    const handleChangeModifier = e => {
+        if(e.target.value==='-1'){
+            console.log('nuevo modificador')
+            clearInputs()
+            setNewModifierSelect(true)
+            setNewModifierOptions(true)
+        }else{
+            props.setModifier(modifiers.find(item => item.idmodifieroriginal == e.target.value))
+            setNewOptionModifier(true)
+            setNewModifierSelect(false)
+            setNewModifierOptions(false)
+        }
+    };
+    function newModifier(){
         if(formvalidmodifiers&&props.modifier.namemodifier!==''){
             setErrorForm('')
             setNewModifier(true)
@@ -34,7 +51,9 @@ function Modificadores(props) {
                 props.modifier.optionsmodifier=listoptionsmodifier
             }
             if(props.listmodifiers.length===0){
+                
                 props.setListModifiers(props.listmodifiers.concat(props.modifier))
+                
             }else{
                 const mo =props.listmodifiers[props.listmodifiers.length-1]
                 props.modifier.idmodifier= mo.idmodifier+1
@@ -54,7 +73,8 @@ function Modificadores(props) {
             pricemodifier:'0.0',
             optionsmodifier:[],
             pricemodifierchecked:false,
-            requiredchecked:false
+            requiredchecked:false,
+            idmodifieroriginal:0
         })
     }
     function removeModifier(i){
@@ -65,6 +85,7 @@ function Modificadores(props) {
         const { data } = await axios.get(baseURL+'/products/modifiers')
         setModifiers(data)
     }
+
     return (
         <div className="accordion-item">
             <button className="accordion-button" type="button" 
@@ -93,7 +114,10 @@ function Modificadores(props) {
                         setListOptionsModifier={setListOptionsModifier}
                         newoptionmodifier={newoptionmodifier}
                         setNewOptionModifier={setNewOptionModifier}
-                        newmodifieroptions={true}
+                        newmodifieroptions={newmodifieroptions}
+                        modifiers={modifiers}
+                        handleChangeModifier={handleChangeModifier}
+                        newmodifierselect={newmodifierselect}
                     />
                     {
                     props.listmodifiers.map((item)=>(
@@ -116,6 +140,9 @@ function Modificadores(props) {
                             newoptionmodifier={newoptionmodifier}
                             setNewOptionModifier={setNewOptionModifier}
                             newmodifieroptions={false}
+                            modifiers={modifiers}
+                            handleChangeModifier={handleChangeModifier}
+                            newmodifierselect={false}
                         />
                         </div>
                     ))}

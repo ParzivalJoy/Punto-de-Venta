@@ -18,7 +18,7 @@ export default function Chart({title, data, dataKey, grid}) {
     return (
         <div className="chart">
             <span className="chart-title">{title}</span>
-            <ResponsiveContainer width="100%" aspect={4/1}>
+            <ResponsiveContainer width="100%" aspect={5/1}>
                 <LineChart data={data}>
                     <XAxis dataKey="month" stroke="#D1D5DB"/>
                     <Line type="monotone" dataKey={dataKey}  stroke="#D1D5DB"/>
@@ -27,6 +27,6 @@ export default function Chart({title, data, dataKey, grid}) {
                 </LineChart>
             </ResponsiveContainer>
             </div>
-  
+
     )
 }
