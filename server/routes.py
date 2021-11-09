@@ -498,6 +498,16 @@ def getProductNot():
     conn.close()
     return jsonify(row)
 
+@app.route('/api/dashboard/ingredientnot',  methods=['GET'])
+def getIngredientNot():
+    conn = conexion()
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+    sql="SELECT COUNT(*) FROM ingredientes WHERE cantidadingrediente <= cantidadnotificacioningrediente"
+    cur.execute(sql) 
+    row = cur.fetchone()
+    conn.close()
+    return jsonify(row)
+
 
 @app.route('/api/<idempleado>',  methods=['GET'])
 def getEmployee(idempleado):

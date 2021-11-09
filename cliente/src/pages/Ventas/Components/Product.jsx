@@ -91,6 +91,7 @@ export default function Product() {
 
     const selectedComplement = (e, id, name, price) => {
         const value = e.target.value
+        console.log(value)
         var length = ''
 
             //Si el valor es diferente de 0

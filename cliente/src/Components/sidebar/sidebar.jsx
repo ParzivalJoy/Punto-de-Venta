@@ -21,15 +21,15 @@ function Sidebar() {
             <div className="sidebar-wrapper">
                 <div className="sidebar-profile">
                     <div className="sidebar-img">
-                        <AccountCircleIcon className="icons profile-icon"/>
+                    <Link to = '/logout' className="link">
+                        <LogoutIcon className="icons profile-icon"/>
+                    </Link>
                     </div>
                     <div className="sidebar-info">
                         <span className="sidebar-info-name">{user}</span>
                         <span className="sidebar-info-ocupation">{role}</span>
                     </div>
-                    <Link to = '/logout' className="link">
-                        <LogoutIcon className="icons icon-logout" />
-                    </Link>
+                     
                 </div>
 
                 <div className="sidebarMenu">

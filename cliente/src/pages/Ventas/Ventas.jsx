@@ -63,7 +63,16 @@ export default function Ventas() {
               })
         }else{
             clear()
+            //verifyProductComplement()
             setAllProducts(data)
+        }
+    }
+
+    async function verifyProductComplement(){
+        const {data} = await axios.get('http://localhost:5000/api/sales/verification/products/complements'+`/${search}`)
+        console.log(data)
+        if(data !== null){
+            console.log("No básico")
         }
     }
     

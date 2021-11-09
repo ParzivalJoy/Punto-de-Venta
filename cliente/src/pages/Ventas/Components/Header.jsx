@@ -11,7 +11,7 @@ export default function Header(props) {
                 <span className="client-title">Atiende a Cliente! <AddCircleOutlineIcon className="header-icons"/></span>
                 <span className="client.promo">Tiene 5 promociones disponibles <MoreHorizIcon className="header-icons"/></span>       
             </div>
-            <div className="header-rigjh">
+            <div className="header-right">
                 <LocalGroceryStoreIcon/>
             </div>   
         </div>

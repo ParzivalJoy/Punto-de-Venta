@@ -21,11 +21,12 @@ export default function Graph() {
         getGraphData()
     }, [])
 
-    const data={
+    const Graphdata={
         labels: labels,
         datasets:[{
             label: 'Productos más vendidos',
-            backgroundColor: '#000',
+            backgroundColor: '#fff',
+            color: '#fff',
             data: datas
         }]
     }
@@ -37,7 +38,7 @@ export default function Graph() {
 
     return (
         <div className="graph">
-            <Bar data={data} options={opciones}/>
+            <Bar data={Graphdata} options={opciones}/>
         </div>
     )
 }

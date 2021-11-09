@@ -6,6 +6,7 @@ import LeftTable from "./Components/lefttable"
 import RightTable from "./Components/righttable"
 import axios from 'axios'
 import Graph from './Components/Graph';
+import Secondcards from './Components/Secondcards';
 
 export default function Dashboard() {
 
@@ -179,6 +180,9 @@ export default function Dashboard() {
             <div className="second-bar">
             <Graph/>
             <Chart data={userdata} title="Gráfica de Ventas (Anual)" grid dataKey="sales"/>
+            </div>
+            <div className="div">
+                <Secondcards/>
             </div>
             <div className="dash-tables">
                 <LeftTable/>

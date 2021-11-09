@@ -88,6 +88,9 @@ _______________________**/
 /**------------------------
         Login CSS
 ------------------------**/
+input[type=number]::-webkit-inner-spin-button {
+  opacity: 1
+}
 
 .form-container {
   margin: 100px auto;
@@ -302,11 +305,12 @@ _______________________**/
 }
 
 .sidebar-img .profile-icon{
-  font-size: 50px;
+  font-size: 40px;
 }
 .sidebar-info{
   display: flex;
   flex-direction: column;
+  margin-left: 20px;
 }
 .sidebar-info-name{
   font-size: 15px;
@@ -376,6 +380,26 @@ _______________________**/
   box-shadow: 0px 0px 11px -1px rgba(0,0,0,0.2);
   -webkit-box-shadow: 0px 0px 11px -1px rgba(0,0,0,0.2);
   -moz-box-shadow: 0px 0px 11px -1px rgba(0,0,0,0.2);
+}
+
+.card-item-graph{
+  flex: 1;
+  height: 230px;
+  margin: 0px 20px;
+  padding: 40px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: .5s;
+  box-shadow: 0px 0px 11px -1px rgba(0,0,0,0.2);
+  -webkit-box-shadow: 0px 0px 11px -1px rgba(0,0,0,0.2);
+  -moz-box-shadow: 0px 0px 11px -1px rgba(0,0,0,0.2);
+}
+
+
+.second-card-item{
+  width: 300px;
+  margin-top: -70px;
+  margin-left: -20px;
 }
 
 .card-title{
@@ -452,6 +476,8 @@ _______________________**/
   -moz-box-shadow: 0px 0px 11px -1px rgba(0,0,0,0.2);
   transition: background-color .5s; 
 }
+
+
 
 .chart-title{
   font-size: 20px;
@@ -624,8 +650,20 @@ _______________________**/
   -webkit-box-shadow: 0px 0px 11px -1px rgba(0,0,0,0.2);
   -moz-box-shadow: 0px 0px 11px -1px rgba(0,0,0,0.2);
 }
-.sales-body{
 
+.product-cant{
+  background-color: red;
+  border-radius: 50%;
+  width: 25px;
+  display: flex;
+  align-items: center;
+}
+
+.p-cant{
+  margin-left: 7px;
+}
+
+.sales-body{
   margin: 20px;
   display: flex;
   align-items: center;
@@ -799,11 +837,15 @@ _______________________**/
   margin: 10px;
 }
 
-.header-left{
+.header-left {
   display: flex;
   flex-direction: column;
 }
 
+.header-right{
+  display: flex;
+  justify-content: space-between;
+}
 .header-left .header-icons{
   cursor: pointer;
   
@@ -1009,6 +1051,21 @@ thead{
 
 .btn-charge{
   margin: 20px;
+}
+
+.cart-comp{
+  font-size: 10px;
+}
+
+.cart-com-mod{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: column;
+}
+
+.delete-icon{
+  cursor: pointer;
 }
 
 

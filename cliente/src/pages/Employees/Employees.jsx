@@ -173,7 +173,7 @@ function Employees() {
         <div className="p-3 mb-2" >
             <div className='row'>
                 { listEmployees.map(item => (
-                 <div className="col-md-3" key={item.idempleado}>
+                 <div className="col-md-4" key={item.idempleado}>
                         <Card
                         idempleado={item.idempleado}
                         nombreempleado={item.nombreempleado}
