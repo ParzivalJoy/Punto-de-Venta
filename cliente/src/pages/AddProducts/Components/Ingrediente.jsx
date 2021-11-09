@@ -70,7 +70,7 @@ export default function Ingrediente(props) {
     }
 
     return (
-            <div className="row d-flex justify-content-center border">
+            <div className="row d-flex justify-content-center">
                 {props.newingredient
                 ?
                 <div align="right">

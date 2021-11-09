@@ -89,7 +89,7 @@ function Modificador(props) {
     }
     console.log(props.modifier)
     return (
-            <div className="row d-flex justify-content-center border">
+            <div className="row d-flex justify-content-center">
             <div className="">
                 <div className="row d-flex justify-content-center">
                 {props.newmodifier

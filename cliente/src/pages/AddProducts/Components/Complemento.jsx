@@ -81,7 +81,7 @@ export default function Complemento(props) {
     };
     inputValidation()
     return (
-        <div className="row d-flex justify-content-center border">
+        <div className="row d-flex justify-content-center">
             {props.newcomplement
             ?
             <div align="right">

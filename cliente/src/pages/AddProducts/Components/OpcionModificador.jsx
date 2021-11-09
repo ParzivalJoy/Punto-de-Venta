@@ -73,7 +73,7 @@ export default function OpcionModificador(props) {
 
 
     return (
-        <div className="container px-4 px-lg-5 h-100 border" >
+        <div className="card container px-4 px-lg-5 h-100" >
             {props.newoptionmodifier
             ?<>{props.newmodifieroptions
                 ?<div align="right">

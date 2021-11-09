@@ -224,6 +224,7 @@ function Products() {
                     imagebinary ={imagebinary }
                     setImagebinary={setImagebinary}
                 />
+                <div className="card">
                 <label>Seleccione los módulos que desea habilitar</label>
                 <div className="row d-flex justify-content-center ">
                 <div className="mb-3 col-md-4" align="center" >
@@ -246,6 +247,7 @@ function Products() {
                         <label className="form-check-label" >
                              Ingredientes
                         </label>
+                </div>
                 </div>
                 </div>
                 {modifierschecked

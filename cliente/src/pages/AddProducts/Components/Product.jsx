@@ -189,10 +189,11 @@ function Product(props) {
     }
     return (
         <div>
-            <div className="p-2 border mt-3">
+            <div className="card p-2 mt-3">
                 <h2>Nuevo Producto</h2>
             </div>
-                <div className="row d-flex justify-content-center border">
+            <div className="card">
+                <div className="row d-flex justify-content-center">
                     <div  className="col-md mt-2 " align="center">
                         <img src={(props.imagebinary===null) ? product : props.imagebinary} width="150" height="150" className="rounded" alt="imagen producto " align="center"/>
                     </div>
@@ -202,8 +203,10 @@ function Product(props) {
                             {errors.imageproduct && <p className="text-danger">{errors.imageproduct}</p>}
                         </div>
                     </div>
+                    </div>
                 </div>
-                <div className="row d-flex justify-content-center border">
+                <div className="card">
+                <div className="row d-flex justify-content-center">
                 <div className=" mb-3 col-md-4 mt-2">
                     <label className="col-form-label"> <b>Nombre:</b></label>
                     <input type="text" className="form-control" name="nameproduct" value={props.formproduct.nameproduct} onChange={ handleChange}/>
@@ -278,9 +281,10 @@ function Product(props) {
                             Habilitar Inventario
                     </label>
                 </div>
+                </div>
                 {props.stockchecked
                 ?
-                <div className="row d-flex justify-content-center border">
+                <div className="row d-flex justify-content-center">
                     <div className="mb-2 col-md-4" >
                     <label className="col-form-label"><b> Cantidad inicial del producto:</b></label>
                     <input type="text" className="form-control" name="stockinitproduct" value={props.formproduct.stockinitproduct} onChange={ handleChange}/>
