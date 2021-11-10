@@ -380,6 +380,15 @@ def verifyProductComplement(search):
     conn.close()
     return jsonify(rows)
 
+@app.route('/api/sales/verification/products/modifiers/<search>',  methods=['GET'])
+def verifyProductModifier(search):
+    conn = conexion()
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+    sql = ("SELECT idmodificador FROM productosmodificadores WHERE idproducto = '{0}'".format(search))
+    cur.execute(sql, search)
+    rows = cur.fetchone()
+    conn.close()
+    return jsonify(rows)
 
 @app.route('/api/getproducts/<id>',  methods=['GET'])
 def getProduct(id):
@@ -508,6 +517,25 @@ def getIngredientNot():
     conn.close()
     return jsonify(row)
 
+@app.route('/api/dashboard/ingredient',  methods=['GET'])
+def getTotalIngredients():
+    conn = conexion()
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+    sql="SELECT COUNT(*) FROM ingredientes"
+    cur.execute(sql) 
+    row = cur.fetchone()
+    conn.close()
+    return jsonify(row)
+
+@app.route('/api/dashboard/complement',  methods=['GET'])
+def getSalesComplement():
+    conn = conexion()
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+    sql="SELECT nombrecomplemento, COUNT(*)idcomplemento FROM ventascomplemento GROUP BY nombrecomplemento LIMIT 5"
+    cur.execute(sql) 
+    row = cur.fetchall()
+    conn.close()
+    return jsonify(row)
 
 @app.route('/api/<idempleado>',  methods=['GET'])
 def getEmployee(idempleado):

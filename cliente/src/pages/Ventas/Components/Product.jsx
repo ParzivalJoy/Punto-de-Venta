@@ -10,6 +10,7 @@ import { useHistory } from "react-router-dom";
     const dataMultiple = []
     const dataComplement = []
     const data = []
+    var totalventa = 0
 
 export default function Product() {
 
@@ -72,17 +73,24 @@ export default function Product() {
         var length = ''
         length = dataMultiple.filter(p => p.idmod === idmod).length 
 
+        //Si es un modificador nuevo
         if (length === 0){
+            totalventa += price
             dataMultiple.push({idcarrito: '', idproducto: params.id, idmod: idmod, nombremodificador: nombremod, id: id, nombre: name, precio: price, idingrediente: ingrediente, porcion: porcion})
+        //Si es un modificador que ya existe
         }else{
             var index = dataMultiple.findIndex((obj => obj.idmod === idmod))
             console.log("Indice:", index)
+            //Sobreescribe la opcion seleccionada
             if(index >= 0){
+                totalventa -= dataMultiple[index].precio 
                 dataMultiple[index].precio = price
                 dataMultiple[index].id = id
                 dataMultiple[index].nombre = name
+                totalventa += price
                 console.log("Elegir otra opcion:", dataMultiple) 
             }else{
+                totalventa += price
                 dataMultiple.push({idcarrito: '', idproducto: params.id, idmod: idmod, nombremodificador: nombremod, id: id, nombre: name, precio: price, idingrediente: ingrediente, porcion: porcion})
             }          
         }
@@ -93,19 +101,21 @@ export default function Product() {
         const value = e.target.value
         console.log(value)
         var length = ''
-
             //Si el valor es diferente de 0
             if (value !== '0'){
                 length = dataComplement.filter(p => p.id == id).length 
                 //Si no existe en el arreglo se hace un push
                 if (length === 0){
+                    totalventa += price * value
                     dataComplement.push({idcarrito: '', idproducto: params.id, id: id, nombre: name, precio: price, cantidad: value, total: price * value}) 
                 //Si existe en el arreglo
                 }else{
                     var index = dataComplement.findIndex((obj => obj.id == id))
                     //Encuentra el indice y cambia el precio
                     if(index >= 0){
-                        dataComplement[index].precio = price * value
+                        totalventa -= dataComplement[index].total
+                        dataComplement[index].total = price * value
+                        totalventa += price * value
                     }else{
                         dataComplement.push({idcarrito: '', idproducto: params.id, id: id, nombre: name, precio: price, cantidad: value, total: price * value})
                     }          
@@ -117,7 +127,7 @@ export default function Product() {
                 dataComplement.splice(index, 1)
             }
           }
-          console.log(dataComplement)
+          console.log("Complementos", dataComplement)
     }
           
     
@@ -135,6 +145,7 @@ export default function Product() {
 
             //Push a data para guardar los valores
             let totalproducto = parseInt(productPrice) * parseInt(cant)
+            totalventa += parseInt(productPrice) * parseInt(cant)
             data.push({idcarrito: carrito, idproducto: params.id, nombreproducto: productName, precioproducto: productPrice, cantidad: parseInt(cant), total: totalproducto, nota: nota})
             console.log('Primer push:',data)
 
@@ -144,6 +155,7 @@ export default function Product() {
             carrito = 1
             //Push a data para guardar los valores
             let totalproducto = parseInt(productPrice) * parseInt(cant)
+            totalventa += parseInt(productPrice) * parseInt(cant)
             data.push({idcarrito: carrito, idproducto: params.id, nombreproducto: productName, precioproducto: productPrice, cantidad: parseInt(cant), total: totalproducto, nota: nota})
             console.log('Push localstore limpio:',data)
 
@@ -151,7 +163,11 @@ export default function Product() {
             localStorage["productdatas"] = JSON.stringify(data)
         }
         console.log(JSON.parse(localStorage["productdatas"]))
-        
+
+        //Se guarda el total a pagar en el carrito
+        var tempventa = localStorage.getItem('Totalpagar')
+        totalventa += parseInt(tempventa)
+        localStorage.setItem('Totalpagar', totalventa)
 
         if(dataComplement.length !== 0){
             var index = 0

@@ -134,7 +134,6 @@ export default function Cobro() {
 
     }
 
-
     async function updateingredient(idproducto, porcion){
         console.log(porcion)
         console.log(idproducto)

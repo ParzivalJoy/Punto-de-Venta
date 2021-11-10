@@ -10,6 +10,8 @@ import { Link } from 'react-router-dom';
 import Carrito from './Components/Carrito'
 import { useHistory } from "react-router-dom";
 
+    const dataproduct = []
+
 export default function Ventas() {
 
     const [ListAllProducts, setAllProducts] = useState([])
@@ -62,9 +64,7 @@ export default function Ventas() {
                 timer: 1500
               })
         }else{
-            clear()
-            //verifyProductComplement()
-            setAllProducts(data)
+            verifyProductComplement()
         }
     }
 
@@ -72,8 +72,55 @@ export default function Ventas() {
         const {data} = await axios.get('http://localhost:5000/api/sales/verification/products/complements'+`/${search}`)
         console.log(data)
         if(data !== null){
-            console.log("No básico")
+            history.push('/product'+`/${search}`)
+        }else{
+            verifyProductModifier()
         }
+    }
+
+    async function verifyProductModifier(){
+        const {data} = await axios.get('http://localhost:5000/api/sales/verification/products/modifiers'+`/${search}`)
+        console.log(data)
+        if(data !== null){
+            history.push('/product'+`/${search}`)
+        }else{
+                getSearchProduct()
+        }
+    }
+
+    async function getSearchProduct(){
+        const {data} = await axios.get('http://localhost:5000/api/getproducts/'+`/${search}`)
+
+        if(localStorage["productdatas"]){
+            //Guarda los datos de localstorage en temp
+            var ptemp = JSON.parse(localStorage["productdatas"])
+            var length = ''
+            length = ptemp.length 
+            var carrito = length + 1
+            //Push a data con los datos en localstorage
+            ptemp.map(item => (
+                dataproduct.push({idcarrito: item.idcarrito, idproducto: item.idproducto, nombreproducto: item.nombreproducto, precioproducto: item.precioproducto, cantidad: item.cantidad, total: item.total, nota: item.nota})
+            ))
+
+            //Push a data para guardar los valores
+            dataproduct.push({idcarrito: carrito, idproducto: search, nombreproducto: data.nombreproducto, precioproducto: data.precioproducto, cantidad: 1, total: data.precioproducto, nota: 'x'})
+            console.log('Primer push:',dataproduct)
+
+            //Se guarda data en localstore mydatas
+            localStorage["productdatas"] = JSON.stringify(dataproduct)
+        }else{
+            carrito = 1
+            //Push a data para guardar los valores
+            dataproduct.push({idcarrito: carrito, idproducto: search, nombreproducto: data.nombreproducto, precioproducto: data.precioproducto, cantidad: 1, total: data.precioproducto, nota: 'x'})
+            console.log('Push localstore limpio:',dataproduct)
+
+            //Se guarda data en localstore mydatas
+            localStorage["productdatas"] = JSON.stringify(dataproduct)
+        }
+        console.log(JSON.parse(localStorage["productdatas"]))
+
+        history.push("/ventas");  
+        window.location.reload(true);
     }
     
     async function getProductsByPrice1(){
