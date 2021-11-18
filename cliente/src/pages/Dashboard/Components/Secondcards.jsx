@@ -4,107 +4,133 @@ import axios from 'axios'
 import PacmanLoader from "react-spinners/PacmanLoader";
 import {Doughnut, Bar, PolarArea} from 'react-chartjs-2'
 
+    var ingredientNot = ''
+    var totalingredients = ''
+
+    var complementos = []
+    var cuentacomp = []
+
+    var usuarios = []
+    var cuenta = []
+
 export default function Secondcards() {
 
-    const [ingredientNot, setIngredientNot] = useState('')
-    const [totalingredients, setTotalIngredients] = useState('')
-    const [nombrecomplemento, setNombreComplemento] = useState([])
-    const [name, setName] = useState([])
-
-    const [loading, setLoading]=useState(true)
+    async function getProductsToday(){
+        const {data} = await axios.get('http://localhost:5000/api/dashboard/doughnut')
+        if(usuarios.length === 0 && cuenta.length === 0){
+            data.map(item =>(
+                usuarios.push(item.usuario),
+                cuenta.push(item.count)
+            ))
+            }
+    }
 
     async function getSalesComplement(){
         const {data} = await axios.get('http://localhost:5000/api/dashboard/complement')
-        setName(data)
-        console.log(name)
+        if(complementos.length === 0 && cuentacomp.length === 0){
+            data.map(item =>(
+                complementos.push(item.nombrecomplemento),
+                cuentacomp.push(item.idcomplemento)
+            ))
+            }
     }
 
     async function getIngredientNot(){
         const {data} = await axios.get('http://localhost:5000/api/dashboard/ingredientnot')
-        setIngredientNot(data.count)
+        if (ingredientNot === ''){
+            ingredientNot = data.count
+        }
     }
 
     async function getTotalIngredients(){
         const {data} = await axios.get('http://localhost:5000/api/dashboard/ingredient')
-        setTotalIngredients(data.count)
+        if (totalingredients === ''){
+            totalingredients = data.count
+        }
     }
-
 
     useEffect(() =>{
         getIngredientNot()
         getTotalIngredients()
         getSalesComplement()
+        getProductsToday()
     }, [])
 
     const dataGraph1={
-        labels: ['Ingredientes bajos de inventario','Ingredientes estandar'],
+        labels: ['Ingredientes próximos a terminarse','Ingredientes estandar'],
         datasets:[{
             label: "Inventario de ingredientes",
             data: [ingredientNot,totalingredients-ingredientNot],
         }]
     }
 
-    if(name === []){
-        setLoading(false)
-    }
-
-    console.log(name)
-    var dataGraph2 = {}
-    if(name !== []){
-        name.map(item =>(
-        dataGraph2={
-            labels: [item.nombrecomplemento],
-            datasets:[{
-                label: "Complementos más vendidos",
-                data: [item.idcomplemento]
-            }]
-            }
-        ))
-    }
-
-    const data={
-        labels: ['Producto','Ingrediente','Cosa'],
+    const dataGraph2={
+        labels: complementos,
         datasets:[{
-            data: [50,20,70],
+            label: "Complementos más utilizados",
+            data: cuentacomp,
         }]
     }
 
-    const opciones={
+    const dataDoughnut={
+        labels: usuarios,
+        datasets:[{
+            label: "Productos vendidos en el día",
+            data: cuenta,
+        }]
+    }
+
+    const optionGraph1={
         maintainAspectRadio: false,
         responsive: true,
         plugins: {
             legend: {
                 display: true,
                 position: 'top'
+            }
+        }
+    }
+
+    const optionGraph2={
+        maintainAspectRadio: false,
+        responsive: true,
+        plugins: {
+            legend: {
+                display: true,
+                position: 'bottom'
+            }
+        }
+    }
+
+    const optionDoughnut={
+        maintainAspectRadio: false,
+        responsive: true,
+        plugins: {
+            legend: {
+                display: true,
+                position: 'bottom'
             },
             title: {
                 display: true,
-                text: 'Inventario de ingredientes',
-                position: 'left'
+                position: 'top',
+                text: 'Ventas de usuarios',
             }
         }
     }
 
     return (
         <div>
-            {name !== null && name !== [] ? (
             <div className="dash-cards">
             <div className="card second-graph">
-                <Bar data={dataGraph1} options={opciones} />
-                <Bar data={dataGraph1} options={opciones} />
+                <Bar data={dataGraph1} options={optionGraph1} />
+                <Bar data={dataGraph2} options={optionGraph2} />
             </div>
             <div className="card second-graph">
                 <div className="second-card-item">
-                    <Doughnut data={data} options={opciones} />
+                    <Doughnut data={dataDoughnut} options={optionDoughnut} />
                 </div>
             </div>
-        </div>
-        ) : (<div className="d-flex justify-content-center align-items-center" id="cargascreen">
-        <div>
-            <PacmanLoader size={30} color={"#123adc"} loading={loading}  />
-        </div>
       </div>
-   )}
         </div>
     )
 }

@@ -1,0 +1,80 @@
+/*New File CSS sin hooks*/
+
+/* body {
+  margin: 0;
+  padding: 0;
+}
+
+.App {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.crop-container {
+  width: 100%;
+  height: 400px;
+  position: relative;
+}
+
+.controls {
+  margin: auto;
+  width: 50%;
+  display: flex;
+  align-items: center;
+}
+
+.slider {
+  padding: 30px 0px;
+}
+
+.button {
+  text-align: center;
+} */
+
+/*New File CSS con hooks*/
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.rel {
+  position: relative;
+  height: 400px;
+  width: 500px;
+}
+
+.App {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.crop-container {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 80px;
+}
+
+.controls {
+  position: relative;
+  bottom: 0;
+  left: 50%;
+  width: 50%;
+  transform: translateX(-50%);
+  height: 80px;
+  display: flex;
+  align-items: center;
+}
+
+.slider {
+  padding: 22px 0px;
+}

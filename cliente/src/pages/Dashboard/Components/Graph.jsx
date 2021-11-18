@@ -11,10 +11,13 @@ export default function Graph() {
 
     async function getGraphData(){
         const {data} = await axios.get('http://localhost:5000/api/dashboard/graphdata')
+        
+        if(labels.length === 0 && datas.length === 0){
         data.map(item =>(
             labels.push(item.nombreproducto),
             datas.push(item.count)
         ))
+        }
     }
 
     useEffect(() =>{
@@ -25,8 +28,6 @@ export default function Graph() {
         labels: labels,
         datasets:[{
             label: 'Productos más vendidos',
-            backgroundColor: '#fff',
-            color: '#fff',
             data: datas
         }]
     }

@@ -7,7 +7,6 @@ import StorageIcon from '@material-ui/icons/Storage';
 import FastfoodIcon from '@material-ui/icons/Fastfood';
 import MoneyOffIcon from '@mui/icons-material/MoneyOff';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import LogoutIcon from '@mui/icons-material/Logout';
 import SettingsIcon from '@mui/icons-material/Settings';
 import {Link} from 'react-router-dom';
@@ -73,11 +72,15 @@ function Sidebar() {
                         </li>
                         <hr/>
                         <li className="sidebar-items">
-                            <MailOutlineIcon className="icons sidebar-icons"/> <span className="sidebar-pages">Gestor de campañas</span>
+                            <Link to = "/gestor" className="link">
+                                <MailOutlineIcon className="icons sidebar-icons"/> <span className="sidebar-pages">Gestor de campañas</span>
+                            </Link>
                         </li>
                         <hr/>
                         <li className="sidebar-items">
-                            <SettingsIcon className="icons sidebar-icons"/> <span className="sidebar-pages">Configuración</span>
+                            <Link to = "/configuracion" classNamw="link">
+                                <SettingsIcon className="icons sidebar-icons"/> <span className="sidebar-pages">Configuración</span>
+                            </Link>
                         </li>
                     </ul>
                 </div>

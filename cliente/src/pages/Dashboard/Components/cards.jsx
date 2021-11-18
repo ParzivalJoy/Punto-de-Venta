@@ -57,7 +57,9 @@ export default function Cards() {
 
 
     return (
-        <div className="dash-cards">
+        <div>
+            <div className="row">
+                <div className="col-md-4">
             <div className="card card-item">
                 <span className="card-title">Ventas</span>
                 <div className="card-money">
@@ -77,6 +79,8 @@ export default function Cards() {
                         } 
                 </div>
             </div>    
+            </div>
+            <div className="col-md-4">
             <div className="card card-item">
                 <span className="card-title">Alertas de productos</span>
                 <div className="card-money">
@@ -84,6 +88,8 @@ export default function Cards() {
                     <span className="card-money-title">{productnot}</span>
                 </div>
             </div>
+            </div>
+            <div className="col-md-4">
             <div className="card card-item">
                 <span className="card-title">Clientes afiliados</span>
                 <div className="card-money">
@@ -91,6 +97,8 @@ export default function Cards() {
                     <span className="card-money-title">60</span>
                     <span className="card-money-sub">+10<TrendingUpIcon className="uparrow"/> </span> 
                 </div>
+            </div>
+            </div>
             </div>
         </div>
     )

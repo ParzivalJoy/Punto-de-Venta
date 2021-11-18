@@ -1,12 +1,12 @@
 [data-theme="light"]{
     --main-color: #ffffff; //Color de fondo
-    --div-color: #f3f3f5; //Color secundario de fondo (sidebar, headers, cards, etc...)
+    --div-color: #ededf1; //Color secundario de fondo (sidebar, headers, cards, etc...)
     --input-color: #d3d3d3;
     --txt-color: #202020; //Color del texto
     --box-shadow-color: rgba(149, 157, 165, 0.2) 0px 8px 24px; //Sombra para second-light 
 }
 
-[data-theme="dark-blue"]{
+[data-theme="dark"]{
     --main-color: #1f2933;//Color de fondo
     --div-color: #323f4b;//Color secundario de fondo (sidebar, headers, cards, etc...)
     --input-color: #788794;
@@ -14,32 +14,9 @@
     --box-shadow-color: rgba(0, 0, 0, 0.2) 0px 5px 10px; //Sombra para second-dark
 }
 
-[data-theme="dark"]{
-    --main-color: #27241d;//Color de fondo
-    --div-color: #423d33;//Color secundario de fondo (sidebar, headers, cards, etc...)
-    --input-color:#625d52;
-    --txt-color: #faf9f7;//Color del texto
-    --box-shadow-color: rgba(0, 0, 0, 0.2) 0px 5px 10px; //Sombra para second-dark
-}
-
-[data-theme="purple"]{
-    --main-color: #573f4c;//Color de fondo
-    --div-color: #e4afc5;//Color secundario de fondo (sidebar, headers, cards, etc...)
-    --input-color:#933469;
-    --txt-color: #fafafb;//Color del texto
-    --box-shadow-color: rgba(0, 0, 0, 0.2) 0px 5px 10px; //Sombra para second-dark
-}
-
-[data-theme="red-dark"]{
-    --main-color: #2d132c;//Color de fondo
-    --div-color: #5f112a;//Color secundario de fondo (sidebar, headers, cards, etc...)
-    --input-color:#c72c41;
-    --txt-color: #fafafb;//Color del texto
-    --box-shadow-color: rgba(0, 0, 0, 0.2) 0px 5px 10px; //Sombra para second-dark
-}
 
 [data-color="blue"]{
-    --color: #349eff; //Color principal (Botones y elementos "principales)
+    --color: #67b4fd; //Color principal (Botones y elementos "principales)
     --second-color: #b3daff; //Color secundario (hover)
 }
 

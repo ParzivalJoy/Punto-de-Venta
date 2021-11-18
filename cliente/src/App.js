@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import Dashboard from './pages/Dashboard/dashboard';
 import Inventory from './pages/Inventory/MenuPosterior'
 import Form from './pages/Login/Components/Form';
@@ -19,35 +19,50 @@ import FinalizarCierre from './pages/Accounting/FinalizarCierre'
 import Accounting from './pages/Accounting/Accounting'
 import Cobro from './pages/Ventas/Components/Cobro'
 import Addproducts from './pages/AddProducts/Addproducts'
+import Config from './pages/Config/Config'
+import axios from 'axios'
+import TableRemote from './pages/Gestor/home/TableRemote'
+import Menu from './pages/Gestor/navegation/Menu'
+import NotificacionForm from "./pages/Gestor/forms/NotificacionWithMaterialUI";
+import NivelesPaper from "./pages/Gestor/niveles/index";
+import BirthdayPaper from "./pages/Gestor/birthdays/index";
+import AyudaPaper from "./pages/Gestor/ayuda/index";
+import SellosPaper from "./pages/Gestor/sellos/index";
+import CatalogoPaper from "./pages/Gestor/catalogo/index";
+
 
 function App() {
 
-  var tema = 2;
-  var color = 1;
+  const [tema, setTema] = useState('')
+  const [color, setColor] = useState('')
 
-    if (tema === 1) {
+  async function getTema(){
+    const {data} = await axios.get('http://localhost:5000/configuracion/getTemasEs')
+    setTema(data.modo)
+    setColor(data.color)
+}
+
+
+    if (tema === 'light') {
       document.documentElement.setAttribute("data-theme", "light");
-    }else if(tema === 2){
-      document.documentElement.setAttribute("data-theme", "dark-blue");
-    }else if(tema === 3){
+    }else if(tema === 'dark'){
       document.documentElement.setAttribute("data-theme", "dark");
-    }else if(tema === 4){
-      document.documentElement.setAttribute("data-theme", "purple");
-    }else if(tema === 5){
-      document.documentElement.setAttribute("data-theme", "red-dark");
     }
 
-    if (color === 1){
+    if (color === 'blue'){
       document.documentElement.setAttribute("data-color", "blue");
-    }else if (color === 2){
+    }else if (color === 'red'){
       document.documentElement.setAttribute("data-color", "red");
-    }else if (color === 3){
+    }else if (color === 'cyan'){
       document.documentElement.setAttribute("data-color", "cyan");
-    }else if (color === 4){
+    }else if (color === 'green'){
       document.documentElement.setAttribute("data-color", "green");
     }
 
-    
+    useEffect(() =>{
+      getTema()
+  }, [])
+
   return (
     <div className="App">
       <BrowserRouter>
@@ -67,6 +82,19 @@ function App() {
           <ProtectedRoute exact path="/accounting" component={Accounting}/>
           <ProtectedRoute exact path="/cobrocarrito" component={Cobro}/>
           <ProtectedRoute exact path="/addproduct" component={Addproducts}/>
+          <ProtectedRoute exact path="/configuracion" component={Config}/>
+          <ProtectedRoute exact path="/gestor" component={Menu}/>
+
+          <ProtectedRoute exact path="/gestor/notificaciones" component={NotificacionForm}/>
+          <ProtectedRoute exact path="/gestor/ayuda" component={AyudaPaper}/>
+          <ProtectedRoute exact path="/gestor/birthday" component={BirthdayPaper}/>
+          <ProtectedRoute exact path="/gestor/catalogo" component={CatalogoPaper}/>
+          <ProtectedRoute exact path="/gestor/sellos" component={SellosPaper}/>
+          <ProtectedRoute exact path="/gestor/puntos" component={NivelesPaper}/>
+          <ProtectedRoute exact path="/gestor/tabla" component={TableRemote}/>
+
+
+
           <Route exact path ="/logout"><Logout/></Route> 
         </Switch>
         </BrowserRouter>

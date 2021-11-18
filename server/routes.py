@@ -3,6 +3,7 @@ import psycopg2
 from psycopg2.extras import RealDictCursor
 from flask_cors import CORS #pip install flask-cors
 import os
+from random import SystemRandom
 from werkzeug.utils import secure_filename
 
 #JWT libraries
@@ -287,6 +288,18 @@ def getGraphData():
     conn.close()
     return jsonify(row)
 
+@app.route('/api/dashboard/doughnut',  methods=['GET'])
+def getProductsToday():
+    conn = conexion()
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+    sql="""select ventas.idusuario, usuario, count(ventas.idusuario) from ventas inner join usuarios
+on ventas.idusuario = usuarios.idusuario
+group by ventas.idusuario, usuario"""
+    cur.execute(sql) 
+    row = cur.fetchall()
+    conn.close()
+    return jsonify(row)
+
 
 # ---------------- Tabla de transacciones ----------------#
 @app.route('/api/dashboard/transactions/<fecha>',  methods=['GET'])
@@ -549,16 +562,34 @@ def getEmployee(idempleado):
 
 @app.route('/api', methods=['POST'])
 def saveEmployee():
-	conn = conexion()
-	cur = conn.cursor()
-	data = request.json
-	sql = """INSERT INTO empleados (nombreempleado, fechacontra, dirempleado,telempleado, emailempleado, idcargo )
-             VALUES (%(nombreempleado)s,%(fechacontra)s, %(dirempleado)s, %(telempleado)s, %(emailempleado)s,NULL)"""
-	cur.execute(sql, data)
-	conn.commit()
-	conn.close()
-	cur.close()
-	return jsonify(msg='added successfully!')
+    conn = conexion()
+    cur = conn.cursor()
+    data = request.json
+    sql = """INSERT INTO empleados (nombreempleado, fechacontra, dirempleado,telempleado, emailempleado, idcargo )
+                VALUES (%(nombreempleado)s,%(fechacontra)s, %(dirempleado)s, %(telempleado)s, %(emailempleado)s,NULL)"""
+    cur.execute(sql, data) 
+    #Genera contraseña
+    longitud = 8
+    valores = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    cryptogen = SystemRandom()
+    contrasena = ""
+    while longitud > 0:
+        contrasena = contrasena + cryptogen.choice(valores)
+        longitud = longitud - 1
+    sql2 = "INSERT INTO usuarios (usuario, contrasena) VALUES ('{0}','{1}') RETURNING idusuario".format(data['nombreempleado'],contrasena)
+    cur.execute(sql2)
+    idusuario= cur.fetchone()
+    for i in range(8):
+        if( i+1!=1 and i+1!=3 and i+1!=7):
+            sql3 = "INSERT INTO permisosusuarios (idpermiso, idusuario, acceso) VALUES ({0},{1},'{2}')".format(i+1,idusuario[0],'t')
+            cur.execute(sql3)
+        else:
+            sql3 = "INSERT INTO permisosusuarios (idpermiso, idusuario, acceso) VALUES ({0},{1},'{2}')".format(i+1,idusuario[0],'f')
+            cur.execute(sql3)
+    conn.commit()
+    conn.close()
+    cur.close()
+    return jsonify(msg='added successfully!')
 
 @app.route('/api/<idempleado>', methods=['DELETE'])
 def deleteEmployee(idempleado):
@@ -1293,6 +1324,141 @@ def getModifiers():
 #    conn.close()
 #    return jsonify(row)
 
+@app.route('/configuracion/editTema', methods=['PUT'])
+def editionTema():
+    conn=conexion()
+    cur=conn.cursor()
+    data=request.json
+    sql="""UPDATE temas SET modo=%(estiloactivo1)s, color=%(temaescogido)s,logo=%(nombreempresa)s WHERE idtema=1"""
+    cur.execute(sql, data)
+    conn.commit()
+    conn.close()
+    cur.close()
+    return jsonify(msg='tema editado de manera satisfactoria!');
+
+@app.route('/configuracion/editPermisoEmpleados', methods=['PUT'])
+def editPermisoEmp():
+    conn=conexion()
+    cur=conn.cursor()
+    data=request.json
+    sql="""UPDATE permisosusuarios SET acceso=%(permisoempleados)s WHERE idusuario=%(idusuario)s AND idpermiso=1"""
+    cur.execute(sql, data)
+    conn.commit()
+    conn.close()
+    cur.close()
+    return jsonify(msg='bien');
+
+@app.route('/configuracion/editPermisoInventarios', methods=['PUT'])
+def editPermisoInv():
+    conn=conexion()
+    cur=conn.cursor()
+    data=request.json
+    sql="""UPDATE permisosusuarios SET acceso=%(permisoinventarios)s WHERE idusuario=%(idusuario)s AND idpermiso=2"""
+    cur.execute(sql, data)
+    conn.commit()
+    conn.close()
+    cur.close()
+    return jsonify(msg='bien');
+
+@app.route('/configuracion/editPermisoConfiguracion', methods=['PUT'])
+def editPermisoCon():
+    conn=conexion()
+    cur=conn.cursor()
+    data=request.json
+    sql="""UPDATE permisosusuarios SET acceso=%(permisoconfiguracion)s WHERE idusuario=%(idusuario)s AND idpermiso=3"""
+    cur.execute(sql, data)
+    conn.commit()
+    conn.close()
+    cur.close()
+    return jsonify(msg='bien');
+
+@app.route('/configuracion/editPermisoGestor', methods=['PUT'])
+def editPermisoGes():
+    conn=conexion()
+    cur=conn.cursor()
+    data=request.json
+    sql="""UPDATE permisosusuarios SET acceso=%(permisogestor)s WHERE idusuario=%(idusuario)s AND idpermiso=4"""
+    cur.execute(sql, data)
+    conn.commit()
+    conn.close()
+    cur.close()
+    return jsonify(msg='bien');
+
+@app.route('/configuracion/editPermisoProductos', methods=['PUT'])
+def editPermisoPro():
+    conn=conexion()
+    cur=conn.cursor()
+    data=request.json
+    sql="""UPDATE permisosusuarios SET acceso=%(permisoproductos)s WHERE idusuario=%(idusuario)s AND idpermiso=5"""
+    cur.execute(sql, data)
+    conn.commit()
+    conn.close()
+    cur.close()
+    return jsonify(msg='bien');
+
+@app.route('/configuracion/editPermisoVentas', methods=['PUT'])
+def editPermisoVen():
+    conn=conexion()
+    cur=conn.cursor()
+    data=request.json
+    sql="""UPDATE permisosusuarios SET acceso=%(permisoventas)s WHERE idusuario=%(idusuario)s AND idpermiso=6"""
+    cur.execute(sql, data)
+    conn.commit()
+    conn.close()
+    cur.close()
+    return jsonify(msg='bien');
+
+@app.route('/configuracion/editPermisoContabilidad', methods=['PUT'])
+def editPermisoConta():
+    conn=conexion()
+    cur=conn.cursor()
+    data=request.json
+    sql="""UPDATE permisosusuarios SET acceso=%(permisocontabilidad)s WHERE idusuario=%(idusuario)s AND idpermiso=7"""
+    cur.execute(sql, data)
+    conn.commit()
+    conn.close()
+    cur.close()
+    return jsonify(msg='bien');
+
+@app.route('/configuracion/getTemasEs',  methods=['GET'])
+def getTema():
+    conn = conexion()
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+    sql="SELECT * FROM temas WHERE idtema=1"
+    cur.execute(sql) 
+    row = cur.fetchone()
+    conn.close()
+    return jsonify(row)
+
+@app.route('/configuracion/getEmpleados',  methods=['GET'])
+def getTEmpleados():
+    conn = conexion()
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+    sql="SELECT idempleado,nombreempleado FROM empleados"
+    cur.execute(sql) 
+    row = cur.fetchall()
+    conn.close()
+    return jsonify(row)
+
+@app.route('/configuracion/getIdusuario/<idempleado>',  methods=['GET'])
+def getTUsuario(idempleado):
+    conn = conexion()
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+    sql="SELECT idusuario FROM usuarios WHERE idempleado={0}".format(idempleado)
+    cur.execute(sql) 
+    row = cur.fetchone()
+    conn.close()
+    return jsonify(row)
+
+@app.route('/configuracion/getPermisos/<userid>',  methods=['GET'])
+def getTPermisos(userid):
+    conn = conexion()
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+    sql="SELECT idpermiso, acceso FROM permisosusuarios WHERE idusuario={0}".format(userid)
+    cur.execute(sql) 
+    row = cur.fetchall()
+    conn.close()
+    return jsonify(row)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)

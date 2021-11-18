@@ -1110,9 +1110,27 @@ thead{
 }
 
 
-/* ---------AddProduct-----------*/
+/* ---------Themes-----------*/
+.temas .red-icon,.temas .blue-icon, .temas .cyan-icon, .temas .green-icon{
+  font-size: 60px;
+}
 
+.temas .red-icon{
+  color: red!important;
+}
+.temas .blue-icon{
+  color: blue!important;
+}
+.temas .cyan-icon{
+  color: cyan!important;
+}
+.temas .green-icon{
+  color: green!important;
+}
 
+.config-title{
+  cursor: pointer;
+}
 
 /*------------Modales-----------*/
 .p-1{

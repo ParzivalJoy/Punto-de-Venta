@@ -1,18 +1,15 @@
 import React  from 'react'
 import ImageSearchIcon from '@mui/icons-material/ImageSearch';
+import Tema from './Components/Tema';
+import RolesSeguridad from './Components/RolesSeguridad';
+
 
 export default function Config() {
     return (
         <div className="configuration">
             <div className="theme-container">
-                <div className="row">
-                    <div class="col-lg-10">
-                        <span className="config-cont-title">Configuración de Temas y Colores</span>
-                    </div>
-                    <div class="col-sm-2">
-                        <ImageSearchIcon/>
-                    </div>
-                </div>
+                <Tema />
+                <RolesSeguridad />
             </div>
         </div>
     )

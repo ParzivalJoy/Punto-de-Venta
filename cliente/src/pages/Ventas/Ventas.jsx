@@ -125,12 +125,38 @@ export default function Ventas() {
     
     async function getProductsByPrice1(){
         const {data} = await axios.get('http://localhost:5000/api/sales/products/price1')
-        setAllProducts(data)
+        if (Object.entries(data).length === 0){
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                showConfirmButton: false,
+                text: 'No existen artículos con esos parámetros',
+                timer: 1500
+              })
+            clear()
+            getAllProducts()
+        }else{
+            clear()
+            setAllProducts(data)
+        }
     }
 
     async function getProductsByPrice2(){
         const {data} = await axios.get('http://localhost:5000/api/sales/products/price2')
-        setAllProducts(data)
+        if (Object.entries(data).length === 0){
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                showConfirmButton: false,
+                text: 'No existen artículos con esos parámetros',
+                timer: 1500
+              })
+            clear()
+            getAllProducts()
+        }else{
+            clear()
+            setAllProducts(data)
+        }
     }
 
     async function getProductsByPrice3(){
@@ -180,9 +206,9 @@ export default function Ventas() {
                 <div className="col-7">
                     <div className="card dropdown-card">
                         <div className="row">
-                            <div className="col-8">
+                            <div className="col-5">
                             </div>
-                            <div className="col-2">
+                            <div className="col-4">
                                 <DropdownButton id="dropdown-basic-button" title={category}>
                                     <DropdownItem onClick={getAllProducts.bind(this)}>Todos los productos</DropdownItem>
                                     {ListCategories.map(item =>(
