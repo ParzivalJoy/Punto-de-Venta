@@ -34,13 +34,24 @@ const ModalCambio = () => {
     e.preventDefault();
     setLock(true)
 
+    ///////////Variables de sesión/////////////////////
+    const user = localStorage.getItem("user")
+
+        const res222 = await fetch(
+          `http://localhost:5000/accesibilidad/getIdUsuario/${user}`
+        );
+        const data222 = await res222.json();
+
+        const idusuarioes= data222.idusuario;
+    ////////////////////////////////////////////////////
+
      ////////////////Insertar el movimiento para la contabilidad////////////////////1111
      if(cantidadretirovalid==='true'){
 
       var totalretiro= cantidadRetiro
       var razon='cambio'
       var tipo='entradaefectivo'
-      var idusuario='1'
+      var idusuario=idusuarioes
       var descripcionmov=('Se ingresó cambio por '+totalretiro+ ' pesos')
       const res9 = await fetch(
         `http://localhost:5000/contabilidad/insertContabilidadMovimiento`,
@@ -165,4 +176,3 @@ const ModalCambio = () => {
 }
 
 export default ModalCambio
-

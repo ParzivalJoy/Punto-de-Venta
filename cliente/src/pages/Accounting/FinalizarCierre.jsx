@@ -53,69 +53,69 @@ const handleReportInfo = async () => {
         }
      })
       if(pfechap!==null){
+        
+      setUltimoapertura(pfechap)
       const res23 = await fetch(
         `http://localhost:5000/contabilidad/ultimosMovimientos/${pfechap}`
       );
       const data23 = await res23.json();
       setMovimientosperiodo(data23)
+      
+      const res3 = await fetch(
+        `http://localhost:5000/contabilidad/VentasHastaAhora/${pfechap}`
+      );
+      const data3 = await res3.json();
+      if (data3.sum === null) {
+        setVentasefectivo(0);
+        data3.sum=0;
+      } else {
+        setVentasefectivo(data3.sum);
       }
-    }
+       /////Obtener ventas de tarjetas desde el apertura
+       const res4 = await fetch(
+        `http://localhost:5000/contabilidad/VentasHastaAhoraTarjetas/${pfechap}`
+      );
+      const data4 = await res4.json();
+      if(data4.sum===null){
+          setVentastarjetas(0);
+          data4.sum=0;
+      }else{
+          setVentastarjetas(data4.sum);
+      }
+      //////////Obtener ventas de tarjetas desde el apertura
+      const res5 = await fetch(
+        `http://localhost:5000/contabilidad/VentasHastaAhoraVales/${pfechap}`
+      );
+      const data5 = await res5.json();
+      if(data5.sum===null){
+          setVentasvales(0);
+          data5.sum=0;
+      }else{
+          setVentasvales(data5.sum);
+      }
+      setTotalsistema(parseFloat(data3.sum)+parseFloat(data4.sum)+parseFloat(data5.sum))
+        //////////Obtener los gastos desde el apertura
+        const res6 = await fetch(
+          `http://localhost:5000/contabilidad/GastosCaja/${pfechap}`
+        );
+        const data6 = await res6.json();
+        if(data6.sum===null){
+            setCajaretiros(0);
+        }else{
+            setCajaretiros(data6.sum);
+        }
+        ///////Obtener los cambios ingresados desde apertura
+        const res7 = await fetch(
+          `http://localhost:5000/contabilidad/CambiosCaja/${pfechap}`
+        );
+        const data7 = await res7.json();
+        if(data7.sum===null){
+            setCajacambios(0);
+        }else{
+            setCajacambios(data7.sum);
+        }
 
-  const res2 = await fetch(`http://localhost:5000/contabilidad/ultimoApertura`);
-  const data2 = await res2.json();
-  const fechaultimoApertura = data2.fechaapertura;
-  const res3 = await fetch(
-    `http://localhost:5000/contabilidad/VentasHastaAhora/${fechaultimoApertura}`
-  );
-  const data3 = await res3.json();
-  if (data3.sum === null) {
-    setVentasefectivo(0);
-    data3.sum=0;
-  } else {
-    setVentasefectivo(data3.sum);
-  }
-   /////Obtener ventas de tarjetas desde el apertura
-   const res4 = await fetch(
-    `http://localhost:5000/contabilidad/VentasHastaAhoraTarjetas/${fechaultimoApertura}`
-  );
-  const data4 = await res4.json();
-  if(data4.sum===null){
-      setVentastarjetas(0);
-      data4.sum=0;
-  }else{
-      setVentastarjetas(data4.sum);
-  }
-  //////////Obtener ventas de tarjetas desde el apertura
-  const res5 = await fetch(
-    `http://localhost:5000/contabilidad/VentasHastaAhoraVales/${fechaultimoApertura}`
-  );
-  const data5 = await res5.json();
-  if(data5.sum===null){
-      setVentasvales(0);
-      data5.sum=0;
-  }else{
-      setVentasvales(data5.sum);
-  }
-  setTotalsistema(parseFloat(data3.sum)+parseFloat(data4.sum)+parseFloat(data5.sum))
-    //////////Obtener los gastos desde el apertura
-    const res6 = await fetch(
-      `http://localhost:5000/contabilidad/GastosCaja/${fechaultimoApertura}`
-    );
-    const data6 = await res6.json();
-    if(data6.sum===null){
-        setCajaretiros(0);
-    }else{
-        setCajaretiros(data6.sum);
-    }
-    ///////Obtener los cambios ingresados desde apertura
-    const res7 = await fetch(
-      `http://localhost:5000/contabilidad/CambiosCaja/${fechaultimoApertura}`
-    );
-    const data7 = await res7.json();
-    if(data7.sum===null){
-        setCajacambios(0);
-    }else{
-        setCajacambios(data7.sum);
+      }
     }
 
 };
@@ -258,8 +258,8 @@ useEffect(() => {
           <button className="m-2 p-2 btn btn-primary" onClick={generatePDF}>
             Guardar Reporte
           </button>
-          <Link to="/">
-            <button className="m-2 p-2 btn btn-primary">Regresar</button>
+          <Link to="/dashboard">
+            <button className="m-2 p-2 btn btn-primary">Salir</button>
           </Link>
         </div>
       </div>

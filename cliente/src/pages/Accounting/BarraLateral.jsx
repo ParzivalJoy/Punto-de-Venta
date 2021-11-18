@@ -18,6 +18,13 @@ function BarraLateral() {
 
   const handleUltimoActualCierre=async ()=>{
 
+    ///////////Variables de sesión/////////////////////
+    const user = localStorage.getItem("user")
+    const role = localStorage.getItem('role')
+
+        setEncargadoactual(user+'('+role+')')
+    ////////////////////////////////////////////////////
+
     const res = await fetch(
       `http://localhost:5000/contabilidad/DatosUltimoCierre`
     );
@@ -33,7 +40,6 @@ function BarraLateral() {
     const tiempotranscurrido= Date.now();
     const hoy= new Date(tiempotranscurrido);
     setFechaactual(hoy.toDateString());
-    setEncargadoactual('quiensabe');
     
     const res2 = await fetch(
       `http://localhost:5000/contabilidad/ultimoApertura`

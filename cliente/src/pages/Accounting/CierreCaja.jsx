@@ -57,12 +57,23 @@ function CierreCaja() {
   const insertCierre= async (e) =>{
     e.preventDefault()
 
+    ///////////Variables de sesión/////////////////////
+    const user = localStorage.getItem("user")
+
+        const res222 = await fetch(
+          `http://localhost:5000/accesibilidad/getIdUsuario/${user}`
+        );
+        const data222 = await res222.json();
+
+        const idusuarioes= data222.idusuario;
+    ////////////////////////////////////////////////////
+
     if(todosvalidos==='true'){
       setLoading(true)
         console.log('la inserción se hará')
 
         var cuenta='12345';
-        var idusuario=1;
+        var idusuario=idusuarioes;
         const res = await fetch(
           `http://localhost:5000/contabilidad/insertCierre`,
           {

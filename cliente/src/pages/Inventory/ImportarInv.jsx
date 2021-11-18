@@ -1,4 +1,4 @@
-import React,{useState} from 'react'
+import React,{useState, useEffect} from 'react'
 import XLSX from 'xlsx'
 import formato from './imgs/excelformato.png'
 import PacmanLoader from "react-spinners/PacmanLoader";
@@ -10,6 +10,20 @@ export default function ImportarInv() {
   const [habilitaring, setHabilitaring] = useState(false);
   const [registrarhab, setRegistrarhab] = useState(true);
   const [loading, setLoading] = useState(false);
+  const [idusuarioes, setIdusuarioses]= useState(false)
+
+  const handleUsuario=async ()=>{
+
+        const user = localStorage.getItem("user")
+        const role = localStorage.getItem('role')
+
+        const res2 = await fetch(
+          `http://localhost:5000/accesibilidad/getIdUsuario/${user}`
+        );
+        const data2 = await res2.json();
+
+            setIdusuarioses(data2.idusuario)
+  }
 
   const handleImportIngredients = () => {
     setHabilitaring(!habilitaring);
@@ -217,6 +231,7 @@ export default function ImportarInv() {
               descripcionmov,
               razon,
               tipo,
+              idusuarioes
             }),
           }
         );
@@ -307,6 +322,7 @@ export default function ImportarInv() {
               descripcionmov,
               razon,
               tipo,
+              idusuarioes
             }),
           }
         );
@@ -318,9 +334,13 @@ export default function ImportarInv() {
 
     Promise.all(vainilla).then((data) => {
       Swal.fire('Bien!','Tu información se registró correctamente','success');
-      window.location.replace("/");
+      window.location.replace("/inventory");
     });
   };
+
+  useEffect(()=>{
+    handleUsuario();
+  },[])
 
   return (
     <div className="import">

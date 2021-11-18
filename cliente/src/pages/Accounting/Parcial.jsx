@@ -34,13 +34,23 @@ function Parcial() {
     const handleParcial= async (e)=>{
         e.preventDefault();
         setLock(true)
+        ///////////Variables de sesión/////////////////////
+        const user = localStorage.getItem("user")
+
+        const res222 = await fetch(
+         `http://localhost:5000/accesibilidad/getIdUsuario/${user}`
+        );
+        const data222 = await res222.json();
+
+        const idusuarioes= data222.idusuario;
+        ////////////////////////////////////////////////////
   
         if(cantidadretirovalid==='true'){
              ////////////////Insertar el movimiento para la contabilidad////////////////////1111
          var totalretiro= cantidadRetiro
          var razon='parcial'
          var tipo='notificarefectivo'
-         var idusuario='1'
+         var idusuario=idusuarioes
          var descripcionmov=('En la caja hay '+totalretiro+ ' pesos')
          const res9 = await fetch(
            `http://localhost:5000/contabilidad/insertContabilidadMovimiento`,

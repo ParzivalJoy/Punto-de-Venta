@@ -40,6 +40,7 @@ function AgregarInventario() {
     const[loading, setLoading]= useState(false)
     const[formDataS, setFormdatas]= useState(null)
     const[imagebinary, setImagebinary] = useState(null)
+    const[idusuarioes, setIdusuarioses]= useState(null)
 
     const cleanstates=()=>{
           setActualProduct('')
@@ -94,6 +95,16 @@ function AgregarInventario() {
         );
         const data = await res.json();
         setProducts(data);
+
+        const user = localStorage.getItem("user")
+        const role = localStorage.getItem('role')
+
+        const res2 = await fetch(
+          `http://localhost:5000/accesibilidad/getIdUsuario/${user}`
+        );
+        const data2 = await res2.json();
+
+            setIdusuarioses(data2.idusuario)
       
     };
 
@@ -150,7 +161,7 @@ function AgregarInventario() {
         setProductCode(data.idproducto);
         setProductname(data.nombreproducto);
         setProductstocknotif(data.cantidadnotificacionproducto)
-        var imgblob= data.imagebproducto;
+        var imgblob= data.rutaimagenproducto;
         ///////////////////Conseguir la imagen actual para mostrarla///////////////////////
         if(imgblob===null){
           setImagebinary(null)
@@ -367,7 +378,8 @@ function AgregarInventario() {
                   totalinversion,
                   descripcionmov,
                   razon,
-                  tipo
+                  tipo,
+                  idusuarioes
                 }),
               }
             );
@@ -505,7 +517,8 @@ function AgregarInventario() {
                   totalinversion,
                   descripcionmov,
                   razon,
-                  tipo
+                  tipo,
+                  idusuarioes
                 }),
               }
             );
@@ -584,7 +597,8 @@ function AgregarInventario() {
                   totalinversion,
                   descripcionmov,
                   razon,
-                  tipo
+                  tipo,
+                  idusuarioes
                 }),
               }
             );
@@ -692,7 +706,8 @@ function AgregarInventario() {
                 totalinversion,
                 descripcionmov,
                 razon,
-                tipo
+                tipo,
+                idusuarioes
               }),
             }
           );

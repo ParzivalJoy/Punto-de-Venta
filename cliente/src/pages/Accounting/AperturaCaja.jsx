@@ -14,8 +14,26 @@ function AperturaCaja() {
   const [ventasvales, setVentasvales]= useState('desconocido')
   const [gananciasperdidas, setGananciasperdidas]= useState('desconocido')
   const [huboapertura, setHuboapertura] =useState('desconocido')
+  const [empleado, setEmpleado]= useState('desconocido')
+  const [rol, setRol]= useState('desconocido')
+  const [idusuarioes, setIdusuarioes]= useState(1)
 
   const datosdesdeInicio = async () =>{
+
+    ////////Variables del usuario en sesión///////////////
+    const user = localStorage.getItem("user")
+    const role = localStorage.getItem('role')
+
+        setEmpleado(user);
+        setRol(role)
+
+        const res222 = await fetch(
+          `http://localhost:5000/accesibilidad/getIdUsuario/${user}`
+        );
+        const data222 = await res222.json();
+
+        setIdusuarioes(data222.idusuario)
+        /////////////////////////////////////////////////////
 
     const tiempotranscurrido= Date.now();
     const hoy= new Date(tiempotranscurrido);
@@ -124,7 +142,7 @@ function AperturaCaja() {
         const data = await res.json();
         if(data===null){
   
-          const idusuario=1;
+          const idusuario=idusuarioes;
           const cuenta=12345;
           const res9 = await fetch(
             `http://localhost:5000/contabilidad/insertPrimerApertura`,
@@ -143,7 +161,7 @@ function AperturaCaja() {
            const data9=await res9.json();
            console.log(data9)
            Swal.fire('Bien hecho!','apertura de caja registrado','success')
-          window.location.replace('/')
+          window.location.replace('/dashboard')
         }else{
   
           const idcorte= data.idcortecaja;
@@ -164,7 +182,7 @@ function AperturaCaja() {
         const data2 = await res2.json();
         console.log(data2.msg) 
         Swal.fire('Bien hecho!','apertura de caja registrado','success')
-        window.location.replace('/')
+        window.location.replace('/dashboard')
         }
       }else{
           Swal.fire('Error!','checa el monto de apertura','error')
@@ -194,24 +212,24 @@ function AperturaCaja() {
             
             <div className="card" id="colors">
               <div className="col-md-11">
-                <h4>Saldo de apertura</h4>             
-                <input type="text" className="form-control" id="helpApertura" aria-describedby="helpApertura" value={montoapertura} onChange={(e)=>setMontoapertura(e.target.value)}/>
-                <div id="helpApertura" className="form-text">
-                    {cantidadaperturavalid === 'false' ? (
-                        <p className="text-danger">
-                          Solo números , incluso con punto
-                        </p>
-                     ) : (
-                        <p>Ingresa el monto de apertura</p>
-                    )}
-                </div>
+                <h4>Saldo de apertura</h4> 
+                  <input type="text" className="form-control" id="helpApertura" aria-describedby="helpApertura" value={montoapertura} onChange={(e)=>setMontoapertura(e.target.value)}/>
+                    <div id="helpApertura" className="form-text">
+                      {cantidadaperturavalid === 'false' ? (
+                          <p className="text-danger">
+                            Solo números , incluso con punto
+                          </p>
+                      ) : (
+                          <p>Ingresa el monto de apertura</p>
+                     )}
+                    </div>            
               </div>
               <div className="col-md-4 col-12">
-                <h6>Usuario: Admin</h6>
+                <h6>Usuario: {empleado} ({rol})</h6>
               </div>
             </div>
 
-            <div className="">
+            <div className="d-flex justify-content-center">
               <div className="col-md-4 m-2" id="colors2">
                 <h4>Saldo en caja:${saldocaja}</h4>
                 {
@@ -251,7 +269,6 @@ function AperturaCaja() {
             </div>
             <div className="d-flex justify-content-center my-5">
               <button type="submit" onClick={handleApertura} onMouseOver={handleValid} className="m-2 p-2 btn btn-primary">Abrir sesión</button>
-              <button className="m-2 p-2 btn btn-primary">Iniciar Operaciones</button>
             </div>
             </form>
           </div>

@@ -12,7 +12,7 @@ import UploadFileIcon from '@mui/icons-material/UploadFile';
 
 function MenuPosterior() {
 
-  const [name, setName] = useState(1);
+  const [name, setName] = useState('1');
   const [users, setUsers] = useState([]);
   const[paginatedPosts, setPaginatedposts]=useState([])
   const[currentPage, setCurrentpage]= useState(1)

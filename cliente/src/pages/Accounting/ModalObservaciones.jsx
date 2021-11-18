@@ -24,13 +24,23 @@ const ModalCambio = () => {
   const handleObservaciones= async(e)=>{
       e.preventDefault()
       setLock(true)
+      ///////////Variables de sesión/////////////////////
+      const user = localStorage.getItem("user")
+
+      const res222 = await fetch(
+      `http://localhost:5000/accesibilidad/getIdUsuario/${user}`
+      );
+      const data222 = await res222.json();
+
+      const idusuarioes= data222.idusuario;
+      ////////////////////////////////////////////////////
 
       if(observacionesvalid==='true'){
          ////////////////Insertar el movimiento para la contabilidad////////////////////1111
          var totalretiro= 0
          var razon='observacion'
          var tipo='notificarobservacion'
-         var idusuario='1'
+         var idusuario=idusuarioes
          var descripcionmov=('Observación: '+observacionesvar)
          const res9 = await fetch(
            `http://localhost:5000/contabilidad/insertContabilidadMovimiento`,
