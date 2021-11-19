@@ -2,6 +2,7 @@ import React  from 'react'
 import ImageSearchIcon from '@mui/icons-material/ImageSearch';
 import Tema from './Components/Tema';
 import RolesSeguridad from './Components/RolesSeguridad';
+import Cuentas from './Components/Cuentas'
 
 
 export default function Config() {
@@ -10,6 +11,7 @@ export default function Config() {
             <div className="theme-container">
                 <Tema />
                 <RolesSeguridad />
+                <Cuentas/>
             </div>
         </div>
     )
