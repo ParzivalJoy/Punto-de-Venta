@@ -16,6 +16,12 @@ def conexion():
     user="postgres",
     password="root")
 
+def conexionRol(role):
+    return psycopg2.connect(
+    host="localhost",
+    database="puntodeventa",
+    user=role,
+    password="root")
 ## ------------------------------------------------------------------------------ ##
 ## -----------------------Catalogo de productos y filtros------------------------ ##
 ## ------------------------------------------------------------------------------ ##

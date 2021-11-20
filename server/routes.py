@@ -11,7 +11,6 @@ from Pos.Configuracion import config_api
 from Pos.Contabilidad import conta_api
 from Pos.Empleados import empleado_api
 from Pos.Inventarios import inv_api
-from Pos.Login import login_api
 
 #JWT libraries
 from flask_jwt_extended import create_access_token
@@ -25,9 +24,17 @@ CORS(app)
 def conexion():
     return psycopg2.connect(
     host="localhost",
-    database="puntodeventa",
+    database="prueba",
     user="postgres",
     password="root")
+
+def conexionRol(role):
+    return psycopg2.connect(
+    host="localhost",
+    database="prueba",
+    user=role,
+    password="root")
+
 
 # Setup the Flask-JWT-Extended extension
 app.config["JWT_SECRET_KEY"] = "dsankldqwp2310953nc812245" 
@@ -52,9 +59,55 @@ app.register_blueprint(config_api)
 app.register_blueprint(conta_api)
 app.register_blueprint(empleado_api)
 app.register_blueprint(inv_api)
-app.register_blueprint(login_api)
 
 
+## ------------------------------------------------------------------------------ ##
+## -----------------Verificacion del usuario en el login ------------------------ ##
+## ------------------------------------------------------------------------------ ##
+
+@app.route('/api/login', methods=['POST'])
+def verifyLogin():
+    conn = conexion()
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+    data=request.json
+    print(data)
+    sql1="SELECT b.nombreempresa as nombreempresa FROM usuariosgenerales a LEFT JOIN empresas b ON a.idempresa=b.idempresa WHERE a.usuariogeneral='{0}' AND a.contrasenausuariogeneral='{1}'".format(data['username'],data['password'])
+    cur.execute(sql1)
+    nombreempresa = cur.fetchone()
+    conn.close()
+    row=None
+    if(nombreempresa!=None):
+        rol=nombreempresa['nombreempresa']
+        conn = conexionRol(rol)
+        cur = conn.cursor(cursor_factory=RealDictCursor)
+        sql="SELECT a.nombreempleado as nombreempleado, c.nombrecargo as nombrecargo FROM empleados a LEFT JOIN usuarios b ON a.idempleado=b.idempleado LEFT JOIN perfil c ON a.idcargo=c.idcargo WHERE b.usuario='{0}' AND b.contrasena='{1}'".format(data['username'],data['password'])
+        cur.execute(sql)
+        row = cur.fetchone()
+        conn.close()
+    if (row==None):
+        return jsonify('0')
+    access_token = create_access_token(identity=data['username'])
+    row['access_token'] = access_token
+    row['role'] = nombreempresa['nombreempresa']
+    return jsonify(row)
+
+## ------------------------------------------------------------------------------ ##
+## ------------- Se rescata el email del usuario en el login -------------------- ##
+## ------------------------------------------------------------------------------ ##
+
+@app.route('/api/userEmail',  methods=['POST'])
+def getEmailUser():
+    conn = conexion()
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+    data=request.json
+    print(data)
+    sql="SELECT a.emailempleado, a.nombreempleado,  b.contrasena FROM empleados a LEFT JOIN usuarios b ON b.idempleado=a.idempleado WHERE usuario= '{0}'".format(data['username'])
+    cur.execute(sql)
+    row = cur.fetchone()
+    conn.close()
+    if (row==None):
+        return jsonify(0)
+    return jsonify(row)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)

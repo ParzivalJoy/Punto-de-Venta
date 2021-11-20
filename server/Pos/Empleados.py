@@ -16,13 +16,21 @@ def conexion():
     user="postgres",
     password="root")
 
+
+def conexionRol(role):
+    return psycopg2.connect(
+    host="localhost",
+    database="prueba",
+    user=role,
+    password="root")
+    
 ## ------------------------------------------------------------------------------ ##
 ## -----------------Lista de empleados registrados en el sistema----------------- ##
 ## ------------------------------------------------------------------------------ ##
 
-@empleado_api.route('/api',  methods=['GET'])
-def index():
-    conn = conexion()
+@empleado_api.route('/api/<rol>',  methods=['GET'])
+def index(rol):
+    conn = conexionRol()
     cur = conn.cursor(cursor_factory=RealDictCursor)
     cur.execute("SELECT idempleado, nombreempleado, to_char(fechacontra, 'DD/MM/YYYY') as fechacontra, dirempleado, telempleado, emailempleado FROM empleados ORDER BY idempleado")
     rows = cur.fetchall()
@@ -39,13 +47,15 @@ def getEmployee(idempleado):
     conn.close()
     return jsonify(row)
 
-@empleado_api.route('/api', methods=['POST'])
-def saveEmployee():
-    conn = conexion()
+@empleado_api.route('/api/<rol>', methods=['POST'])
+def saveEmployee(rol):
+    #Hace conexion del rol
+    conn = conexionRol(rol)
     cur = conn.cursor()
     data = request.json
+    #Inserta en la tabla empleados 
     sql = """INSERT INTO empleados (nombreempleado, fechacontra, dirempleado,telempleado, emailempleado, idcargo )
-                VALUES (%(nombreempleado)s,%(fechacontra)s, %(dirempleado)s, %(telempleado)s, %(emailempleado)s,NULL)"""
+                VALUES (%(nombreempleado)s,%(fechacontra)s, %(dirempleado)s, %(telempleado)s, %(emailempleado)s,2)"""
     cur.execute(sql, data) 
     #Genera contraseña
     longitud = 8
@@ -55,9 +65,11 @@ def saveEmployee():
     while longitud > 0:
         contrasena = contrasena + cryptogen.choice(valores)
         longitud = longitud - 1
-    sql2 = "INSERT INTO usuarios (usuario, contrasena) VALUES ('{0}','{1}') RETURNING idusuario".format(data['nombreempleado'],contrasena)
+    #Inserta en la tabla usuarios
+    sql2 = "INSERT INTO usuarios (usuario, contrasena) VALUES ('{0}','{1}') RETURNING idusuario".format(data['emailempleado'],contrasena)
     cur.execute(sql2)
     idusuario= cur.fetchone()
+    #Inserta permisos
     for i in range(8):
         if( i+1!=1 and i+1!=3 and i+1!=7):
             sql3 = "INSERT INTO permisosusuarios (idpermiso, idusuario, acceso) VALUES ({0},{1},'{2}')".format(i+1,idusuario[0],'t')
@@ -68,6 +80,17 @@ def saveEmployee():
     conn.commit()
     conn.close()
     cur.close()
+    #Abre conexion publica
+    conn = conexionRol('postgres')
+    cur =conn.cursor(cursor_factory=RealDictCursor)
+    #Selecciona el rol
+    sql4="SELECT idempresa FROM empresas WHERE nombreempresa= '{0}'".format(rol)
+    cur.execute(sql4)
+    idempresa= cur.fetchone()
+    print(idempresa)
+    conn.close()
+    #Inserta en el esquema publico en la tabla usuarios generales
+    insertusuario(data['emailempleado'],contrasena,idempresa['idempresa'])
     return jsonify(msg='added successfully!')
 
 @empleado_api.route('/api/<idempleado>', methods=['DELETE'])
@@ -92,3 +115,12 @@ def updateEmployee():
     conn.close()
     cur.close()
     return jsonify(msg="employee updated") 
+
+def insertusuario(usuario,contrasena,rol):
+    conn = conexion()
+    cur = conn.cursor()
+    sql = "INSERT INTO usuariosgenerales (usuariogeneral, contrasenausuariogeneral, idempresa) VALUES ('{0}','{1}','{2}') RETURNING idusuariogeneral".format(usuario,contrasena,rol)
+    cur.execute(sql)
+    conn.commit()
+    conn.close()
+    cur.close()

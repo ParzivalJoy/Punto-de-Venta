@@ -94,6 +94,7 @@ const Login = () => {
         localStorage.setItem("user", data.nombreempleado)
         localStorage.setItem('role',data.nombrecargo)
         localStorage.setItem('token',data.access_token)
+        localStorage.setItem('rol', data.role)
         history.push("/dashboard");
       }else
       {
@@ -101,7 +102,6 @@ const Login = () => {
       }
     }
   }
-
 
   return (
     <div className="login">

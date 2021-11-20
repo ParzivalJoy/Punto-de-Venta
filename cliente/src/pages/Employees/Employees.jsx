@@ -16,15 +16,16 @@ function Employees() {
     const [ telempleado, setTel ] = useState('')
     const [ dirempleado, setDir ] = useState('')
     const [ update, setUpdate ] = useState(false)
+    const role = localStorage.getItem('rol')
 
     useEffect(() => {
         getEmployees()
     },[])
 
     async function getEmployees(){
-        const { data } = await axios.get(baseURL)
-        setListEmployees(data)
-    }
+      const { data } = await axios.get(baseURL+`/${role}`)
+      setListEmployees(data)
+  }
 
     function getCurrentDate(separator=''){
         let newDate = new Date()
