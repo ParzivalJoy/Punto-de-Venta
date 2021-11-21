@@ -20,7 +20,7 @@ def conexion():
 def conexionRol(role):
     return psycopg2.connect(
     host="localhost",
-    database="prueba",
+    database="puntodeventa",
     user=role,
     password="root")
     

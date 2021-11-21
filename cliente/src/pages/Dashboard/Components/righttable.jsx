@@ -3,11 +3,12 @@ import '../../../styles.scss';
 import axios from 'axios'
 
 export default function Righttable() {
-    
+
+    const rol = localStorage.getItem('rol')
+
     const Button = ({type}) =>{
         return <button className={"table-button "+ type}>{type}</button>
     }
-
 
     const [transacciones, setTransacciones] = useState([])
 
@@ -22,7 +23,7 @@ export default function Righttable() {
 
     async function getTransactions(){
         let fecha=getCurrentDate()
-        const {data} = await axios.get('http://localhost:5000/api/dashboard/transactions'+`/${fecha}`)
+        const {data} = await axios.get('http://localhost:5000/api/dashboard/transactions'+`/${fecha}`+`/${rol}`)
         setTransacciones(data)
     }
 

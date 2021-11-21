@@ -2,8 +2,6 @@ import React, { useState, useCallback } from 'react';
 import { LineChart, Line, XAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import '../../../styles.scss';
 
-
-
 export default function Chart({title, data, dataKey, grid}) {
 
     const [value, setValue] = useState();

@@ -14,6 +14,8 @@ export default function Cards() {
     const [salesyes, setSalesYes] = useState('')
     const [productnot, setProductNot] = useState('')
 
+    const rol = localStorage.getItem('rol')
+
     function getCurrentDate(separator='-'){
         let newDate = new Date()
         let date = newDate.getDate();
@@ -34,18 +36,18 @@ export default function Cards() {
 
     async function getSalesToday(){
         let fechaventa = getCurrentDate()
-        const {data} = await axios.get('http://localhost:5000/api/dashboard'+`/${fechaventa}`)
+        const {data} = await axios.get('http://localhost:5000/api/dashboard'+`/${fechaventa}`+`/${rol}`)
         setSalesToday(data.sum)
     }
 
     async function getSalesYes(){
         let fechaventa = getYesDate()
-        const {data} = await axios.get('http://localhost:5000/api/dashboard'+`/${fechaventa}`)
+        const {data} = await axios.get('http://localhost:5000/api/dashboard'+`/${fechaventa}`+`/${rol}`)
         setSalesYes(data.sum)
     }
 
     async function getProductNot(){
-        const {data} = await axios.get('http://localhost:5000/api/dashboard')
+        const {data} = await axios.get('http://localhost:5000/api/dashboard'+`/${rol}`)
         setProductNot(data.count)
     }
 

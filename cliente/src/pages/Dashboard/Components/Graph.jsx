@@ -9,8 +9,10 @@ var datas = []
 
 export default function Graph() {
 
+    const rol = localStorage.getItem('rol')
+
     async function getGraphData(){
-        const {data} = await axios.get('http://localhost:5000/api/dashboard/graphdata')
+        const {data} = await axios.get('http://localhost:5000/api/dashboard/graphdata'+`/${rol}`)
         
         if(labels.length === 0 && datas.length === 0){
         data.map(item =>(

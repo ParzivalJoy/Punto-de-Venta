@@ -15,8 +15,9 @@ import {Doughnut, Bar, PolarArea} from 'react-chartjs-2'
 
 export default function Secondcards() {
 
+    const rol = localStorage.getItem('rol')
     async function getProductsToday(){
-        const {data} = await axios.get('http://localhost:5000/api/dashboard/doughnut')
+        const {data} = await axios.get('http://localhost:5000/api/dashboard/doughnut'+`/${rol}`)
         if(usuarios.length === 0 && cuenta.length === 0){
             data.map(item =>(
                 usuarios.push(item.usuario),
@@ -26,7 +27,7 @@ export default function Secondcards() {
     }
 
     async function getSalesComplement(){
-        const {data} = await axios.get('http://localhost:5000/api/dashboard/complement')
+        const {data} = await axios.get('http://localhost:5000/api/dashboard/complement'+`/${rol}`)
         if(complementos.length === 0 && cuentacomp.length === 0){
             data.map(item =>(
                 complementos.push(item.nombrecomplemento),
@@ -36,14 +37,14 @@ export default function Secondcards() {
     }
 
     async function getIngredientNot(){
-        const {data} = await axios.get('http://localhost:5000/api/dashboard/ingredientnot')
+        const {data} = await axios.get('http://localhost:5000/api/dashboard/ingredientnot'+`/${rol}`)
         if (ingredientNot === ''){
             ingredientNot = data.count
         }
     }
 
     async function getTotalIngredients(){
-        const {data} = await axios.get('http://localhost:5000/api/dashboard/ingredient')
+        const {data} = await axios.get('http://localhost:5000/api/dashboard/ingredient'+`/${rol}`)
         if (totalingredients === ''){
             totalingredients = data.count
         }

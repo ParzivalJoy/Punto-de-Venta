@@ -19,7 +19,7 @@ def conexion():
 def conexionRol(role):
     return psycopg2.connect(
     host="localhost",
-    database="prueba",
+    database="puntodeventa",
     user=role,
     password="root")
 
@@ -118,7 +118,7 @@ def getSalesSeptiembre(year, rol):
     return jsonify(row)
 
 @dash_api.route('/api/dashboard/salesOctubre/<year>/<rol>',  methods=['GET'])
-def getSalesOctubre(rol):
+def getSalesOctubre(year, rol):
     conn = conexionRol(rol)
     cur = conn.cursor(cursor_factory=RealDictCursor)
     sql="SELECT COUNT(*) FROM ventas WHERE fechaventa BETWEEN '{0}-10-01' AND '{0}-10-31'".format(year)
