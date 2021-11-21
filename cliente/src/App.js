@@ -35,9 +35,10 @@ function App() {
 
   const [tema, setTema] = useState('')
   const [color, setColor] = useState('')
+  const rol = localStorage.getItem('rol')
 
   async function getTema(){
-    const {data} = await axios.get('http://localhost:5000/configuracion/getTemasEs')
+    const {data} = await axios.get('http://localhost:5000/configuracion/getTemasEs'+`/${rol}`)
     setTema(data.modo)
     setColor(data.color)
 }

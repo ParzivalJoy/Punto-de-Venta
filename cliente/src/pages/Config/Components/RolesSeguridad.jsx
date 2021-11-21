@@ -16,10 +16,11 @@ function RolesSeguridad() {
     const[permisocontabilidad, setPermisocontabilidad]= useState(false)
     const[idusuario, setIdusuario]= useState(null)
     const [loading, setLoading]=useState(false)
+    const rol = localStorage.getItem('rol')
 
     const DatosInicio= async()=>{
       const res2 = await fetch(
-        `http://localhost:5000/configuracion/getEmpleados`
+        `http://localhost:5000/configuracion/getEmpleados`+`/${rol}`
       );
       const data2 = await res2.json();
       setListemployees(data2)
@@ -53,13 +54,13 @@ function RolesSeguridad() {
         else{
 
           const res3 = await fetch(
-            `http://localhost:5000/configuracion/getIdusuario/${actualempleado}`
+            `http://localhost:5000/configuracion/getIdusuario/${actualempleado}`+`/${rol}`
           );
           const data3 = await res3.json();
           let userid= data3.idusuario;
           setIdusuario(data3.idusuario)
           const res4 = await fetch(
-            `http://localhost:5000/configuracion/getPermisos/${userid}`
+            `http://localhost:5000/configuracion/getPermisos/${userid}`+`/${rol}`
           );
           const data4 = await res4.json();
           data4.map((permiso)=>{
@@ -96,7 +97,7 @@ function RolesSeguridad() {
 
           setLoading(true)
           const res = await fetch(
-            `http://localhost:5000/configuracion/editPermisoEmpleados`,
+            `http://localhost:5000/configuracion/editPermisoEmpleados`+`/${rol}`,
             {
               method: "PUT",
               headers: {
@@ -111,7 +112,7 @@ function RolesSeguridad() {
             await res.json();
           ////////editar permiso de inventarios//////////////////
           const resinv = await fetch(
-            `http://localhost:5000/configuracion/editPermisoInventarios`,
+            `http://localhost:5000/configuracion/editPermisoInventarios`+`/${rol}`,
             {
               method: "PUT",
               headers: {
@@ -126,7 +127,7 @@ function RolesSeguridad() {
             await resinv.json();
           ///////////editar permiso de configuracion//////////////////
           const rescon = await fetch(
-            `http://localhost:5000/configuracion/editPermisoConfiguracion`,
+            `http://localhost:5000/configuracion/editPermisoConfiguracion`+`/${rol}`,
             {
               method: "PUT",
               headers: {
@@ -141,7 +142,7 @@ function RolesSeguridad() {
             await rescon.json();
           /////////////////editar permisos de gestor //////////////////
           const resges = await fetch(
-            `http://localhost:5000/configuracion/editPermisoGestor`,
+            `http://localhost:5000/configuracion/editPermisoGestor`+`/${rol}`,
             {
               method: "PUT",
               headers: {
@@ -156,7 +157,7 @@ function RolesSeguridad() {
             await resges.json();
           /////////////editar permisos de productos///////////////////
           const respro = await fetch(
-            `http://localhost:5000/configuracion/editPermisoProductos`,
+            `http://localhost:5000/configuracion/editPermisoProductos`+`/${rol}`,
             {
               method: "PUT",
               headers: {
@@ -171,7 +172,7 @@ function RolesSeguridad() {
             await respro.json();
           ////////////editar permisos de ventas//////////////////
           const resven = await fetch(
-            `http://localhost:5000/configuracion/editPermisoVentas`,
+            `http://localhost:5000/configuracion/editPermisoVentas`+`/${rol}`,
             {
               method: "PUT",
               headers: {
@@ -186,7 +187,7 @@ function RolesSeguridad() {
             await resven.json();
           //////////editar permisos de contabilidad//////////////
           const resconta = await fetch(
-            `http://localhost:5000/configuracion/editPermisoContabilidad`,
+            `http://localhost:5000/configuracion/editPermisoContabilidad`+`/${rol}`,
             {
               method: "PUT",
               headers: {

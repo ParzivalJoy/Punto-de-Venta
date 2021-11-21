@@ -9,11 +9,12 @@ function Tema() {
     const [temaescogido, setTemaescogido]= useState('blue')
     const [nombreempresa, setNombreEmpresa]= useState('POS')
     const[nombreempresavalid, setNombreempresavalid]=useState(true)
-
+    const rol = localStorage.getItem('rol')
+    
     const datosInicio=async()=>{
       //////////datos de temas desde el inicio ////////////////////////
       const res1 = await fetch(
-        `http://localhost:5000/configuracion/getTemasEs`
+        `http://localhost:5000/configuracion/getTemasEs`+`/${rol}`
       );
       const data1 = await res1.json();
       if(data1===null){
@@ -44,7 +45,7 @@ function Tema() {
       if(nombreempresavalid===true){
 
         const res = await fetch(
-          `http://localhost:5000/configuracion/editTema`,
+          `http://localhost:5000/configuracion/editTema`+`/${rol}`,
           {
             method: "PUT",
             headers: {

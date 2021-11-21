@@ -14,15 +14,22 @@ def conexion():
     user="postgres",
     password="root")
 
+def conexionRol(role):
+    return psycopg2.connect(
+    host="localhost",
+    database="puntodeventa",
+    user=role,
+    password="root")
+
 config_api = Blueprint('config_api', __name__)
 
 ## ------------------------------------------------------------------------------ ##
 ## ---------------Configuración del Tema, Logo y Colores------------------------- ##
 ## ------------------------------------------------------------------------------ ##
 
-@config_api.route('/configuracion/editTema', methods=['PUT'])
-def editionTema():
-    conn=conexion()
+@config_api.route('/configuracion/editTema/<rol>', methods=['PUT'])
+def editionTema(rol):
+    conn=conexionRol(rol)
     cur=conn.cursor()
     data=request.json
     sql="""UPDATE temas SET modo=%(estiloactivo1)s, color=%(temaescogido)s,logo=%(nombreempresa)s WHERE idtema=1"""
@@ -32,9 +39,9 @@ def editionTema():
     cur.close()
     return jsonify(msg='tema editado de manera satisfactoria!');
 
-@config_api.route('/configuracion/getTemasEs',  methods=['GET'])
-def getTema():
-    conn = conexion()
+@config_api.route('/configuracion/getTemasEs/<rol>',  methods=['GET'])
+def getTema(rol):
+    conn = conexionRol(rol)
     cur = conn.cursor(cursor_factory=RealDictCursor)
     sql="SELECT * FROM temas WHERE idtema=1"
     cur.execute(sql) 
@@ -47,9 +54,9 @@ def getTema():
 ## -------------Configuración de los permisos de los empleados------------------- ##
 ## ------------------------------------------------------------------------------ ##
 
-@config_api.route('/configuracion/editPermisoEmpleados', methods=['PUT'])
-def editPermisoEmp():
-    conn=conexion()
+@config_api.route('/configuracion/editPermisoEmpleados/<rol>', methods=['PUT'])
+def editPermisoEmp(rol):
+    conn=conexionRol(rol)
     cur=conn.cursor()
     data=request.json
     sql="""UPDATE permisosusuarios SET acceso=%(permisoempleados)s WHERE idusuario=%(idusuario)s AND idpermiso=1"""
@@ -59,9 +66,9 @@ def editPermisoEmp():
     cur.close()
     return jsonify(msg='bien');
 
-@config_api.route('/configuracion/editPermisoInventarios', methods=['PUT'])
-def editPermisoInv():
-    conn=conexion()
+@config_api.route('/configuracion/editPermisoInventarios/<rol>', methods=['PUT'])
+def editPermisoInv(rol):
+    conn=conexionRol(rol)
     cur=conn.cursor()
     data=request.json
     sql="""UPDATE permisosusuarios SET acceso=%(permisoinventarios)s WHERE idusuario=%(idusuario)s AND idpermiso=2"""
@@ -71,9 +78,9 @@ def editPermisoInv():
     cur.close()
     return jsonify(msg='bien');
 
-@config_api.route('/configuracion/editPermisoConfiguracion', methods=['PUT'])
-def editPermisoCon():
-    conn=conexion()
+@config_api.route('/configuracion/editPermisoConfiguracion/<rol>', methods=['PUT'])
+def editPermisoCon(rol):
+    conn=conexionRol(rol)
     cur=conn.cursor()
     data=request.json
     sql="""UPDATE permisosusuarios SET acceso=%(permisoconfiguracion)s WHERE idusuario=%(idusuario)s AND idpermiso=3"""
@@ -83,9 +90,9 @@ def editPermisoCon():
     cur.close()
     return jsonify(msg='bien');
 
-@config_api.route('/configuracion/editPermisoGestor', methods=['PUT'])
-def editPermisoGes():
-    conn=conexion()
+@config_api.route('/configuracion/editPermisoGestor/<rol>', methods=['PUT'])
+def editPermisoGes(rol):
+    conn=conexionRol(rol)
     cur=conn.cursor()
     data=request.json
     sql="""UPDATE permisosusuarios SET acceso=%(permisogestor)s WHERE idusuario=%(idusuario)s AND idpermiso=4"""
@@ -95,9 +102,9 @@ def editPermisoGes():
     cur.close()
     return jsonify(msg='bien');
 
-@config_api.route('/configuracion/editPermisoProductos', methods=['PUT'])
-def editPermisoPro():
-    conn=conexion()
+@config_api.route('/configuracion/editPermisoProductos/<rol>', methods=['PUT'])
+def editPermisoPro(rol):
+    conn=conexionRol(rol)
     cur=conn.cursor()
     data=request.json
     sql="""UPDATE permisosusuarios SET acceso=%(permisoproductos)s WHERE idusuario=%(idusuario)s AND idpermiso=5"""
@@ -107,9 +114,9 @@ def editPermisoPro():
     cur.close()
     return jsonify(msg='bien');
 
-@config_api.route('/configuracion/editPermisoVentas', methods=['PUT'])
-def editPermisoVen():
-    conn=conexion()
+@config_api.route('/configuracion/editPermisoVentas/<rol>', methods=['PUT'])
+def editPermisoVen(rol):
+    conn=conexionRol(rol)
     cur=conn.cursor()
     data=request.json
     sql="""UPDATE permisosusuarios SET acceso=%(permisoventas)s WHERE idusuario=%(idusuario)s AND idpermiso=6"""
@@ -119,9 +126,9 @@ def editPermisoVen():
     cur.close()
     return jsonify(msg='bien');
 
-@config_api.route('/configuracion/editPermisoContabilidad', methods=['PUT'])
-def editPermisoConta():
-    conn=conexion()
+@config_api.route('/configuracion/editPermisoContabilidad/<rol>', methods=['PUT'])
+def editPermisoConta(rol):
+    conn=conexionRol(rol)
     cur=conn.cursor()
     data=request.json
     sql="""UPDATE permisosusuarios SET acceso=%(permisocontabilidad)s WHERE idusuario=%(idusuario)s AND idpermiso=7"""
@@ -135,9 +142,9 @@ def editPermisoConta():
 ## --------------Obtención de los datos de los empleados------------------------- ##
 ## ------------------------------------------------------------------------------ ##
 
-@config_api.route('/configuracion/getEmpleados',  methods=['GET'])
-def getTEmpleados():
-    conn = conexion()
+@config_api.route('/configuracion/getEmpleados/<rol>',  methods=['GET'])
+def getTEmpleados(rol):
+    conn = conexionRol(rol)
     cur = conn.cursor(cursor_factory=RealDictCursor)
     sql="SELECT idempleado,nombreempleado FROM empleados"
     cur.execute(sql) 
@@ -145,9 +152,9 @@ def getTEmpleados():
     conn.close()
     return jsonify(row)
 
-@config_api.route('/configuracion/getIdusuario/<idempleado>',  methods=['GET'])
-def getTUsuario(idempleado):
-    conn = conexion()
+@config_api.route('/configuracion/getIdusuario/<idempleado>/<rol>',  methods=['GET'])
+def getTUsuario(idempleado, rol):
+    conn = conexionRol(rol)
     cur = conn.cursor(cursor_factory=RealDictCursor)
     sql="SELECT idusuario FROM usuarios WHERE idempleado={0}".format(idempleado)
     cur.execute(sql) 
@@ -155,9 +162,9 @@ def getTUsuario(idempleado):
     conn.close()
     return jsonify(row)
 
-@config_api.route('/configuracion/getPermisos/<userid>',  methods=['GET'])
-def getTPermisos(userid):
-    conn = conexion()
+@config_api.route('/configuracion/getPermisos/<userid>/<rol>',  methods=['GET'])
+def getTPermisos(userid, rol):
+    conn = conexionRol(rol)
     cur = conn.cursor(cursor_factory=RealDictCursor)
     sql="SELECT idpermiso, acceso FROM permisosusuarios WHERE idusuario={0}".format(userid)
     cur.execute(sql) 
