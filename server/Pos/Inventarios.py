@@ -57,9 +57,6 @@ def insercionMoveInv():
     cur.close()
     return jsonify(msg='movimiento de entrada agregado');
 
-@inv_api.route('/inventario/bringImgs/<filename>')
-def uploaded_file(filename):
-    return send_from_directory(IMAGE_FOLDER, path=filename, as_attachment=False)
 
 @inv_api.route('/inventario/getActualProduct/<id>',  methods=['GET'])
 def getProductsInv(id):

@@ -212,10 +212,10 @@ def verifyProductModifier(search, rol):
 ## ----------- Cambios en las cantidades de productos e ingredientes------------- ##
 ## ------------------------------------------------------------------------------ ##
 
-@ventas_api.route('/api/sales/updateproduct', methods=['PUT'])
-def updateProducts():
+@ventas_api.route('/api/sales/updateproduct/<rol>', methods=['PUT'])
+def updateProducts(rol):
     data = request.json
-    conn = conexionRol(data['rol'])
+    conn = conexionRol(rol)
     cur = conn.cursor()
     sql = "UPDATE productos SET cantidadproducto = cantidadproducto - {0} WHERE idproducto='{1}'".format(data['cantidad'], data['idproducto'])
     cur.execute(sql, data) 
@@ -224,10 +224,10 @@ def updateProducts():
     cur.close()
     return jsonify(msg="employee updated")
 
-@ventas_api.route('/api/sales/updateingredient', methods=['PUT'])
-def updateIngredients():
+@ventas_api.route('/api/sales/updateingredient/<rol>', methods=['PUT'])
+def updateIngredients(rol):
     data = request.json
-    conn = conexionRol(data['rol'])
+    conn = conexionRol(rol)
     cur = conn.cursor()
     sql = """update ingredientes set cantidadingrediente = cantidadingrediente - {0} from productosingredientes
             where productosingredientes.idproducto = '{1}' and ingredientes.idingrediente = productosingredientes.idingrediente""".format(data['porcion'], data['idproducto'])
@@ -237,10 +237,10 @@ def updateIngredients():
     cur.close()
     return jsonify(msg="ingredient updated")
 
-@ventas_api.route('/api/sales/modifier/updateingredient', methods=['PUT'])
-def updateModifierIngredients():
+@ventas_api.route('/api/sales/modifier/updateingredient/<rol>', methods=['PUT'])
+def updateModifierIngredients(rol):
     data = request.json
-    conn = conexionRol(data['rol'])
+    conn = conexionRol(rol)
     cur = conn.cursor()
     sql = "UPDATE ingredientes SET cantidadingrediente = cantidadingrediente - {0} WHERE idingrediente = '{1}'"-format(data['porcion'], data['idingrediente'])
     cur.execute(sql, data) 
@@ -254,10 +254,10 @@ def updateModifierIngredients():
 ## ------------------Inserciones en las tablas de ventas------------------------- ##
 ## ------------------------------------------------------------------------------ ##
 
-@ventas_api.route('/api/sales/venta', methods=['POST'])
-def addSale():
+@ventas_api.route('/api/sales/venta/<rol>', methods=['POST'])
+def addSale(rol):
     data = request.json
-    conn = conexionRol(data['rol'])
+    conn = conexionRol(rol)
     cur = conn.cursor()
     sql = """INSERT INTO ventas (idusuario, idcliente, idpago, totalventa, fechaventa, horaventa )
              VALUES (%(idusuario)s,%(idcliente)s, %(idpago)s, %(totalventa)s, %(fechaventa)s, %(horaventa)s)"""
@@ -267,10 +267,10 @@ def addSale():
     cur.close()
     return jsonify(msg='added successfully!')
 
-@ventas_api.route('/api/sales/addsaleproduct', methods=['POST'])
-def addSaleProduct():
+@ventas_api.route('/api/sales/addsaleproduct/<rol>', methods=['POST'])
+def addSaleProduct(rol):
     data = request.json
-    conn = conexionRol(data['rol'])
+    conn = conexionRol(rol)
     cur = conn.cursor()
     sql = """INSERT INTO ventasproducto (idusuario, idproducto, cantidad, nombreproducto, notas, subtotal, totalproductos )
              VALUES (%(idusuario)s,%(idproducto)s, %(cantidad)s, %(nombre)s, %(nota)s, %(precio)s, %(total)s)"""
@@ -280,10 +280,10 @@ def addSaleProduct():
     cur.close()
     return jsonify(msg='added successfully!')
 
-@ventas_api.route('/api/sales/addsalecomplement', methods=['POST'])
-def addSaleComplement():
+@ventas_api.route('/api/sales/addsalecomplement/<rol>', methods=['POST'])
+def addSaleComplement(rol):
     data = request.json
-    conn = conexionRol(data['rol'])
+    conn = conexionRol(rol)
     cur = conn.cursor()
     sql = """INSERT INTO ventascomplemento (idusuario, idcomplemento, nombrecomplemento, cantidad, subtotal, totalcomplemento )
              VALUES (%(idusuario)s,%(idcomplemento)s, %(nombre)s, %(cantidad)s, %(precio)s, %(total)s)"""
@@ -293,10 +293,10 @@ def addSaleComplement():
     cur.close()
     return jsonify(msg='added successfully!')
 
-@ventas_api.route('/api/sales/addsalemodifier', methods=['POST'])
-def addSaleModifier():
+@ventas_api.route('/api/sales/addsalemodifier/<rol>', methods=['POST'])
+def addSaleModifier(rol):
     data = request.json
-    conn = conexionRol(data['rol'])
+    conn = conexionRol(rol)
     cur = conn.cursor()
     sql = """INSERT INTO ventasmodificadores (idusuario, idmodificador, idopcionmodificador, nombremodificador, nombreopcion, subtotal, totalmodificador )
              VALUES (%(idusuario)s,%(idmod)s, %(idop)s, %(nombremod)s, %(nombreop)s, %(precio)s, %(precio)s)"""

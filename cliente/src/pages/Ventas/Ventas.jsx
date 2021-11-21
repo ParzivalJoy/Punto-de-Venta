@@ -19,29 +19,30 @@ export default function Ventas() {
     const [category, setCategory] = useState('Categorias')
     const [search, setSearch] = useState('')
    
+    const rol = localStorage.getItem('rol')
     let history = useHistory();
 
     async function getAllProducts(){
-        const {data} = await axios.get('http://localhost:5000/api/sales/products')
+        const {data} = await axios.get('http://localhost:5000/api/sales/products'+`/${rol}`)
         clear()
         setCategory('Categorias')
         setAllProducts(data)
     }
 
     async function getCategories(){
-        const {data} = await axios.get('http://localhost:5000/api/sales/categories')
+        const {data} = await axios.get('http://localhost:5000/api/sales/categories'+`/${rol}`)
         setCategories(data)
     }
 
     async function getProductsByCategory(idcategoria, nombrecategoria){
-        const {data} = await axios.get('http://localhost:5000/api/sales/products/category'+`/${idcategoria}`)
+        const {data} = await axios.get('http://localhost:5000/api/sales/products/category'+`/${idcategoria}`+`/${rol}`)
         clear()
         setCategory(nombrecategoria)
         setAllProducts(data)
     }
 
     async function getProductByName(){
-        const {data} = await axios.get('http://localhost:5000/api/sales/products/name'+`/${search}`)
+        const {data} = await axios.get('http://localhost:5000/api/sales/products/name'+`/${search}`+`/${rol}`)
 
         //Si no encuentra nada en la consulta de nombre, hace la consulta por código
         if (Object.entries(data).length === 0){
@@ -53,7 +54,7 @@ export default function Ventas() {
     }
 
     async function getProductById(){
-        const {data} = await axios.get('http://localhost:5000/api/sales/products/id'+`/${search}`)
+        const {data} = await axios.get('http://localhost:5000/api/sales/products/id'+`/${search}`+`/${rol}`)
         console.log(data)       
         if (Object.entries(data).length === 0){
             Swal.fire({
@@ -69,7 +70,7 @@ export default function Ventas() {
     }
 
     async function verifyProductComplement(){
-        const {data} = await axios.get('http://localhost:5000/api/sales/verification/products/complements'+`/${search}`)
+        const {data} = await axios.get('http://localhost:5000/api/sales/verification/products/complements'+`/${search}`+`/${rol}`)
         console.log(data)
         if(data !== null){
             history.push('/product'+`/${search}`)
@@ -79,7 +80,7 @@ export default function Ventas() {
     }
 
     async function verifyProductModifier(){
-        const {data} = await axios.get('http://localhost:5000/api/sales/verification/products/modifiers'+`/${search}`)
+        const {data} = await axios.get('http://localhost:5000/api/sales/verification/products/modifiers'+`/${search}`+`/${rol}`)
         console.log(data)
         if(data !== null){
             history.push('/product'+`/${search}`)
@@ -89,7 +90,7 @@ export default function Ventas() {
     }
 
     async function getSearchProduct(){
-        const {data} = await axios.get('http://localhost:5000/api/getproducts/'+`/${search}`)
+        const {data} = await axios.get('http://localhost:5000/api/getproducts/'+`/${search}`+`/${rol}`)
 
         if(localStorage["productdatas"]){
             //Guarda los datos de localstorage en temp
@@ -124,7 +125,7 @@ export default function Ventas() {
     }
     
     async function getProductsByPrice1(){
-        const {data} = await axios.get('http://localhost:5000/api/sales/products/price1')
+        const {data} = await axios.get('http://localhost:5000/api/sales/products/price1'+`/${rol}`)
         if (Object.entries(data).length === 0){
             Swal.fire({
                 icon: 'error',
@@ -142,7 +143,7 @@ export default function Ventas() {
     }
 
     async function getProductsByPrice2(){
-        const {data} = await axios.get('http://localhost:5000/api/sales/products/price2')
+        const {data} = await axios.get('http://localhost:5000/api/sales/products/price2'+`/${rol}`)
         if (Object.entries(data).length === 0){
             Swal.fire({
                 icon: 'error',
@@ -161,7 +162,7 @@ export default function Ventas() {
 
     async function getProductsByPrice3(){
 
-        const {data} = await axios.get('http://localhost:5000/api/sales/products/price3')
+        const {data} = await axios.get('http://localhost:5000/api/sales/products/price3'+`/${rol}`)
         if (Object.entries(data).length === 0){
             Swal.fire({
                 icon: 'error',

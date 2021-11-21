@@ -12,6 +12,7 @@ import axios from 'axios' //npm i
 export default function Carrito() {
     
     let history = useHistory()
+    const rol = localStorage.getItem('rol')
 
     const [productdata, setProductData] = useState([])
     const [complementdata, setComplementData] = useState([])
@@ -111,12 +112,12 @@ export default function Carrito() {
     async function updateProduct(idusuario, idproducto, cantidad, precio, nombre, nota, total){
         const obj = {idusuario, idproducto, cantidad, nombre, nota, precio, total}
         //Modificar la cantidad del producto
-        await axios.put('http://localhost:5000/api/sales/updateproduct',obj)
+        await axios.put('http://localhost:5000/api/sales/updateproduct'+`/${rol}`,obj)
         //Agregar detalles de la venta de productos
-        await axios.post('http://localhost:5000/api/sales/addsaleproduct', obj)
+        await axios.post('http://localhost:5000/api/sales/addsaleproduct'+`/${rol}`, obj)
 
         //Rescata la porcion de cada ingrediente que utiliza el producto
-        const {data} = await axios.get('http://localhost:5000/api/sales/verification/ingredient/portion'+`/${idproducto}`)
+        const {data} = await axios.get('http://localhost:5000/api/sales/verification/ingredient/portion'+`/${idproducto}`+`/${rol}`)
         
         //Si el producto tiene ingredientes le quita la cantidad utilizada
         if (data !== undefined){
@@ -129,24 +130,24 @@ export default function Carrito() {
     async function updateModifier(idusuario, idmod, idop, nombremod, nombreop, precio, idingrediente, porcion){
         //Agregar detalles de la venta de modificadores
         const obj = {idusuario, idmod, idop, nombremod, nombreop, precio, idingrediente, porcion}
-        await axios.post('http://localhost:5000/api/sales/addsalemodifier',obj)
-        await axios.put('http://localhost:5000/api/sales/modifier/updateingredient',obj)
+        await axios.post('http://localhost:5000/api/sales/addsalemodifier'+`/${rol}`,obj)
+        await axios.put('http://localhost:5000/api/sales/modifier/updateingredient'+`/${rol}`,obj)
     }
 
     async function updateComplement(idusuario, idcomplemento, cantidad, nombre, precio, total){
         //Se obtiene el id del producto original
-        const { data } = await axios.get('http://localhost:5000/api/sales/verification/complement'+`/${idcomplemento}`)
+        const { data } = await axios.get('http://localhost:5000/api/sales/verification/complement'+`/${idcomplemento}`+`/${rol}`)
         let idproducto = data.idproductooriginal
         const obj = {idproducto, cantidad}
         
         //Modificar la cantidad del producto
-        await axios.put('http://localhost:5000/api/sales/updateproduct',obj)
+        await axios.put('http://localhost:5000/api/sales/updateproduct'+`/${rol}`,obj)
         //Agregar detalles de la venta de complementos
         const objproduct = {idusuario, idcomplemento, cantidad, nombre, precio, total}
-        await axios.post('http://localhost:5000/api/sales/addsalecomplement', objproduct)
+        await axios.post('http://localhost:5000/api/sales/addsalecomplement'+`/${rol}`, objproduct)
        
         //Rescata la porcion de cada ingrediente que utiliza el producto
-        const {dataportion} = await axios.get('http://localhost:5000/api/sales/verification/ingredient/portion'+`/${idproducto}`)
+        const {dataportion} = await axios.get('http://localhost:5000/api/sales/verification/ingredient/portion'+`/${idproducto}`+`/${rol}`)
         
         //Si el complemento tiene ingredientes tambien quita la cantidad utilizada
         if (dataportion !== undefined){
@@ -161,7 +162,7 @@ export default function Carrito() {
         console.log(porcion)
         console.log(idproducto)
         const obj = {porcion, idproducto}
-        await axios.put('http://localhost:5000/api/sales/updateingredient', obj)
+        await axios.put('http://localhost:5000/api/sales/updateingredient'+`/${rol}`, obj)
     }
 
 
@@ -174,7 +175,7 @@ export default function Carrito() {
         let idpago = 1
 
         const obj = { idusuario, idcliente, idpago, totalventa , fechaventa, horaventa}
-        const { data } = await axios.post('http://localhost:5000/api/sales/venta', obj)
+        const { data } = await axios.post('http://localhost:5000/api/sales/venta'+`/${rol}`, obj)
 
     }
 

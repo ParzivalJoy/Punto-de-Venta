@@ -17,6 +17,8 @@ export default function Product() {
     let history = useHistory();
     const params = useParams();
 
+    const rol = localStorage.getItem('rol')
+
     const [productName, setProductName] = useState('')
     const [productDescr, setProductDescr] = useState('')
     const [productPrice, setProductPrice] = useState('')
@@ -29,7 +31,7 @@ export default function Product() {
     const [optionlist, setOptionList] = useState([])
 
     async function getProduct(){
-        const {data} = await axios.get('http://localhost:5000/api/getproducts'+`/${params.id}`)
+        const {data} = await axios.get('http://localhost:5000/api/getproducts'+`/${params.id}`+`/${rol}`)
         setProductName(data.nombreproducto)
         setProductDescr(data.descripcionproducto)
         setProductPrice(data.precioproducto)
@@ -37,14 +39,14 @@ export default function Product() {
         var imgblob= data.imagebproducto;
         if(imgblob===null){
             const resb = await fetch(
-                `http://localhost:5000/inventario/bringImgs/sin-imagen.jpg`
+                `http://localhost:5000/inventario/bringImgs/sin-imagen.jpg`+`/${rol}`
               );
               const datab = await resb.blob();
               var sauce= URL.createObjectURL(datab)
               setImagebinary(sauce)
           }else{
             const resb = await fetch(
-              `http://localhost:5000/inventario/bringImgs/${imgblob}`
+              `http://localhost:5000/inventario/bringImgs/${imgblob}`+`/${rol}`
             );
             const datab = await resb.blob();
             var sauce= URL.createObjectURL(datab)
@@ -52,19 +54,19 @@ export default function Product() {
           }
 
     }
-    console.log(cant)
+    
     async function getListComplements(){
-        const {data} = await axios.get('http://localhost:5000/api/complements'+`/${params.id}`)
+        const {data} = await axios.get('http://localhost:5000/api/complements'+`/${params.id}`+`/${rol}`)
         setComplementList(data)
     }
 
     async function getListModifiers(){
-        const {data} = await axios.get('http://localhost:5000/api/modifiers'+`/${params.id}`)
+        const {data} = await axios.get('http://localhost:5000/api/modifiers'+`/${params.id}`+`/${rol}`)
         setModifierList(data)
     }
 
     async function getListOptions(idmodificador){
-        const {data} = await axios.get('http://localhost:5000/api/options'+`/${idmodificador}`)
+        const {data} = await axios.get('http://localhost:5000/api/options'+`/${idmodificador}`+`/${rol}`)
         setOptionList(data)
         console.log(dataMultiple)
     } 

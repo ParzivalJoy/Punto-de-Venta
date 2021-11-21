@@ -109,6 +109,10 @@ def getEmailUser():
         return jsonify(0)
     return jsonify(row)
 
+@app.route('/inventario/bringImgs/<filename>/<rol>')
+def uploaded_file(filename, rol):
+    return send_from_directory(IMAGE_FOLDER, path=filename, as_attachment=False)
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
 
