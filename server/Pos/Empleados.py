@@ -49,10 +49,10 @@ def getEmployee(idempleado, rol):
 
 @empleado_api.route('/api/<rol>', methods=['POST'])
 def saveEmployee(rol):
+    data = request.json
     #Hace conexion del rol
     conn = conexionRol(rol)
     cur = conn.cursor()
-    data = request.json
     #Inserta en la tabla empleados 
     sql = """INSERT INTO empleados (nombreempleado, fechacontra, dirempleado,telempleado, emailempleado, idcargo )
                 VALUES (%(nombreempleado)s,%(fechacontra)s, %(dirempleado)s, %(telempleado)s, %(emailempleado)s,2)"""
@@ -106,9 +106,9 @@ def deleteEmployee(idempleado, rol):
 
 @empleado_api.route('/api/<rol>', methods=['PUT'])
 def updateEmployee(rol):
+    data = request.json
     conn = conexionRol(rol)
     cur = conn.cursor()
-    data = request.json
     sql = "UPDATE empleados SET nombreempleado=%(nombreempleado)s, dirempleado=%(dirempleado)s,telempleado=%(telempleado)s, emailempleado=%(emailempleado)s WHERE idempleado=%(idempleado)s"
     cur.execute(sql,data) 
     conn.commit()

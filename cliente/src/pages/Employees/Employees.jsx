@@ -16,14 +16,14 @@ function Employees() {
     const [ telempleado, setTel ] = useState('')
     const [ dirempleado, setDir ] = useState('')
     const [ update, setUpdate ] = useState(false)
-    const role = localStorage.getItem('rol')
+    const rol = localStorage.getItem('rol')
 
     useEffect(() => {
         getEmployees()
     },[])
 
     async function getEmployees(){
-      const { data } = await axios.get(baseURL+`/${role}`)
+      const { data } = await axios.get(baseURL+`/${rol}`)
       setListEmployees(data)
   }
 
@@ -37,8 +37,8 @@ function Employees() {
 
     async function saveEmployee(){
         let fechacontra=getCurrentDate()
-        const obj = { nombreempleado,fechacontra, emailempleado, telempleado,dirempleado }
-        const { data } = await axios.post(baseURL, obj)
+        const obj = { nombreempleado,fechacontra, emailempleado, telempleado,dirempleado}
+        const { data } = await axios.post(baseURL+`/${rol}`, obj)
         console.log(data)
         clearInput()
         getEmployees()
@@ -99,7 +99,7 @@ function Employees() {
     }
 
     async function deleteEmployeeAlert(idempleado){
-        const { data } = await axios.delete(baseURL+`/${idempleado}`)
+        const { data } = await axios.delete(baseURL+`/${idempleado}`+`/${rol}`)
         console.log(data)
         getEmployees()
     }
@@ -144,7 +144,7 @@ function Employees() {
 
     async function getEmployeeAlert(idempleado){
             setUpdate(true)
-            const {data} = await axios.get(baseURL+`/${idempleado}`)
+            const {data} = await axios.get(baseURL+`/${idempleado}`+`/${rol}`)
             let nombre =  data.nombreempleado
             let email =  data.emailempleado
             let tel = data.telempleado
@@ -161,8 +161,8 @@ function Employees() {
     }
 
     async function updateEmployee(){
-        const obj = {idempleado,nombreempleado, emailempleado, telempleado,dirempleado }
-        const { data } = await axios.put(baseURL,obj)
+        const obj = {idempleado,nombreempleado, emailempleado, telempleado,dirempleado}
+        const { data } = await axios.put(baseURL+`/${rol}`,obj)
         console.log(data)
         clearInput()
         getEmployees()
