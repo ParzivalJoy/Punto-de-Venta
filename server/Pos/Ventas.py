@@ -26,45 +26,45 @@ def conexionRol(role):
 ## -----------------------Catalogo de productos y filtros------------------------ ##
 ## ------------------------------------------------------------------------------ ##
 
-@ventas_api.route('/api/sales/products',  methods=['GET'])
-def getAllProducts():
-    conn = conexion()
+@ventas_api.route('/api/sales/products/<rol>',  methods=['GET'])
+def getAllProducts(rol):
+    conn = conexionRol(rol)
     cur = conn.cursor(cursor_factory=RealDictCursor)
     cur.execute("SELECT idproducto, nombreproducto, precioproducto, descripcionproducto, imagebproducto FROM productos")
     rows = cur.fetchall()
     conn.close()
     return jsonify(rows)
 
-@ventas_api.route('/api/sales/products/price1',  methods=['GET'])
-def getProductsByPrice1():
-    conn = conexion()
+@ventas_api.route('/api/sales/products/price1/<rol>',  methods=['GET'])
+def getProductsByPrice1(rol):
+    conn = conexionRol(rol)
     cur = conn.cursor(cursor_factory=RealDictCursor)
     cur.execute("SELECT idproducto, nombreproducto, precioproducto, descripcionproducto FROM productos WHERE precioproducto <= 50")
     rows = cur.fetchall()
     conn.close()
     return jsonify(rows)
 
-@ventas_api.route('/api/sales/products/price2',  methods=['GET'])
-def getProductsByPrice2():
-    conn = conexion()
+@ventas_api.route('/api/sales/products/price2/<rol>',  methods=['GET'])
+def getProductsByPrice2(rol):
+    conn = conexionRol(rol)
     cur = conn.cursor(cursor_factory=RealDictCursor)
     cur.execute("SELECT idproducto, nombreproducto, precioproducto, descripcionproducto FROM productos WHERE precioproducto > 50 AND precioproducto <= 500")
     rows = cur.fetchall()
     conn.close()
     return jsonify(rows)
 
-@ventas_api.route('/api/sales/products/price3',  methods=['GET'])
-def getProductsByPrice3():
-    conn = conexion()
+@ventas_api.route('/api/sales/products/price3/<rol>',  methods=['GET'])
+def getProductsByPrice3(rol):
+    conn = conexionRol(rol)
     cur = conn.cursor(cursor_factory=RealDictCursor)
     cur.execute("SELECT idproducto, nombreproducto, precioproducto, descripcionproducto FROM productos WHERE precioproducto > 500")
     rows = cur.fetchall()
     conn.close()
     return jsonify(rows)
 
-@ventas_api.route('/api/sales/products/category/<idcategoria>',  methods=['GET'])
-def getProductsByCategory(idcategoria):
-    conn = conexion()
+@ventas_api.route('/api/sales/products/category/<idcategoria>/<rol>',  methods=['GET'])
+def getProductsByCategory(idcategoria, rol):
+    conn = conexionRol(rol)
     cur = conn.cursor(cursor_factory=RealDictCursor)
     sql = ('''SELECT idproducto, nombreproducto, precioproducto, descripcionproducto, nombrecategoria FROM productos 
             INNER JOIN categorias ON productos.idcategoria = {0} AND categorias.idcategoria = productos.idcategoria'''.format(idcategoria))
@@ -73,9 +73,9 @@ def getProductsByCategory(idcategoria):
     conn.close()
     return jsonify(rows)
 
-@ventas_api.route('/api/sales/products/name/<search>',  methods=['GET'])
-def getProductByName(search):
-    conn = conexion()
+@ventas_api.route('/api/sales/products/name/<search>/<rol>',  methods=['GET'])
+def getProductByName(search, rol):
+    conn = conexionRol(rol)
     cur = conn.cursor(cursor_factory=RealDictCursor)
     sql = ("SELECT idproducto, nombreproducto, precioproducto, descripcionproducto FROM productos WHERE nombreproducto = '{0}'".format(search))
     cur.execute(sql, search)
@@ -83,9 +83,9 @@ def getProductByName(search):
     conn.close()
     return jsonify(rows)
 
-@ventas_api.route('/api/sales/products/id/<search>',  methods=['GET'])
-def getProductById(search):
-    conn = conexion()
+@ventas_api.route('/api/sales/products/id/<search>/<rol>',  methods=['GET'])
+def getProductById(search, rol):
+    conn = conexionRol(rol)
     cur = conn.cursor(cursor_factory=RealDictCursor)
     sql = ("SELECT idproducto, nombreproducto, precioproducto, descripcionproducto FROM productos WHERE idproducto = '{0}'".format(search))
     cur.execute(sql, search)
@@ -93,9 +93,9 @@ def getProductById(search):
     conn.close()
     return jsonify(rows)
 
-@ventas_api.route('/api/getproducts/<id>',  methods=['GET'])
-def getProduct(id):
-    conn = conexion()
+@ventas_api.route('/api/getproducts/<id>/<rol>',  methods=['GET'])
+def getProduct(id, rol):
+    conn = conexionRol(rol)
     cur = conn.cursor(cursor_factory=RealDictCursor)
     sql = ("SELECT idproducto, nombreproducto, precioproducto, descripcionproducto, imagebproducto FROM productos WHERE idproducto = '{0}'".format(id))
     cur.execute(sql, id)
@@ -103,27 +103,27 @@ def getProduct(id):
     conn.close()
     return jsonify(rows)
 
-@ventas_api.route('/api/sales/categories',  methods=['GET'])
-def getCategories():
-    conn = conexion()
+@ventas_api.route('/api/sales/categories/<rol>',  methods=['GET'])
+def getCategories(rol):
+    conn = conexionRol(rol)
     cur = conn.cursor(cursor_factory=RealDictCursor)
     cur.execute("SELECT idcategoria, nombrecategoria FROM categorias ORDER BY idcategoria")
     rows = cur.fetchall()
     conn.close()
     return jsonify(rows)
    
-@ventas_api.route('/api/complements/<id>',  methods=['GET'])
-def getListComplements(id):
-    conn = conexion()
+@ventas_api.route('/api/complements/<id>/<rol>',  methods=['GET'])
+def getListComplements(id, rol):
+    conn = conexionRol(rol)
     cur = conn.cursor(cursor_factory=RealDictCursor)
     cur.execute("SELECT idcomplemento, nombrecomplemento, preciocomplemento, descripcioncomplemento FROM complementos WHERE idproducto = '{0}'".format(id))
     rows = cur.fetchall()
     conn.close()
     return jsonify(rows)
 
-@ventas_api.route('/api/modifiers/<id>',  methods=['GET'])
-def getListModifiers(id):
-    conn = conexion()
+@ventas_api.route('/api/modifiers/<id>/<rol>',  methods=['GET'])
+def getListModifiers(id, rol):
+    conn = conexionRol(rol)
     cur = conn.cursor(cursor_factory=RealDictCursor)
     cur.execute('''SELECT modificadores.idmodificador, nombremodificador, preciomodificador, obligatorio FROM modificadores INNER JOIN productosmodificadores 
                 ON productosmodificadores.idproducto = '{0}' AND modificadores.idmodificador = productosmodificadores.idmodificador '''.format(id))
@@ -131,9 +131,9 @@ def getListModifiers(id):
     conn.close()
     return jsonify(rows)
 
-@ventas_api.route('/api/options/<idmodificador>',  methods=['GET'])
-def getListOptions(idmodificador):
-    conn = conexion()
+@ventas_api.route('/api/options/<idmodificador>/<rol>',  methods=['GET'])
+def getListOptions(idmodificador, rol):
+    conn = conexionRol(rol)
     cur = conn.cursor(cursor_factory=RealDictCursor)
     cur.execute('''SELECT opciones.idopcionmodificador, idmodificador, nombreopcion, precioopcionmodificador, idingrediente, opcionporcion FROM opciones JOIN modificadoresopciones
                 ON modificadoresopciones.idmodificador = {0} AND opciones.idopcionmodificador = modificadoresopciones.idopcionmodificador'''.format(idmodificador))
@@ -141,9 +141,9 @@ def getListOptions(idmodificador):
     conn.close()
     return jsonify(rows)
 
-@ventas_api.route('/api/categories/<idcategoria>',  methods=['GET'])
-def getProducts(idcategoria):
-    conn = conexion()
+@ventas_api.route('/api/categories/<idcategoria>/<rol>',  methods=['GET'])
+def getProducts(idcategoria, rol):
+    conn = conexionRol(rol)
     cur = conn.cursor(cursor_factory=RealDictCursor)
     sql="SELECT idproducto, nombreproducto, descripcionproducto, precioproducto, idcategoria FROM productos WHERE idcategoria = {0}".format(idcategoria)
     cur.execute(sql, idcategoria) 
@@ -154,9 +154,9 @@ def getProducts(idcategoria):
 ## -----------Verificacion de Cantidades de productos e Ingredientes ------------ ##
 ## ------------------------------------------------------------------------------ ##
 
-@ventas_api.route('/sales/verification/<id>',  methods=['GET'])
-def verifyCantProduct(id):
-    conn = conexion()
+@ventas_api.route('/sales/verification/<id>/<rol>',  methods=['GET'])
+def verifyCantProduct(id, rol):
+    conn = conexionRol(rol)
     cur = conn.cursor(cursor_factory=RealDictCursor)
     sql="SELECT cantidadproducto FROM productos WHERE idproducto = '{0}'".format(id)
     cur.execute(sql, id) 
@@ -164,9 +164,9 @@ def verifyCantProduct(id):
     conn.close()
     return jsonify(row)
 
-@ventas_api.route('/api/sales/verification/complement/<id>',  methods=['GET'])
-def updateComplemento(id):
-    conn = conexion()
+@ventas_api.route('/api/sales/verification/complement/<id>/<rol>',  methods=['GET'])
+def updateComplemento(id, rol):
+    conn = conexionRol(rol)
     cur = conn.cursor(cursor_factory=RealDictCursor)
     sql="SELECT idproductooriginal FROM complementos WHERE idcomplemento = '{0}'".format(id)
     cur.execute(sql, id) 
@@ -174,9 +174,9 @@ def updateComplemento(id):
     conn.close()
     return jsonify(row)
 
-@ventas_api.route('/api/sales/verification/ingredient/portion/<idproducto>',  methods=['GET'])
-def getPortion(idproducto):
-    conn = conexion()
+@ventas_api.route('/api/sales/verification/ingredient/portion/<idproducto>/<rol>',  methods=['GET'])
+def getPortion(idproducto, rol):
+    conn = conexionRol(rol)
     cur = conn.cursor(cursor_factory=RealDictCursor)
     sql="SELECT porcion FROM productosingredientes WHERE idproducto = '{0}'".format(idproducto)
     cur.execute(sql, idproducto) 
@@ -188,9 +188,9 @@ def getPortion(idproducto):
 ## ----------Verificacion de productos simples o productos compuestos------------ ##
 ## ------------------------------------------------------------------------------ ##
 
-@ventas_api.route('/api/sales/verification/products/complements/<search>',  methods=['GET'])
-def verifyProductComplement(search):
-    conn = conexion()
+@ventas_api.route('/api/sales/verification/products/complements/<search>/<rol>',  methods=['GET'])
+def verifyProductComplement(search, rol):
+    conn = conexionRol(rol)
     cur = conn.cursor(cursor_factory=RealDictCursor)
     sql = ("SELECT idcomplemento FROM complementos WHERE idproducto = '{0}'".format(search))
     cur.execute(sql, search)
@@ -198,9 +198,9 @@ def verifyProductComplement(search):
     conn.close()
     return jsonify(rows)
 
-@ventas_api.route('/api/sales/verification/products/modifiers/<search>',  methods=['GET'])
-def verifyProductModifier(search):
-    conn = conexion()
+@ventas_api.route('/api/sales/verification/products/modifiers/<search>/<rol>',  methods=['GET'])
+def verifyProductModifier(search, rol):
+    conn = conexionRol(rol)
     cur = conn.cursor(cursor_factory=RealDictCursor)
     sql = ("SELECT idmodificador FROM productosmodificadores WHERE idproducto = '{0}'".format(search))
     cur.execute(sql, search)
@@ -214,9 +214,9 @@ def verifyProductModifier(search):
 
 @ventas_api.route('/api/sales/updateproduct', methods=['PUT'])
 def updateProducts():
-    conn = conexion()
-    cur = conn.cursor()
     data = request.json
+    conn = conexionRol(data['rol'])
+    cur = conn.cursor()
     sql = "UPDATE productos SET cantidadproducto = cantidadproducto - {0} WHERE idproducto='{1}'".format(data['cantidad'], data['idproducto'])
     cur.execute(sql, data) 
     conn.commit()
@@ -226,9 +226,9 @@ def updateProducts():
 
 @ventas_api.route('/api/sales/updateingredient', methods=['PUT'])
 def updateIngredients():
-    conn = conexion()
-    cur = conn.cursor()
     data = request.json
+    conn = conexionRol(data['rol'])
+    cur = conn.cursor()
     sql = """update ingredientes set cantidadingrediente = cantidadingrediente - {0} from productosingredientes
             where productosingredientes.idproducto = '{1}' and ingredientes.idingrediente = productosingredientes.idingrediente""".format(data['porcion'], data['idproducto'])
     cur.execute(sql, data) 
@@ -239,9 +239,9 @@ def updateIngredients():
 
 @ventas_api.route('/api/sales/modifier/updateingredient', methods=['PUT'])
 def updateModifierIngredients():
-    conn = conexion()
-    cur = conn.cursor()
     data = request.json
+    conn = conexionRol(data['rol'])
+    cur = conn.cursor()
     sql = "UPDATE ingredientes SET cantidadingrediente = cantidadingrediente - {0} WHERE idingrediente = '{1}'"-format(data['porcion'], data['idingrediente'])
     cur.execute(sql, data) 
     conn.commit()
@@ -256,52 +256,52 @@ def updateModifierIngredients():
 
 @ventas_api.route('/api/sales/venta', methods=['POST'])
 def addSale():
-	conn = conexion()
-	cur = conn.cursor()
-	data = request.json
-	sql = """INSERT INTO ventas (idusuario, idcliente, idpago, totalventa, fechaventa, horaventa )
+    data = request.json
+    conn = conexionRol(data['rol'])
+    cur = conn.cursor()
+    sql = """INSERT INTO ventas (idusuario, idcliente, idpago, totalventa, fechaventa, horaventa )
              VALUES (%(idusuario)s,%(idcliente)s, %(idpago)s, %(totalventa)s, %(fechaventa)s, %(horaventa)s)"""
-	cur.execute(sql, data)
-	conn.commit()
-	conn.close()
-	cur.close()
-	return jsonify(msg='added successfully!')
+    cur.execute(sql, data)
+    conn.commit()
+    conn.close()
+    cur.close()
+    return jsonify(msg='added successfully!')
 
 @ventas_api.route('/api/sales/addsaleproduct', methods=['POST'])
 def addSaleProduct():
-	conn = conexion()
-	cur = conn.cursor()
-	data = request.json
-	sql = """INSERT INTO ventasproducto (idusuario, idproducto, cantidad, nombreproducto, notas, subtotal, totalproductos )
+    data = request.json
+    conn = conexionRol(data['rol'])
+    cur = conn.cursor()
+    sql = """INSERT INTO ventasproducto (idusuario, idproducto, cantidad, nombreproducto, notas, subtotal, totalproductos )
              VALUES (%(idusuario)s,%(idproducto)s, %(cantidad)s, %(nombre)s, %(nota)s, %(precio)s, %(total)s)"""
-	cur.execute(sql, data)
-	conn.commit()
-	conn.close()
-	cur.close()
-	return jsonify(msg='added successfully!')
+    cur.execute(sql, data)
+    conn.commit()
+    conn.close()
+    cur.close()
+    return jsonify(msg='added successfully!')
 
 @ventas_api.route('/api/sales/addsalecomplement', methods=['POST'])
 def addSaleComplement():
-	conn = conexion()
-	cur = conn.cursor()
-	data = request.json
-	sql = """INSERT INTO ventascomplemento (idusuario, idcomplemento, nombrecomplemento, cantidad, subtotal, totalcomplemento )
+    data = request.json
+    conn = conexionRol(data['rol'])
+    cur = conn.cursor()
+    sql = """INSERT INTO ventascomplemento (idusuario, idcomplemento, nombrecomplemento, cantidad, subtotal, totalcomplemento )
              VALUES (%(idusuario)s,%(idcomplemento)s, %(nombre)s, %(cantidad)s, %(precio)s, %(total)s)"""
-	cur.execute(sql, data)
-	conn.commit()
-	conn.close()
-	cur.close()
-	return jsonify(msg='added successfully!')
+    cur.execute(sql, data)
+    conn.commit()
+    conn.close()
+    cur.close()
+    return jsonify(msg='added successfully!')
 
 @ventas_api.route('/api/sales/addsalemodifier', methods=['POST'])
 def addSaleModifier():
-	conn = conexion()
-	cur = conn.cursor()
-	data = request.json
-	sql = """INSERT INTO ventasmodificadores (idusuario, idmodificador, idopcionmodificador, nombremodificador, nombreopcion, subtotal, totalmodificador )
+    data = request.json
+    conn = conexionRol(data['rol'])
+    cur = conn.cursor()
+    sql = """INSERT INTO ventasmodificadores (idusuario, idmodificador, idopcionmodificador, nombremodificador, nombreopcion, subtotal, totalmodificador )
              VALUES (%(idusuario)s,%(idmod)s, %(idop)s, %(nombremod)s, %(nombreop)s, %(precio)s, %(precio)s)"""
-	cur.execute(sql, data)
-	conn.commit()
-	conn.close()
-	cur.close()
-	return jsonify(msg='added successfully!')
+    cur.execute(sql, data)
+    conn.commit()
+    conn.close()
+    cur.close()
+    return jsonify(msg='added successfully!')

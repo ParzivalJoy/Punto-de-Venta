@@ -16,6 +16,12 @@ def conexion():
     user="postgres",
     password="root")
 
+def conexionRol(role):
+    return psycopg2.connect(
+    host="localhost",
+    database="puntodeventa",
+    user=role,
+    password="root")
 
 ## ------------------------------------------------------------------------------ ##
 ## ------------------------------Manejo de inventarios--------------------------- ##
@@ -370,9 +376,9 @@ def insercionProveedorIngrediente():
 ## ------------------------------------------------------------------------------ ##
 
 #Obtiene la lista de unidades ordenadas por el id
-@inv_api.route('/api/products/units',  methods=['GET'])
-def getUnits():
-    conn = conexion()
+@inv_api.route('/api/products/units/<rol>',  methods=['GET'])
+def getUnits(rol):
+    conn = conexionRol(rol)
     cur = conn.cursor(cursor_factory=RealDictCursor)
     cur.execute("SELECT * FROM unidades ORDER BY idunidad")
     rows = cur.fetchall()
@@ -380,9 +386,9 @@ def getUnits():
     return jsonify(rows)
 
 #Obtiene la lista de ingredientes con el nombre de la unidad
-@inv_api.route('/api/ingredients',  methods=['GET'])
-def getListIngredients():
-    conn = conexion()
+@inv_api.route('/api/ingredients/<rol>',  methods=['GET'])
+def getListIngredients(rol):
+    conn = conexionRol(rol)
     cur = conn.cursor(cursor_factory=RealDictCursor)
     cur.execute("SELECT a.idingrediente, a.nombreingrediente, b.nombreunidad FROM ingredientes a LEFT JOIN unidades b ON a.idunidad=b.idunidad")
     rows = cur.fetchall()
@@ -390,9 +396,9 @@ def getListIngredients():
     return jsonify(rows)
 
 #Verifica que la categoria no exista y si no existe la agrega y devuelve idcategoria
-@inv_api.route('/api/products/category',  methods=['POST'])
-def newCategory():
-    conn = conexion()
+@inv_api.route('/api/products/category/<rol>',  methods=['POST'])
+def newCategory(rol):
+    conn = conexionRol(rol)
     cur = conn.cursor(cursor_factory=RealDictCursor)
     data=request.json
     sql="SELECT * FROM categorias WHERE nombrecategoria= '{0}'".format(data['namecategory'])
@@ -417,9 +423,9 @@ def newCategory():
         return jsonify(row1)
 
 #Devuelve lista de productos con el nombre y su id
-@inv_api.route('/api/products',  methods=['GET'])
-def getListProducts():
-    conn = conexion()
+@inv_api.route('/api/products/<rol>',  methods=['GET'])
+def getListProducts(rol):
+    conn = conexionRol(rol)
     cur = conn.cursor(cursor_factory=RealDictCursor)
     cur.execute("SELECT nombreproducto, idproducto FROM productos")
     rows = cur.fetchall()
@@ -427,9 +433,9 @@ def getListProducts():
     return jsonify(rows)
 
 #Inserta un nuevo modificador e inserta en la tabla de productosmodificadores y devuelve idmodificador del modificador insertado
-@inv_api.route('/api/products/modifiers/<idproducto>', methods=['POST'])
-def newModifier(idproducto):
-    conn = conexion()
+@inv_api.route('/api/products/modifiers/<idproducto>/<rol>', methods=['POST'])
+def newModifier(idproducto, rol):
+    conn = conexionRol(rol)
     cur = conn.cursor()
     data = request.json
     sql = "INSERT INTO modificadores (nombremodificador, preciomodificador,obligatorio) VALUES ('{0}', '{1}', '{2}') RETURNING idmodificador".format(data['namemodifier'],data['pricemodifier'],data['requiredchecked'])
@@ -452,9 +458,9 @@ def newModifier(idproducto):
     return jsonify(idmodificador[0])
 
 #Inserta una nueva opcion e inserta en la tabla modificadoresopciones
-@inv_api.route('/api/products/modifiers/options/<idmodificador>', methods=['POST'])
-def newOptionModifier(idmodificador):
-    conn = conexion()
+@inv_api.route('/api/products/modifiers/options/<idmodificador>/<rol>', methods=['POST'])
+def newOptionModifier(idmodificador, rol):
+    conn = conexionRol(rol)
     cur = conn.cursor()
     data = request.json
     if(data['idoptionmodifieroriginal']==''):
@@ -472,9 +478,9 @@ def newOptionModifier(idmodificador):
     return jsonify(1)
 
 #Inserta un nuevo complemento
-@inv_api.route('/api/products/complements/<idproducto>', methods=['POST'])
-def newComplement(idproducto):
-	conn = conexion()
+@inv_api.route('/api/products/complements/<idproducto>/<rol>', methods=['POST'])
+def newComplement(idproducto, rol):
+	conn = conexionRol(rol)
 	cur = conn.cursor()
 	data = request.json
 	sql = "INSERT INTO complementos (nombrecomplemento, preciocomplemento, idproducto, descripcioncomplemento,idproductooriginal,tipocomplemento) VALUES ('{0}', '{1}', '{2}', '{3}','{4}','{5}')".format(data['namecomplement'],data['pricecomplement'],idproducto,data['descriptioncomplement'],data['idproduct'],data['typecomplement'])
@@ -485,9 +491,9 @@ def newComplement(idproducto):
 	return jsonify(1)
 
 #Inserta un nuevo ingrediente
-@inv_api.route('/api/products/ingredients/<idproducto>', methods=['POST'])
-def newIngredient(idproducto):
-	conn = conexion()
+@inv_api.route('/api/products/ingredients/<idproducto>/<rol>', methods=['POST'])
+def newIngredient(idproducto, rol):
+	conn = conexionRol(rol)
 	cur = conn.cursor()
 	data = request.json
 	sql = "INSERT INTO productosingredientes (idproducto, idingrediente, porcion) VALUES ('{0}', '{1}', '{2}')".format(idproducto,data['idingredient'],data['portioningredient'])
@@ -499,9 +505,9 @@ def newIngredient(idproducto):
 
 @inv_api.route('/api/products', methods=['POST'])
 def newProduct():
-	conn = conexion()
-	cur = conn.cursor()
 	data = request.json
+	conn = conexionRol(data['rol'])
+	cur = conn.cursor()
 	sql = "INSERT INTO productos (idproducto, nombreproducto, precioproducto, costoproducto, descripcionproducto, idcategoria, idunidad, cantidadproducto,cantidadnotificacionproducto, imagebproducto ) VALUES (%(idproduct)s, %(nameproduct)s, %(priceproduct)s, %(costproduct)s, %(descriptionproduct)s, %(categoryproduct)s, %(unitproduct)s, %(stockinitproduct)s, %(stocknotifiproduct)s , %(imageproduct)s)"
 	cur.execute(sql, data)
 	conn.commit()
@@ -510,18 +516,18 @@ def newProduct():
 	return jsonify(1)
 
 #Obtiene la lista de las categorias ordenanadas por abecedario
-@inv_api.route('/api/products/categories',  methods=['GET'])
-def getCategoriesProducts():
-    conn = conexion()
+@inv_api.route('/api/products/categories/<rol>',  methods=['GET'])
+def getCategoriesProducts(rol):
+    conn = conexionRol(rol)
     cur = conn.cursor(cursor_factory=RealDictCursor)
     cur.execute("SELECT * FROM categorias ORDER BY nombrecategoria ASC ")
     rows = cur.fetchall()
     conn.close()
     return jsonify(rows)
 
-@inv_api.route('/api/products/modifiers',  methods=['GET'])
-def getModifiers():
-    conn = conexion()
+@inv_api.route('/api/products/modifiers/<rol>',  methods=['GET'])
+def getModifiers(rol):
+    conn = conexionRol(rol)
     cur = conn.cursor(cursor_factory=RealDictCursor)
     cur.execute("SELECT idmodificador as idmodifieroriginal, nombremodificador as namemodifier, preciomodificador as pricemodifier, obligatorio as requiredchecked FROM modificadores ")
     modifiers = cur.fetchall()

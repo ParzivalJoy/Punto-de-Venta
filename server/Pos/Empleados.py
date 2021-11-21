@@ -30,16 +30,16 @@ def conexionRol(role):
 
 @empleado_api.route('/api/<rol>',  methods=['GET'])
 def index(rol):
-    conn = conexionRol()
+    conn = conexionRol(rol)
     cur = conn.cursor(cursor_factory=RealDictCursor)
     cur.execute("SELECT idempleado, nombreempleado, to_char(fechacontra, 'DD/MM/YYYY') as fechacontra, dirempleado, telempleado, emailempleado FROM empleados ORDER BY idempleado")
     rows = cur.fetchall()
     conn.close()
     return jsonify(rows)
 
-@empleado_api.route('/api/<idempleado>',  methods=['GET'])
-def getEmployee(idempleado):
-    conn = conexion()
+@empleado_api.route('/api/<idempleado>/<rol>',  methods=['GET'])
+def getEmployee(idempleado, rol):
+    conn = conexionRol(rol)
     cur = conn.cursor(cursor_factory=RealDictCursor)
     sql="SELECT nombreempleado, dirempleado, telempleado, emailempleado FROM empleados  WHERE idempleado = {0}".format(idempleado)
     cur.execute(sql, idempleado) 
@@ -93,9 +93,9 @@ def saveEmployee(rol):
     insertusuario(data['emailempleado'],contrasena,idempresa['idempresa'])
     return jsonify(msg='added successfully!')
 
-@empleado_api.route('/api/<idempleado>', methods=['DELETE'])
-def deleteEmployee(idempleado):
-    conn = conexion()
+@empleado_api.route('/api/<idempleado>/<rol>', methods=['DELETE'])
+def deleteEmployee(idempleado, rol):
+    conn = conexionRol(rol)
     cur = conn.cursor()
     sql = "DELETE FROM empleados WHERE idempleado = {0}".format(idempleado)
     cur.execute(sql, idempleado) 
@@ -104,9 +104,9 @@ def deleteEmployee(idempleado):
     cur.close()
     return jsonify(msg="employee eliminated") 
 
-@empleado_api.route('/api', methods=['PUT'])
-def updateEmployee():
-    conn = conexion()
+@empleado_api.route('/api/<rol>', methods=['PUT'])
+def updateEmployee(rol):
+    conn = conexionRol(rol)
     cur = conn.cursor()
     data = request.json
     sql = "UPDATE empleados SET nombreempleado=%(nombreempleado)s, dirempleado=%(dirempleado)s,telempleado=%(telempleado)s, emailempleado=%(emailempleado)s WHERE idempleado=%(idempleado)s"
