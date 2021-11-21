@@ -30,7 +30,7 @@ export default function Complemento(props) {
         });
     };
     async function getProducts(){
-        const { data } = await axios.get(baseURL+'/products')
+        const { data } = await axios.get(baseURL+'/products'+`/${rol}`)
       //  console.log(props.listingredients)
         for(let i=0;i<data.length;i++){
             data[i].typecomplement='producto'

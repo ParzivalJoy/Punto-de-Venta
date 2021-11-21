@@ -7,6 +7,8 @@ import AddIcon from '@mui/icons-material/Add'
 const baseURL = process.env.REACT_APP_API_URL //npm i dotenv
 
 export default function Ingrediente(props) {
+
+    const rol = localStorage.getItem('rol')
     const errors ={
         idingredient:'*Campo obligatorio.', 
         portioningredient:'*Campo obligatorio.'}
@@ -44,7 +46,7 @@ export default function Ingrediente(props) {
     
 
     async function getIngredients(){
-        const { data } = await axios.get(baseURL+'/ingredients')
+        const { data } = await axios.get(baseURL+'/ingredients'+`/${rol}`)
         setListIngredients(data)
     }
 

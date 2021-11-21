@@ -12,6 +12,7 @@ const baseURL = process.env.REACT_APP_API_URL //npm i dotenv
 
 function Products() {
 
+    const rol = localStorage.getItem('rol')
     const [listunits, setListUnits] = useState([])
     const [listingredients, setListIngredients] = useState([])
     const [modifierschecked, setModifiersChecked] = useState(true)
@@ -72,11 +73,11 @@ function Products() {
     },[])
     
     async function getUnits(){
-        const { data } = await axios.get(baseURL+'/products/units')
+        const { data } = await axios.get(baseURL+'/products/units'+`/${rol}`)
         setListUnits(data)
     }
     async function getIngredients(){
-        const { data } = await axios.get(baseURL+'/ingredients')
+        const { data } = await axios.get(baseURL+'/ingredients'+`/${rol}`)
         setListIngredients(data)
     }
 
@@ -86,25 +87,25 @@ function Products() {
         {
 
             //Agrega categoria nueva
-            const {data1}= await axios.post(baseURL+'/products/category', {namecategory})
+            const {data1}= await axios.post(baseURL+'/products/category'+`/${rol}`, {namecategory})
             //Agrega producto
-            const {data}= await axios.post(baseURL+'/products', formproduct)
+            const {data}= await axios.post(baseURL+'/products'+`/${rol}`, formproduct)
             /////////////////Inserción de la imagen /////////////////////////////////
-            const {resImgs} = await axios.put(`http://localhost:5000/inventario/manejoImgs/${formproduct.idproduct}`,formDataS)
+            const {resImgs} = await axios.put(`http://localhost:5000/inventario/manejoImgs/${formproduct.idproduct}`+`/${rol}`,formDataS)
               console.log(resImgs)
               setImagebinary(null)
             //Agrega modificadores
             if(listmodifiers.length!==0){
                 for(let i=0;i<listmodifiers.length;i++){
                     console.log(listmodifiers[i])
-                    const data4= await axios.post(baseURL+'/products/modifiers'+`/${formproduct.idproduct}`, listmodifiers[i] )
+                    const data4= await axios.post(baseURL+'/products/modifiers'+`/${formproduct.idproduct}`+`/${rol}`, listmodifiers[i] )
                     console.log(data4.data)
                     let listoptions=listmodifiers[i].optionsmodifier
                     listidmodifiers[i]=data4.data
                     //Agrega opciones modificadores
                     if(listoptions.length>0){
                         for(let j=0;j<listoptions.length;j++){
-                            const {data5}= await axios.post(baseURL+'/products/modifiers/options'+`/${data4.data}`, listoptions[j])
+                            const {data5}= await axios.post(baseURL+'/products/modifiers/options'+`/${data4.data}`+`/${rol}`, listoptions[j])
                             console.log(data5)
                         }
                     } 
@@ -135,7 +136,7 @@ function Products() {
             if(listcomplements.length!==0){
                 for(let i=0;i<listcomplements.length;i++){
                     console.log(listcomplements[i])
-                    const {data2}= await axios.post(baseURL+'/products/complements'+`/${formproduct.idproduct}`, listcomplements[i] )
+                    const {data2}= await axios.post(baseURL+'/products/complements'+`/${formproduct.idproduct}`+`/${rol}`, listcomplements[i] )
                     if(data2!==1){
                         Swal.fire({
                             icon: 'error',
@@ -151,7 +152,7 @@ function Products() {
             if(listingredientsproducts.length!==0){
                 for(let i=0;i<listingredientsproducts.length;i++){
                     console.log(listingredientsproducts[i])
-                    const {data3}= await axios.post(baseURL+'/products/ingredients'+`/${formproduct.idproduct}`, listingredientsproducts[i] )
+                    const {data3}= await axios.post(baseURL+'/products/ingredients'+`/${formproduct.idproduct}`+`/${rol}`, listingredientsproducts[i] )
                     if(data3!==1){
                         Swal.fire({
                             icon: 'error',

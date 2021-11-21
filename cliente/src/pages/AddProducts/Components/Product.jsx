@@ -54,7 +54,7 @@ function Product(props) {
         })
       }
     async function getCategories(){
-        const { data } = await axios.get(baseURL+'/products/categories')
+        const { data } = await axios.get(baseURL+'/products/categories'+`/${rol}`)
         setListCategories(data)
     }
 
