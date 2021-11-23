@@ -113,6 +113,42 @@ def getEmailUser():
 def uploaded_file(filename, rol):
     return send_from_directory(IMAGE_FOLDER, path=filename, as_attachment=False)
 
+@app.route('/inventario/manejoImgs/<id>/<rol>', methods=['PUT'])
+def uploadimage(id, rol):
+    conn = conexionRol(rol)
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+    if 'file' not in request.files:
+        return jsonify(' not got it, file in not requested files')
+    file=request.files['file']
+    if file.filename== '':
+        return jsonify('not got it, no name')
+    if file and allowed_file(file.filename):
+        filename=secure_filename(file.filename)
+        file.save(os.path.join(inv_api.instance_path, 'uploads', filename))
+        cur.execute("UPDATE productos SET imagebproducto=(%s) WHERE idproducto= '{0}' ".format(id),(filename,))
+        conn.commit()
+        return jsonify('got it: '+filename)
+    else:
+        return jsonify('extensiones permitidas: jpg, jpeg, png')
+
+@app.route('/cuentas/manejoImgs/<rol>', methods=['PUT'])
+def uploadimagecuenta(rol):
+    conn = conexionRol(rol)
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+    if 'file' not in request.files:
+        return jsonify(' not got it, file in not requested files')
+    file=request.files['file']
+    if file.filename== '':
+        return jsonify('not got it, no name')
+    if file and allowed_file(file.filename):
+        filename=secure_filename(file.filename)
+        file.save(os.path.join(app.instance_path, 'uploads', filename))
+        cur.execute("UPDATE cuenta SET qrcuenta='{0}' WHERE idcuenta= 1 ".format(filename,))
+        conn.commit()
+        return jsonify('got it: '+filename)
+    else:
+        return jsonify('extensiones permitidas: jpg, jpeg, png')
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
 

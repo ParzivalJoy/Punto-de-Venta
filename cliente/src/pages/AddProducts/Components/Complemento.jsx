@@ -7,6 +7,7 @@ const baseURL = process.env.REACT_APP_API_URL //npm i dotenv
 
 export default function Complemento(props) {
     
+    const rol = localStorage.getItem('rol')
     const [listproducts, setListProducts] = useState([])
     
     useEffect(() => {

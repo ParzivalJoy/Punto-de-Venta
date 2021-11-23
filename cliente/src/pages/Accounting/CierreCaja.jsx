@@ -39,6 +39,8 @@ function CierreCaja() {
   const [todosvalidos, setTodosvalidos]= useState(null)
   const[loading, setLoading]= useState(false)
 
+  const rol = localStorage.getItem('rol')
+
   const handleTotalParcial = () =>{
 
     setRecuento(parseFloat(billmil*1000)+ parseFloat(billquinientos*500)
@@ -61,7 +63,7 @@ function CierreCaja() {
     const user = localStorage.getItem("user")
 
         const res222 = await fetch(
-          `http://localhost:5000/accesibilidad/getIdUsuario/${user}`
+          `http://localhost:5000/accesibilidad/getIdUsuario/${rol}/${user}`
         );
         const data222 = await res222.json();
 
@@ -75,7 +77,7 @@ function CierreCaja() {
         var cuenta='12345';
         var idusuario=idusuarioes;
         const res = await fetch(
-          `http://localhost:5000/contabilidad/insertCierre`,
+          `http://localhost:5000/contabilidad/insertCierre/${rol}`,
           {
             method: "POST",
             headers: {

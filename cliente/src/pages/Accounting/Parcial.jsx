@@ -26,6 +26,8 @@ function Parcial() {
     const [cantidadretirovalid, setCantidadretirovalid]= useState('true')
     const [lock, setLock]= useState(false)
 
+    const rol = localStorage.getItem('rol')
+
     const handleCantidadTotal = () =>{
         setCantidadretiro(0);
         setShowparcial(false)
@@ -34,11 +36,12 @@ function Parcial() {
     const handleParcial= async (e)=>{
         e.preventDefault();
         setLock(true)
+      
         ///////////Variables de sesión/////////////////////
         const user = localStorage.getItem("user")
 
         const res222 = await fetch(
-         `http://localhost:5000/accesibilidad/getIdUsuario/${user}`
+         `http://localhost:5000/accesibilidad/getIdUsuario/${rol}/${user}`
         );
         const data222 = await res222.json();
 
@@ -53,7 +56,7 @@ function Parcial() {
          var idusuario=idusuarioes
          var descripcionmov=('En la caja hay '+totalretiro+ ' pesos')
          const res9 = await fetch(
-           `http://localhost:5000/contabilidad/insertContabilidadMovimiento`,
+           `http://localhost:5000/contabilidad/insertContabilidadMovimiento/${rol}`,
            {
              method: "POST",
              headers: {

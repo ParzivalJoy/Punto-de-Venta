@@ -14,9 +14,12 @@ export default function Accounting() {
     const [huboapertura,setHuboapertura]=useState('null')
     const [loading, setLoading]=useState(true)
 
+    const rol = localStorage.getItem('rol')
+
     const handleShowContabilidad= async()=>{
+
       const res = await fetch(
-        `http://localhost:5000/contabilidad/DatosUltimoCierre`
+        `http://localhost:5000/contabilidad/DatosUltimoCierre/${rol}`
       );
       const data = await res.json();
       if(data===null){

@@ -17,6 +17,8 @@ function MenuPosterior() {
   const[paginatedPosts, setPaginatedposts]=useState([])
   const[currentPage, setCurrentpage]= useState(1)
 
+  const rol = localStorage.getItem('rol')
+
   const componentRef = useRef();
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
@@ -27,7 +29,7 @@ function MenuPosterior() {
     /* console.log(name) */
 
     const res = await fetch(
-      `http://localhost:5000/inventario/getInventario2/${name}`
+      `http://localhost:5000/inventario/getInventario2/${rol}/${name}`
     );
     const data = await res.json();
     setUsers(data);

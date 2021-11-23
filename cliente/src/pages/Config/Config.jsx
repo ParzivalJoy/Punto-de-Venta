@@ -6,6 +6,9 @@ import Cuentas from './Components/Cuentas'
 
 
 export default function Config() {
+
+    const rol = localStorage.getItem('rol')
+
     return (
         <div className="configuration">
             <div className="theme-container">

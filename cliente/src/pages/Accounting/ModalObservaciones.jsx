@@ -15,6 +15,8 @@ const ModalCambio = () => {
   const[observacionesvalid, setObservacionesvalid]= useState('true')
   const[lock, setLock]= useState(false)
 
+  const rol = localStorage.getItem('rol')
+
   const handleCierre=()=>{
         setObservacionesvar('');
         setShowobservaciones(false)
@@ -24,11 +26,12 @@ const ModalCambio = () => {
   const handleObservaciones= async(e)=>{
       e.preventDefault()
       setLock(true)
+    
       ///////////Variables de sesión/////////////////////
       const user = localStorage.getItem("user")
 
       const res222 = await fetch(
-      `http://localhost:5000/accesibilidad/getIdUsuario/${user}`
+      `http://localhost:5000/accesibilidad/getIdUsuario/${rol}/${user}`
       );
       const data222 = await res222.json();
 
@@ -43,7 +46,7 @@ const ModalCambio = () => {
          var idusuario=idusuarioes
          var descripcionmov=('Observación: '+observacionesvar)
          const res9 = await fetch(
-           `http://localhost:5000/contabilidad/insertContabilidadMovimiento`,
+           `http://localhost:5000/contabilidad/insertContabilidadMovimiento/${rol}`,
            {
              method: "POST",
              headers: {

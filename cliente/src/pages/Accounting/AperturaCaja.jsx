@@ -15,8 +15,10 @@ function AperturaCaja() {
   const [gananciasperdidas, setGananciasperdidas]= useState('desconocido')
   const [huboapertura, setHuboapertura] =useState('desconocido')
   const [empleado, setEmpleado]= useState('desconocido')
-  const [rol, setRol]= useState('desconocido')
+  const [rol1, setRol]= useState('desconocido')
   const [idusuarioes, setIdusuarioes]= useState(1)
+
+  const rol = localStorage.getItem('rol')
 
   const datosdesdeInicio = async () =>{
 
@@ -28,7 +30,7 @@ function AperturaCaja() {
         setRol(role)
 
         const res222 = await fetch(
-          `http://localhost:5000/accesibilidad/getIdUsuario/${user}`
+          `http://localhost:5000/accesibilidad/getIdUsuario/${rol}/${user}`
         );
         const data222 = await res222.json();
 
@@ -40,7 +42,7 @@ function AperturaCaja() {
     setFechaactual(hoy.toDateString());
 
     const res = await fetch(
-      `http://localhost:5000/contabilidad/ultimoApertura`
+      `http://localhost:5000/contabilidad/ultimoApertura/${rol}`
     );
     const data = await res.json();
     if(data===null){
@@ -50,7 +52,7 @@ function AperturaCaja() {
     }
 
     const res2 = await fetch(
-      `http://localhost:5000/contabilidad/ultimosAperturas`
+      `http://localhost:5000/contabilidad/ultimosAperturas/${rol}`
     );
     const data2 = await res2.json();
     if(data===null){
@@ -70,7 +72,7 @@ function AperturaCaja() {
         let ve=0;
         let vv=0;
         const res3 = await fetch(
-          `http://localhost:5000/contabilidad/VentasHastaAhora/${pfechap}`
+          `http://localhost:5000/contabilidad/VentasHastaAhora/${rol}/${pfechap}`
         );
         const data3 = await res3.json();
         if(data3.sum===null){
@@ -82,7 +84,7 @@ function AperturaCaja() {
         }
         /////Obtener ventas de tarjetas desde el apertura
         const res4 = await fetch(
-          `http://localhost:5000/contabilidad/VentasHastaAhoraTarjetas/${pfechap}`
+          `http://localhost:5000/contabilidad/VentasHastaAhoraTarjetas/${rol}/${pfechap}`
         );
         const data4 = await res4.json();
         if(data4.sum===null){
@@ -94,7 +96,7 @@ function AperturaCaja() {
         }
         //////////Obtener ventas de vales desde el apertura
         const res5 = await fetch(
-          `http://localhost:5000/contabilidad/VentasHastaAhoraVales/${pfechap}`
+          `http://localhost:5000/contabilidad/VentasHastaAhoraVales/${rol}/${pfechap}`
         );
         const data5 = await res5.json();
         if(data5.sum===null){
@@ -106,7 +108,7 @@ function AperturaCaja() {
         }
         let vcargas=0;
         const res7 = await fetch(
-          `http://localhost:5000/contabilidad/inversionPeriodoPasado/${pfechap}`
+          `http://localhost:5000/contabilidad/inversionPeriodoPasado/${rol}/${pfechap}`
         );
         const data7 = await res7.json();
         if(data7.sum===null){
@@ -137,7 +139,7 @@ function AperturaCaja() {
 
       if(cantidadaperturavalid==='true'){
         const res = await fetch(
-          `http://localhost:5000/contabilidad/ultimoApertura`
+          `http://localhost:5000/contabilidad/ultimoApertura/${rol}`
         );
         const data = await res.json();
         if(data===null){
@@ -145,7 +147,7 @@ function AperturaCaja() {
           const idusuario=idusuarioes;
           const cuenta=12345;
           const res9 = await fetch(
-            `http://localhost:5000/contabilidad/insertPrimerApertura`,
+            `http://localhost:5000/contabilidad/insertPrimerApertura/${rol}`,
             {
               method: "POST",
               headers: {
@@ -167,7 +169,7 @@ function AperturaCaja() {
           const idcorte= data.idcortecaja;
   
           const res2 = await fetch(
-          `http://localhost:5000/contabilidad/editApertura`,
+          `http://localhost:5000/contabilidad/editApertura/${rol}`,
           {
             method: "PUT",
             headers: {
@@ -225,7 +227,7 @@ function AperturaCaja() {
                     </div>            
               </div>
               <div className="col-md-4 col-12">
-                <h6>Usuario: {empleado} ({rol})</h6>
+                <h6>Usuario: {empleado} ({rol1})</h6>
               </div>
             </div>
 

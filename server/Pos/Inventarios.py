@@ -27,27 +27,11 @@ def conexionRol(role):
 ## ------------------------------Manejo de inventarios--------------------------- ##
 ## ------------------------------------------------------------------------------ ##
 
-@inv_api.route('/inventario/manejoImgs/<id>', methods=['PUT'])
-def uploadimage(id):
-    conn = conexion()
-    cur = conn.cursor(cursor_factory=RealDictCursor)
-    if 'file' not in request.files:
-        return jsonify(' not got it, file in not requested files')
-    file=request.files['file']
-    if file.filename== '':
-        return jsonify('not got it, no name')
-    if file and allowed_file(file.filename):
-        filename=secure_filename(file.filename)
-        file.save(os.path.join(inv_api.instance_path, 'uploads', filename))
-        cur.execute("UPDATE productos SET imagebproducto=(%s) WHERE idproducto= '{0}' ".format(id),(filename,))
-        conn.commit()
-        return jsonify('got it: '+filename)
-    else:
-        return jsonify('extensiones permitidas: jpg, jpeg, png')
 
-@inv_api.route('/inventario/insertInventarioMovimiento', methods=['POST'])
-def insercionMoveInv():
-    conn=conexion()
+
+@inv_api.route('/inventario/insertInventarioMovimiento/<rol>', methods=['POST'])
+def insercionMoveInv(rol):
+    conn=conexionRol(rol)
     cur=conn.cursor()
     data=request.json
     sql="""INSERT INTO movimientos (tipo,razon,descripcion,total,idusuario,fechamovimiento) values(%(tipo)s,%(razon)s,%(descripcionmov)s,%(totalinversion)s,1,NOW())"""
@@ -56,11 +40,11 @@ def insercionMoveInv():
     conn.close()
     cur.close()
     return jsonify(msg='movimiento de entrada agregado');
+    
 
-
-@inv_api.route('/inventario/getActualProduct/<id>',  methods=['GET'])
-def getProductsInv(id):
-    conn = conexion()
+@inv_api.route('/inventario/getActualProduct/<rol>/<id>',  methods=['GET'])
+def getProductsInv(rol,id):
+    conn = conexionRol(rol)
     cur = conn.cursor(cursor_factory=RealDictCursor)
     sql="SELECT idproducto,nombreproducto,precioproducto,costoproducto,descripcionproducto,idunidad,imagebproducto,cantidadproducto,cantidadnotificacionproducto,productos.idcategoria,nombrecategoria FROM productos JOIN categorias ON productos.idcategoria=categorias.idcategoria WHERE productos.idproducto = '{0}'".format(id)
     cur.execute(sql, id) 
@@ -69,9 +53,9 @@ def getProductsInv(id):
     return jsonify(row)
 
 
-@inv_api.route('/inventario/getInventario2/<int:valor>', methods=['GET'])
-def selectall2(valor):
-    conn=conexion()
+@inv_api.route('/inventario/getInventario2/<rol>/<int:valor>', methods=['GET'])
+def selectall2(rol,valor):
+    conn=conexionRol(rol)
     cur=conn.cursor(cursor_factory= RealDictCursor)
     if valor ==1:
         cur.execute("SELECT c.nombreproveedor, b.costo, a.nombreingrediente, a.idunidad, a.idingrediente,a.cantidadingrediente,b.fecha,TO_CHAR(b.fecha, 'DD/MM/YYYY') AS fecha FROM ingredientes a LEFT JOIN ingredientesproveedores b ON a.idingrediente=b.idingrediente LEFT JOIN proveedores c ON c.idproveedor=b.idproveedor ORDER BY a.nombreingrediente")
@@ -95,9 +79,9 @@ def selectall2(valor):
     return jsonify(rows)
 
 
-@inv_api.route('/inventario/getInventario/<int:valor>', methods=['GET'])
-def selectall(valor):
-    conn=conexion()
+@inv_api.route('/inventario/getInventario/<rol>/<int:valor>', methods=['GET'])
+def selectall(rol,valor):
+    conn=conexionRol(rol)
     cur=conn.cursor(cursor_factory= RealDictCursor)
     if valor ==1:
         cur.execute("SELECT * FROM ingredientes")
@@ -116,9 +100,9 @@ def selectall(valor):
     cur.close()
     return jsonify(rows)
 
-@inv_api.route('/inventario/getActualIngredient/<ids>',  methods=['GET'])
-def getIngredientsInv(ids):
-    conn = conexion()
+@inv_api.route('/inventario/getActualIngredient/<rol>/<ids>',  methods=['GET'])
+def getIngredientsInv(rol,ids):
+    conn = conexionRol(rol)
     cur = conn.cursor(cursor_factory=RealDictCursor)
     sql="SELECT a.idunidad, a.cantidadingrediente, a.idingrediente, a.nombreingrediente, a.cantidadnotificacioningrediente, b.idproveedor, b.costo, c.nombreproveedor FROM ingredientes a LEFT JOIN ingredientesproveedores b ON a.idingrediente=b.idingrediente LEFT JOIN proveedores c ON c.idproveedor=b.idproveedor WHERE a.idingrediente = '{0}' ORDER BY a.nombreingrediente".format(ids) 
     cur.execute(sql,ids) 
@@ -126,9 +110,9 @@ def getIngredientsInv(ids):
     conn.close()
     return jsonify(row)
 
-@inv_api.route('/inventario/insertProduct', methods=['POST'])
-def insercionProductInv():
-    conn=conexion()
+@inv_api.route('/inventario/insertProduct/<rol>', methods=['POST'])
+def insercionProductInv(rol):
+    conn=conexionRol(rol)
     cur=conn.cursor()
     data=request.json
     sql="""INSERT INTO productos (idproducto, nombreproducto, descripcionproducto, precioproducto, costoproducto, idcategoria, cantidadnotificacionproducto, idunidad, cantidadproducto) values(%(productcode)s,%(productname)s,%(productdescrip)s,%(productprice)s,%(productcost)s,1, %(productstocknotif)s,%(productunidad)s, %(productstock)s)"""
@@ -138,9 +122,9 @@ def insercionProductInv():
     cur.close()
     return jsonify(msg='added succesfully');
 
-@inv_api.route('/inventario/editProduct', methods=['PUT'])
-def editionProductInv():
-    conn=conexion()
+@inv_api.route('/inventario/editProduct/<rol>', methods=['PUT'])
+def editionProductInv(rol):
+    conn=conexionRol(rol)
     cur=conn.cursor()
     data=request.json
     sql="""UPDATE productos SET nombreproducto=%(productname)s, descripcionproducto=%(productdescrip)s, precioproducto=%(productprice)s, costoproducto=%(productcost)s, idcategoria=1, cantidadnotificacionproducto=%(productstocknotif)s, idunidad=%(productunidad)s, cantidadproducto= %(stockParcial1)s WHERE idproducto=%(productcode)s"""
@@ -150,9 +134,9 @@ def editionProductInv():
     cur.close()
     return jsonify(msg='edited succesfully');
 
-@inv_api.route('/inventario/editProductMerma', methods=['PUT'])
-def editionProductMermaInv():
-    conn=conexion()
+@inv_api.route('/inventario/editProductMerma/<rol>', methods=['PUT'])
+def editionProductMermaInv(rol):
+    conn=conexionRol(rol)
     cur=conn.cursor()
     data=request.json
     sql="""UPDATE productos SET cantidadproducto= %(stockParcial1)s WHERE idproducto=%(productcode)s"""
@@ -162,9 +146,9 @@ def editionProductMermaInv():
     cur.close()
     return jsonify(msg='edited succesfully');
 
-@inv_api.route('/inventario/editIngredientMerma', methods=['PUT'])
-def editionIngredientMermaInv():
-    conn=conexion()
+@inv_api.route('/inventario/editIngredientMerma/<rol>', methods=['PUT'])
+def editionIngredientMermaInv(rol):
+    conn=conexionRol(rol)
     cur=conn.cursor()
     data=request.json
     sql="""UPDATE ingredientes SET cantidadingrediente= %(stockParcial1)s WHERE idingrediente=%(productcode)s"""
@@ -174,9 +158,9 @@ def editionIngredientMermaInv():
     cur.close()
     return jsonify(msg='edited succesfully');
 
-@inv_api.route('/inventario/editIngredient', methods=['PUT'])
-def editionIngredientInv():
-    conn=conexion()
+@inv_api.route('/inventario/editIngredient/<rol>', methods=['PUT'])
+def editionIngredientInv(rol):
+    conn=conexionRol(rol)
     cur=conn.cursor()
     data=request.json
     sql="""UPDATE ingredientes SET nombreingrediente=%(productname)s, cantidadingrediente=%(stockParcial1)s, cantidadnotificacioningrediente=%(productstocknotif)s, idunidad=%(productunidad)s WHERE idingrediente=%(productcode)s"""
@@ -186,9 +170,9 @@ def editionIngredientInv():
     cur.close()
     return jsonify(msg='edited succesfully');
 
-@inv_api.route('/inventario/editProveedorPro', methods=['PUT'])
-def editionProveedorPro():
-    conn=conexion()
+@inv_api.route('/inventario/editProveedorPro/<rol>', methods=['PUT'])
+def editionProveedorPro(rol):
+    conn=conexionRol(rol)
     cur=conn.cursor()
     data=request.json
     sql="""UPDATE proveedores SET nombreproveedor=%(productproveedor)s WHERE idproveedor=%(productidproveedor)s"""
@@ -198,9 +182,9 @@ def editionProveedorPro():
     cur.close()
     return jsonify(msg='edited succesfully');
 
-@inv_api.route('/inventario/editCategoriaPro', methods=['PUT'])
-def editionCategoriaPro():
-    conn=conexion()
+@inv_api.route('/inventario/editCategoriaPro/<rol>', methods=['PUT'])
+def editionCategoriaPro(rol):
+    conn=conexionRol(rol)
     cur=conn.cursor()
     data=request.json
     sql="""UPDATE categorias SET nombrecategoria=%(productcategoria)s WHERE idcategoria=%(productIdcategoria)s"""
@@ -210,9 +194,9 @@ def editionCategoriaPro():
     cur.close()
     return jsonify(msg='edited completely succesfully');
 
-@inv_api.route('/inventario/editProveedorPro2', methods=['PUT'])
-def editionProveedorPro2():
-    conn=conexion()
+@inv_api.route('/inventario/editProveedorPro2/<rol>', methods=['PUT'])
+def editionProveedorPro2(rol):
+    conn=conexionRol(rol)
     cur=conn.cursor()
     data=request.json
     sql="""UPDATE productosproveedores SET idproveedor=%(productidproveedor)s,costo=%(productcost)s,cantidad=%(productstock)s, fecha=NOW() WHERE idproducto=%(productcode)s"""
@@ -222,9 +206,9 @@ def editionProveedorPro2():
     cur.close()
     return jsonify(msg='edited succesfully');
 
-@inv_api.route('/inventario/editProveedorIng2', methods=['PUT'])
-def editionProveedorIng2():
-    conn=conexion()
+@inv_api.route('/inventario/editProveedorIng2/<rol>', methods=['PUT'])
+def editionProveedorIng2(rol):
+    conn=conexionRol(rol)
     cur=conn.cursor()
     data=request.json
     sql="""UPDATE ingredientesproveedores SET idproveedor=%(productidproveedor)s,costo=%(productcost)s,cantidad=%(productstock)s, fecha=NOW() WHERE idingrediente=%(productcode)s"""
@@ -234,9 +218,9 @@ def editionProveedorIng2():
     cur.close()
     return jsonify(msg='edited succesfully');
 
-@inv_api.route('/inventario/insertIngredient', methods=['POST'])
-def insercionIngredientInv():
-    conn=conexion()
+@inv_api.route('/inventario/insertIngredient/<rol>', methods=['POST'])
+def insercionIngredientInv(rol):
+    conn=conexionRol(rol)
     cur=conn.cursor()
     data=request.json
     sql="""INSERT INTO ingredientes (idingrediente,nombreingrediente,cantidadingrediente, idunidad,cantidadnotificacioningrediente) values(%(productcode)s,%(productname)s,%(productstock)s,%(productunidad)s,%(productstocknotif)s)"""
@@ -246,9 +230,9 @@ def insercionIngredientInv():
     cur.close()
     return jsonify(msg='added succesfully');
 
-@inv_api.route('/inventario/mermaProducto', methods=['POST'])
-def insercionMermaProducto():
-    conn=conexion()
+@inv_api.route('/inventario/mermaProducto/<rol>', methods=['POST'])
+def insercionMermaProducto(rol):
+    conn=conexionRol(rol)
     cur=conn.cursor()
     data=request.json
     sql="""INSERT INTO reportesmermas(idproducto,cantidadmerma, descripcionmerma,fechareporte,nombreproducto,idunidad)values(%(productcode)s,%(productcantidad)s,%(productdescrip)s, NOW(),%(productname)s,%(productunidad)s )"""
@@ -258,9 +242,9 @@ def insercionMermaProducto():
     cur.close()
     return jsonify(msg='added succesfully');
 
-@inv_api.route('/inventario/getProveedor/<proveedor>',  methods=['GET'])
-def getProveedor(proveedor):
-    conn = conexion()
+@inv_api.route('/inventario/getProveedor/<rol>/<proveedor>',  methods=['GET'])
+def getProveedor(rol, proveedor):
+    conn = conexionRol(rol)
     cur = conn.cursor(cursor_factory=RealDictCursor)
     sql="SELECT * FROM proveedores WHERE nombreproveedor = '{0}'".format(proveedor) 
     cur.execute(sql,proveedor) 
@@ -268,9 +252,9 @@ def getProveedor(proveedor):
     conn.close()
     return jsonify(row)
 
-@inv_api.route('/inventario/getCategoria/<categoria>',  methods=['GET'])
-def getCategoria(categoria):
-    conn = conexion()
+@inv_api.route('/inventario/getCategoria/<rol>/<categoria>',  methods=['GET'])
+def getCategoria(rol,categoria):
+    conn = conexionRol(rol)
     cur = conn.cursor(cursor_factory=RealDictCursor)
     sql="SELECT * FROM categorias WHERE nombrecategoria = '{0}'".format(categoria) 
     cur.execute(sql,categoria) 
@@ -278,9 +262,9 @@ def getCategoria(categoria):
     conn.close()
     return jsonify(row)
 
-@inv_api.route('/inventario/getActualProveedorId/<idproducto>',  methods=['GET'])
-def getProveedorId(idproducto):
-    conn = conexion()
+@inv_api.route('/inventario/getActualProveedorId/<rol>/<idproducto>',  methods=['GET'])
+def getProveedorId(rol,idproducto):
+    conn = conexionRol(rol)
     cur = conn.cursor(cursor_factory=RealDictCursor)
     sql="SELECT idproveedor FROM productosproveedores WHERE idproducto = '{0}'".format(idproducto) 
     cur.execute(sql,idproducto) 
@@ -288,9 +272,9 @@ def getProveedorId(idproducto):
     conn.close()
     return jsonify(row)
 
-@inv_api.route('/inventario/getActualProveedorIdIng/<idingrediente1>',  methods=['GET'])
-def getProveedorIdIng(idingrediente1):
-    conn = conexion()
+@inv_api.route('/inventario/getActualProveedorIdIng/<rol>/<idingrediente1>',  methods=['GET'])
+def getProveedorIdIng(rol,idingrediente1):
+    conn = conexionRol(rol)
     cur = conn.cursor(cursor_factory=RealDictCursor)
     sql="SELECT idproveedor,costo FROM ingredientesproveedores WHERE idingrediente = '{0}'".format(idingrediente1) 
     cur.execute(sql,idingrediente1) 
@@ -298,9 +282,9 @@ def getProveedorIdIng(idingrediente1):
     conn.close()
     return jsonify(row)
 
-@inv_api.route('/inventario/getActualProveedorName/<idproveedor>',  methods=['GET'])
-def getProveedorName(idproveedor):
-    conn = conexion()
+@inv_api.route('/inventario/getActualProveedorName/<rol>/<idproveedor>',  methods=['GET'])
+def getProveedorName(rol,idproveedor):
+    conn = conexionRol(rol)
     cur = conn.cursor(cursor_factory=RealDictCursor)
     sql="SELECT nombreproveedor FROM proveedores WHERE idproveedor = {0}".format(idproveedor) 
     cur.execute(sql,idproveedor) 
@@ -308,9 +292,9 @@ def getProveedorName(idproveedor):
     conn.close()
     return jsonify(row)
 
-@inv_api.route('/inventario/insertProveedor', methods=['POST'])
-def insercionProveedor():
-    conn=conexion()
+@inv_api.route('/inventario/insertProveedor/<rol>', methods=['POST'])
+def insercionProveedor(rol):
+    conn=conexionRol(rol)
     cur=conn.cursor()
     data=request.json
     sql="""INSERT INTO proveedores(compania,nombreproveedor,direccionproveedor,telproveedor)values('',%(productproveedor)s,'',0)"""
@@ -320,9 +304,9 @@ def insercionProveedor():
     cur.close()
     return jsonify(msg='added succesfully');
 
-@inv_api.route('/inventario/insertCategoria', methods=['POST'])
-def insercionCategoria():
-    conn=conexion()
+@inv_api.route('/inventario/insertCategoria/<rol>', methods=['POST'])
+def insercionCategoria(rol):
+    conn=conexionRol(rol)
     cur=conn.cursor()
     data=request.json
     sql="""INSERT INTO categorias(nombrecategoria)values(%(productcategoria)s)"""
@@ -332,9 +316,9 @@ def insercionCategoria():
     cur.close()
     return jsonify(msg='added succesfully');
 
-@inv_api.route('/inventario/insertCategoria2', methods=['PUT'])
-def insercionCategoria2():
-    conn=conexion()
+@inv_api.route('/inventario/insertCategoria2/<rol>', methods=['PUT'])
+def insercionCategoria2(rol):
+    conn=conexionRol(rol)
     cur=conn.cursor()
     data=request.json
     sql="""UPDATE productos SET idcategoria=%(idcategoria1)s WHERE idproducto=%(productcode)s"""
@@ -344,9 +328,9 @@ def insercionCategoria2():
     cur.close()
     return jsonify(msg='la inserción se realizó con éxito');
 
-@inv_api.route('/inventario/insertProveedorProduct', methods=['POST'])
-def insercionProveedorProducto():
-    conn=conexion()
+@inv_api.route('/inventario/insertProveedorProduct/<rol>', methods=['POST'])
+def insercionProveedorProducto(rol):
+    conn=conexionRol(rol)
     cur=conn.cursor()
     data=request.json
     sql="""INSERT INTO productosproveedores(idproveedor, idproducto, cantidad,costo, fecha)values(%(idproveedor1)s,%(productcode)s,%(productstock)s, %(productcost)s, NOW())"""
@@ -356,9 +340,9 @@ def insercionProveedorProducto():
     cur.close()
     return jsonify(msg='added succesfully');
 
-@inv_api.route('/inventario/insertProveedorIng', methods=['POST'])
-def insercionProveedorIngrediente():
-    conn=conexion()
+@inv_api.route('/inventario/insertProveedorIng/<rol>', methods=['POST'])
+def insercionProveedorIngrediente(rol):
+    conn=conexionRol(rol)
     cur=conn.cursor()
     data=request.json
     sql="""INSERT INTO ingredientesproveedores(idproveedor, cantidad,costo, fecha, idingrediente)values(%(idproveedor1)s,%(productstock)s, %(productcost)s, NOW(),%(productcode)s)"""
@@ -367,7 +351,7 @@ def insercionProveedorIngrediente():
     conn.close()
     cur.close()
     return jsonify(msg='added succesfully');
-    
+
 ## ------------------------------------------------------------------------------ ##
 ## ---------------------- Agregar productos al inventario ----------------------- ##
 ## ------------------------------------------------------------------------------ ##

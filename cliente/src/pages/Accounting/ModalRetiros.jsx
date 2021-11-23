@@ -25,6 +25,8 @@ const ModalRetiros = () => {
   const[cantidadretirovalid, setCantidadretirovalid]= useState('true')
   const[lock, setLock]= useState(false)
 
+  const rol = localStorage.getItem('rol')
+
   const handleCantidadTotal = () =>{
     setCantidadretiro(0);
     setShowretirar(false)
@@ -33,11 +35,12 @@ const ModalRetiros = () => {
   const handleRetiro= async (e)=>{
       e.preventDefault();
       setLock(true)
+
       ///////////Variables de sesión/////////////////////
       const user = localStorage.getItem("user")
 
        const res222 = await fetch(
-        `http://localhost:5000/accesibilidad/getIdUsuario/${user}`
+        `http://localhost:5000/accesibilidad/getIdUsuario/${rol}/${user}`
         );
         const data222 = await res222.json();
 
@@ -52,7 +55,7 @@ const ModalRetiros = () => {
         var idusuario=idusuarioes
         var descripcionmov=('Se hizo un retiro de '+totalretiro+ ' pesos')
         const res9 = await fetch(
-          `http://localhost:5000/contabilidad/insertContabilidadMovimiento`,
+          `http://localhost:5000/contabilidad/insertContabilidadMovimiento/${rol}`,
           {
             method: "POST",
             headers: {

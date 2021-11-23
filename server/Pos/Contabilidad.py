@@ -16,13 +16,21 @@ def conexion():
     user="postgres",
     password="root")
 
+def conexionRol(role):
+    return psycopg2.connect(
+    host="localhost",
+    database="puntodeventa",
+    user=role,
+    password="root")
+
+
 ## ------------------------------------------------------------------------------ ##
 ## --------------------------Operaciones de contabilidad------------------------- ##
 ## ------------------------------------------------------------------------------ ##
 
-@conta_api.route('/contabilidad/sumaParciales/<fecha>',  methods=['GET'])
-def getSumaParciales(fecha):
-    conn = conexion()
+@conta_api.route('/contabilidad/sumaParciales/<rol>/<fecha>',  methods=['GET'])
+def getSumaParciales(rol,fecha):
+    conn = conexionRol(rol)
     cur = conn.cursor(cursor_factory=RealDictCursor)
     sql="SELECT SUM(total) FROM movimientos WHERE fechamovimiento>='{0}' AND razon='parcial'".format(fecha)
     cur.execute(sql) 
@@ -30,9 +38,9 @@ def getSumaParciales(fecha):
     conn.close()
     return jsonify(row)
 
-@conta_api.route('/contabilidad/ultimosMovimientos/<fecha>',  methods=['GET'])
-def getultimosMovimientos(fecha):
-    conn = conexion()
+@conta_api.route('/contabilidad/ultimosMovimientos/<rol>/<fecha>',  methods=['GET'])
+def getultimosMovimientos(rol,fecha):
+    conn = conexionRol(rol)
     cur = conn.cursor(cursor_factory=RealDictCursor)
     sql="SELECT to_char(fechamovimiento, 'YYYY-MM-DD HH24:MI:SS') As fechamovimiento,razon,descripcion,total,usuarios.usuario FROM movimientos JOIN usuarios ON movimientos.idusuario=usuarios.idusuario WHERE fechamovimiento>='{0}' AND (razon='parcial' OR razon='observacion') ORDER BY fechamovimiento DESC".format(fecha)
     cur.execute(sql) 
@@ -40,9 +48,9 @@ def getultimosMovimientos(fecha):
     conn.close()
     return jsonify(row)
 
-@conta_api.route('/contabilidad/inversionPeriodoPasado/<fecha>',  methods=['GET'])
-def getInversionPeriodoPasado(fecha):
-    conn = conexion()
+@conta_api.route('/contabilidad/inversionPeriodoPasado/<rol>/<fecha>',  methods=['GET'])
+def getInversionPeriodoPasado(rol,fecha):
+    conn = conexionRol(rol)
     cur = conn.cursor(cursor_factory=RealDictCursor)
     sql="SELECT SUM(total) FROM movimientos WHERE fechamovimiento>='{0}' AND razon='carga'".format(fecha)
     cur.execute(sql, fecha) 
@@ -50,9 +58,9 @@ def getInversionPeriodoPasado(fecha):
     conn.close()
     return jsonify(row)
 
-@conta_api.route('/contabilidad/ultimosAperturas',  methods=['GET'])
-def getultimosAperturas():
-    conn = conexion()
+@conta_api.route('/contabilidad/ultimosAperturas/<rol>',  methods=['GET'])
+def getultimosAperturas(rol):
+    conn = conexionRol(rol)
     cur = conn.cursor(cursor_factory=RealDictCursor)
     sql="SELECT to_char(fechaapertura, 'YYYY-MM-DD HH24:MI:SS') As fechaapertura,idcortecaja,saldoapertura FROM cortescaja ORDER BY fechaapertura DESC"
     cur.execute(sql) 
@@ -60,9 +68,9 @@ def getultimosAperturas():
     conn.close()
     return jsonify(row)
 
-@conta_api.route('/contabilidad/editApertura', methods=['PUT'])
-def editionApertura():
-    conn=conexion()
+@conta_api.route('/contabilidad/editApertura/<rol>', methods=['PUT'])
+def editionApertura(rol):
+    conn=conexionRol(rol)
     cur=conn.cursor()
     data=request.json
     sql="""UPDATE cortescaja SET fechaapertura=NOW(), saldoapertura=%(montoapertura)s WHERE idcortecaja=%(idcorte)s"""
@@ -72,9 +80,9 @@ def editionApertura():
     cur.close()
     return jsonify(msg='edited succesfully');
 
-@conta_api.route('/contabilidad/ultimoApertura',  methods=['GET'])
-def getultimoApertura():
-    conn = conexion()
+@conta_api.route('/contabilidad/ultimoApertura/<rol>',  methods=['GET'])
+def getultimoApertura(rol):
+    conn = conexionRol(rol)
     cur = conn.cursor(cursor_factory=RealDictCursor)
     sql="SELECT to_char(fechaapertura, 'YYYY-MM-DD HH24:MI:SS') As fechaapertura,idcortecaja,saldoapertura FROM cortescaja ORDER BY fechaapertura DESC"
     cur.execute(sql) 
@@ -82,9 +90,9 @@ def getultimoApertura():
     conn.close()
     return jsonify(row)
 
-@conta_api.route('/contabilidad/insertContabilidadMovimiento', methods=['POST'])
-def insercionMoveCont():
-    conn=conexion()
+@conta_api.route('/contabilidad/insertContabilidadMovimiento/<rol>', methods=['POST'])
+def insercionMoveCont(rol):
+    conn=conexionRol(rol)
     cur=conn.cursor()
     data=request.json
     sql="""INSERT INTO movimientos (tipo,razon,descripcion,total,idusuario,fechamovimiento) values(%(tipo)s,%(razon)s,%(descripcionmov)s,%(totalretiro)s,%(idusuario)s,NOW())"""
@@ -94,9 +102,9 @@ def insercionMoveCont():
     cur.close()
     return jsonify(msg='movimiento registrado');
 
-@conta_api.route('/contabilidad/insertPrimerApertura', methods=['POST'])
-def insercionPrimerApertura():
-    conn=conexion()
+@conta_api.route('/contabilidad/insertPrimerApertura/<rol>', methods=['POST'])
+def insercionPrimerApertura(rol):
+    conn=conexionRol(rol)
     cur=conn.cursor()
     data=request.json
     sql="""INSERT INTO cortescaja (subtotalcorte,totalcorte,saldoapertura, idusuario,fechaapertura,fechacorte,cuenta) values(0,0,%(montoapertura)s, %(idusuario)s,NOW(),'2021-01-01 00:00:00', %(cuenta)s)"""
@@ -106,9 +114,9 @@ def insercionPrimerApertura():
     cur.close()
     return jsonify(msg='movimiento registrado');
 
-@conta_api.route('/contabilidad/insertCierre', methods=['POST'])
-def insercionCierreCaja():
-    conn=conexion()
+@conta_api.route('/contabilidad/insertCierre/<rol>', methods=['POST'])
+def insercionCierreCaja(rol):
+    conn=conexionRol(rol)
     cur=conn.cursor()
     data=request.json
     sql="""INSERT INTO cortescaja (totalcorte, subtotalcorte,saldoapertura,idusuario,fechaapertura,fechacorte,cuenta) values(%(totalrecaudado)s,%(recuento)s, %(fondodecambio)s, %(idusuario)s, NOW(), NOW(),%(cuenta)s)"""
@@ -118,9 +126,9 @@ def insercionCierreCaja():
     cur.close()
     return jsonify(msg='cierre registrado');
 
-@conta_api.route('/contabilidad/DatosUltimoCierre',  methods=['GET'])
-def getUltimoCierre():
-    conn = conexion()
+@conta_api.route('/contabilidad/DatosUltimoCierre/<rol>',  methods=['GET'])
+def getUltimoCierre(rol):
+    conn = conexionRol(rol)
     cur = conn.cursor(cursor_factory=RealDictCursor)
     sql="SELECT usuarios.idusuario,usuario,totalcorte,saldoapertura,to_char(fechacorte, 'DD/MM/YYYY HH24:MI:SS') As fechacorte, to_char(fechaapertura, 'DD/MM/YYYY HH24:MI:SS') As fechaapertura FROM usuarios JOIN cortescaja ON usuarios.idusuario=cortescaja.idusuario ORDER BY fechacorte DESC "
     cur.execute(sql) 
@@ -128,9 +136,9 @@ def getUltimoCierre():
     conn.close()
     return jsonify(row)
 
-@conta_api.route('/contabilidad/VentasHastaAhora/<fecha>',  methods=['GET'])
-def getVentasDesdeApertura(fecha):
-    conn = conexion()
+@conta_api.route('/contabilidad/VentasHastaAhora/<rol>/<fecha>',  methods=['GET'])
+def getVentasDesdeApertura(rol,fecha):
+    conn = conexionRol(rol)
     cur = conn.cursor(cursor_factory=RealDictCursor)
     sql="SELECT SUM(totalventa) FROM ventas WHERE fechaventa>='{0}' AND idpago=1".format(fecha)
     cur.execute(sql, fecha) 
@@ -138,9 +146,9 @@ def getVentasDesdeApertura(fecha):
     conn.close()
     return jsonify(row)
 
-@conta_api.route('/contabilidad/VentasHastaAhoraTarjetas/<fecha>',  methods=['GET'])
-def getVentasHoyT(fecha):
-    conn = conexion()
+@conta_api.route('/contabilidad/VentasHastaAhoraTarjetas/<rol>/<fecha>',  methods=['GET'])
+def getVentasHoyT(rol,fecha):
+    conn = conexionRol(rol)
     cur = conn.cursor(cursor_factory=RealDictCursor)
     sql="SELECT SUM(totalventa) FROM ventas WHERE fechaventa>='{0}' AND idpago=2".format(fecha)
     cur.execute(sql, fecha) 
@@ -148,9 +156,9 @@ def getVentasHoyT(fecha):
     conn.close()
     return jsonify(row)
 
-@conta_api.route('/contabilidad/VentasHastaAhoraVales/<fecha>',  methods=['GET'])
-def getVentasHoyV(fecha):
-    conn = conexion()
+@conta_api.route('/contabilidad/VentasHastaAhoraVales/<rol>/<fecha>',  methods=['GET'])
+def getVentasHoyV(rol,fecha):
+    conn = conexionRol(rol)
     cur = conn.cursor(cursor_factory=RealDictCursor)
     sql="SELECT SUM(totalventa) FROM ventas WHERE fechaventa>='{0}' AND idpago=3".format(fecha)
     cur.execute(sql, fecha) 
@@ -158,9 +166,9 @@ def getVentasHoyV(fecha):
     conn.close()
     return jsonify(row)
 
-@conta_api.route('/contabilidad/CajaHastaAhora/<fecha>',  methods=['GET'])
-def getCajaHoy(fecha):
-    conn = conexion()
+@conta_api.route('/contabilidad/CajaHastaAhora/<rol>/<fecha>',  methods=['GET'])
+def getCajaHoy(rol,fecha):
+    conn = conexionRol(rol)
     cur = conn.cursor(cursor_factory=RealDictCursor)
     sql="SELECT totalcorte,saldoapertura FROM cortescaja ORDER BY fechacorte DESC"
     cur.execute(sql, fecha) 
@@ -168,9 +176,9 @@ def getCajaHoy(fecha):
     conn.close()
     return jsonify(row)
 
-@conta_api.route('/contabilidad/GastosCaja/<fecha>',  methods=['GET'])
-def getRetirosHoy(fecha):
-    conn = conexion()
+@conta_api.route('/contabilidad/GastosCaja/<rol>/<fecha>',  methods=['GET'])
+def getRetirosHoy(rol,fecha):
+    conn = conexionRol(rol)
     cur = conn.cursor(cursor_factory=RealDictCursor)
     sql="SELECT SUM(total) FROM movimientos WHERE fechamovimiento>='{0}' AND razon = 'retiro' ".format(fecha)
     cur.execute(sql, fecha) 
@@ -178,8 +186,16 @@ def getRetirosHoy(fecha):
     conn.close()
     return jsonify(row)
 
-@conta_api.route('/contabilidad/CambiosCaja/<fecha>',  methods=['GET'])
-def getCambiosHoy(fecha):
+@conta_api.route('/contabilidad/CambiosCaja/<rol>/<fecha>',  methods=['GET'])
+def getCambiosHoy(rol,fecha):
+    conn = conexionRol(rol)
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+    sql="SELECT SUM(total) FROM movimientos WHERE fechamovimiento>='{0}' AND razon = 'cambio' ".format(fecha)
+    cur.execute(sql, fecha) 
+    row = cur.fetchone()
+    conn.close()
+    return jsonify(row)
+
     conn = conexion()
     cur = conn.cursor(cursor_factory=RealDictCursor)
     sql="SELECT SUM(total) FROM movimientos WHERE fechamovimiento>='{0}' AND razon = 'cambio' ".format(fecha)

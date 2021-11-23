@@ -20,6 +20,8 @@ function ReporteMerma() {
   const[productcantidadvalid, setProductcantidadvalid]= useState(null)
   const[productunidadvalid, setProductunidadvalid]= useState(null)
   const[todosvalidos, setTodosvalidos]=useState(null);
+  
+  const rol = localStorage.getItem('rol')
 
   ///////////////Reiniciar los estados /////////////////////////////////////////////////////////
 
@@ -39,8 +41,9 @@ function ReporteMerma() {
   ///////Funciones para traer todos los productos/ingredientes//////////////////////////////////
 
   const handleShowAllMerca2= async (e)=>{
+
     const res = await fetch(
-      `http://localhost:5000/inventario/getInventario/1`
+      `http://localhost:5000/inventario/getInventario/${rol}/1`
     );
     const data = await res.json();
     setIngredients(data);
@@ -49,7 +52,7 @@ function ReporteMerma() {
   const handleShowAllMerca = async (e) => {
     
       const res = await fetch(
-        `http://localhost:5000/inventario/getInventario/2`
+        `http://localhost:5000/inventario/getInventario/${rol}/2`
       );
       const data = await res.json();
       setProducts(data);
@@ -68,7 +71,7 @@ function ReporteMerma() {
     setEsproducto(1);
     
     const res = await fetch(
-      `http://localhost:5000/inventario/getActualProduct/${actualproduct}`
+      `http://localhost:5000/inventario/getActualProduct/${rol}/${actualproduct}`
     );
     const data = await res.json();
     setProductunidad(data.idunidad);
@@ -83,7 +86,7 @@ function ReporteMerma() {
     setEsproducto(2);
 
     const res = await fetch(
-      `http://localhost:5000/inventario/getActualIngredient/${actualingredient}`
+      `http://localhost:5000/inventario/getActualIngredient/${rol}/${actualingredient}`
     );
     const data = await res.json();
     setProductunidad(data.idunidad);
@@ -113,7 +116,7 @@ const handleinsert = async (e) =>{
 
     if(todosvalidos==='true'){
         const res = await fetch(
-          `http://localhost:5000/inventario/mermaProducto`,
+          `http://localhost:5000/inventario/mermaProducto/${rol}`,
           {
             method: "POST",
             headers: {
@@ -134,7 +137,7 @@ const handleinsert = async (e) =>{
         if(esproducto===1){
         const stockParcial1= parseFloat(inicialstock)-parseFloat(productcantidad)
         const res2 = await fetch(
-          `http://localhost:5000/inventario/editProductMerma`,
+          `http://localhost:5000/inventario/editProductMerma/${rol}`,
           {
             method: "PUT",
             headers: {
@@ -151,7 +154,7 @@ const handleinsert = async (e) =>{
       }else{
         const stockParcial1= parseFloat(inicialstock)-parseFloat(productcantidad)
             const res = await fetch(
-              `http://localhost:5000/inventario/editIngredientMerma`,
+              `http://localhost:5000/inventario/editIngredientMerma/${rol}`,
               {
                 method: "PUT",
                 headers: {
@@ -173,7 +176,7 @@ const handleinsert = async (e) =>{
         var razon='merma'
         var tipo='salidaInventario'
         const res9 = await fetch(
-          `http://localhost:5000/inventario/insertInventarioMovimiento`,
+          `http://localhost:5000/inventario/insertInventarioMovimiento/${rol}`,
           {
             method: "POST",
             headers: {

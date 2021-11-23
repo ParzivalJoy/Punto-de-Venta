@@ -7,6 +7,8 @@ import axios from 'axios' //npm i axios
 const baseURL = process.env.REACT_APP_API_URL //npm i dotenv
 
 function Product(props) {
+    
+    const rol = localStorage.getItem('rol')
     const [listcategories, setListCategories] = useState([])
     const [msg, setMsg]=useState('')
     const errors ={
