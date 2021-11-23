@@ -26,6 +26,15 @@ def conexionRol(role):
 ## -----------------------Catalogo de productos y filtros------------------------ ##
 ## ------------------------------------------------------------------------------ ##
 
+@ventas_api.route('/api/sales/cuenta/<rol>',  methods=['GET'])
+def getImageCuenta(rol):
+    conn = conexionRol(rol)
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+    cur.execute("SELECT qrcuenta FROM cuenta WHERE idcuenta = 1")
+    rows = cur.fetchone()
+    conn.close()
+    return jsonify(rows)
+
 @ventas_api.route('/api/sales/products/<rol>',  methods=['GET'])
 def getAllProducts(rol):
     conn = conexionRol(rol)

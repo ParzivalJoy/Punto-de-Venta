@@ -7,6 +7,8 @@ import PaymentIcon from '@mui/icons-material/Payment';
 import { useHistory } from "react-router-dom";
 import CleaningServicesIcon from '@mui/icons-material/CleaningServices';
 import axios from 'axios' //npm i 
+import Modal from 'react-bootstrap/Modal'
+import Button from 'react-bootstrap/Button'
 
 
 export default function Carrito() {
@@ -14,6 +16,12 @@ export default function Carrito() {
     let history = useHistory()
     const rol = localStorage.getItem('rol')
 
+    const [show, setShow] = useState(false);
+
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+
+    const[imagebinary, setImagebinary] = useState(null)
     const [productdata, setProductData] = useState([])
     const [complementdata, setComplementData] = useState([])
     const [multipledata, setMultipleData] = useState([])
@@ -41,6 +49,26 @@ export default function Carrito() {
         let today = new Date()
         let time = today.getHours() + ':' + today.getMinutes() + ':' + today.getSeconds();
         return `${time}`
+    }
+
+    async function getImageCuenta(){
+        const {data} = await axios.get('http://localhost:5000/api/sales/cuenta'+`/${rol}`)
+        console.log("Imagen :", data.qrcuenta)
+        if(data.qrcuenta===null){
+            const resb = await fetch(
+                `http://localhost:5000/inventario/bringImgs/sin-imagen.jpg`+`/${rol}`
+              );
+              const datab = await resb.blob();
+              var sauce= URL.createObjectURL(datab)
+              setImagebinary(sauce)
+          }else{
+            const resb = await fetch(
+              `http://localhost:5000/inventario/bringImgs/${data.qrcuenta}`+`/${rol}`
+            );
+            const datab = await resb.blob();
+            var sauce= URL.createObjectURL(datab)
+            setImagebinary(sauce)
+          }
     }
 
     console.log('Recibido:',recibido)
@@ -242,6 +270,24 @@ export default function Carrito() {
 
     }
 
+    async function PagoTarjeta(){
+        Swal.fire({
+            title: '¿Se ha realizado la transacción',
+            text: "Asegurate de que la transacción se haya realizado con éxito antes de continuar",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si, continua!'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              Swal.fire(
+                Transaccion()
+              )
+            }
+          })
+    }
+
     function LimpiarCarrito(){
         Swal.fire({
             title: '¿Estas seguro?',
@@ -270,6 +316,7 @@ export default function Carrito() {
 
     useEffect(() =>{
         getDatos()  
+        getImageCuenta()
     }, [])
 
     console.log(productdata)
@@ -327,12 +374,31 @@ export default function Carrito() {
                     <button className="btn btn-primary btn-cobrar" onClick={Transaccion.bind(this)}><AttachMoneyIcon/>Cobrar</button>
                 </div>
                 <div className="input-cobrar">
-                    <button className="btn btn-primary btn-cobrar"><PaymentIcon/>Tarjeta</button>
+                    <button className="btn btn-primary btn-cobrar" onClick={handleShow}><PaymentIcon/>Tarjeta</button>
                 </div>
                 <div className="input-cobrar">
                     <button className="btn btn-primary btn-cobrar" onClick={LimpiarCarrito.bind(this)}><CleaningServicesIcon/>Limpiar</button>
                 </div>
             </div>
+            <Modal
+        show={show}
+        onHide={handleClose}
+        backdrop="static"
+        keyboard={false}
+      >
+        <Modal.Header>
+          <Modal.Title>Muestra el QR al cliente</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <img src={imagebinary}/>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Cancelar
+          </Button>
+          <Button variant="primary">Aceptar Transacción </Button>
+        </Modal.Footer>
+      </Modal>
         </div>
     )
 }
