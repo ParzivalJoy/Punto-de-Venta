@@ -217,6 +217,17 @@ def verifyProductModifier(search, rol):
     conn.close()
     return jsonify(rows)
 
+@ventas_api.route('/api/sales/verifyproduct/<idproducto>/<rol>', methods=['GET'])
+def verifyProducts(idproducto, rol):
+    conn = conexionRol(rol)
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+    sql = "SELECT cantidadproducto FROM productos WHERE idproducto ='{0}'".format(idproducto)
+    cur.execute(sql, idproducto) 
+    rows = cur.fetchone()
+    conn.close()
+    cur.close()
+    return jsonify(rows)
+
 ## ------------------------------------------------------------------------------ ##
 ## ----------- Cambios en las cantidades de productos e ingredientes------------- ##
 ## ------------------------------------------------------------------------------ ##

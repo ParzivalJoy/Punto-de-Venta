@@ -1,5 +1,8 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
+import HelpIcon from '@mui/icons-material/Help';
+import AccountBoxIcon from '@mui/icons-material/AccountBox';
 
 export default function Menu() {
     return (
@@ -9,6 +12,9 @@ export default function Menu() {
                 <Link to = "/gestor/notificaciones" className="link">
                     <div className="card card-item">
                     Notificaciones
+                    <div className="card-money">        
+                        <NotificationsActiveIcon className="icons"/>
+                    </div>
                     </div>
                     </Link>
                 </div>
@@ -16,6 +22,9 @@ export default function Menu() {
                 <Link to = "/gestor/ayuda" className="link">
                     <div className="card card-item">
                     Ayuda (Q&A)
+                    <div className="card-money">        
+                        <HelpIcon className="icons"/>
+                    </div>
                     </div>
                     </Link>
                 </div>
@@ -28,6 +37,9 @@ export default function Menu() {
                 <Link to = "/gestor/sellos" className="link">
                     <div className="card card-item">
                         Sistema de Sellos
+                        <div className="card-money">        
+                        <AccountBoxIcon className="icons"/>
+                    </div>
                     </div>
                 </Link>
                 </div>

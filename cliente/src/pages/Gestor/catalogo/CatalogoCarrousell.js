@@ -29,7 +29,7 @@ export default function AyudaCarrousell() {
           </Paper>
         </Grid>
         <Grid item xs={6}>
-          <Paper className={classes.paper}>
+          <Paper className="card">
             <CatalogoForm />
           </Paper>
         </Grid>

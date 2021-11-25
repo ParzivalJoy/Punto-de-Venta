@@ -71,7 +71,8 @@ export default function Carrito() {
           }
     }
 
-    console.log('Recibido:',recibido)
+    
+
     async function Transaccion(){
         if(recibido === 0){
             Swal.fire({
@@ -81,6 +82,10 @@ export default function Carrito() {
               })
         }else{
             if(productdata.length !== 0){
+                //productdata.map(item =>(
+                //    ConsultaCantidadesProductos(item.idproducto, item.cantidad)
+                //))
+
                 let tempventa = localStorage.getItem('Totalpagar')
                 let cambio = parseInt(recibido) - parseInt(tempventa) 
 
@@ -113,7 +118,7 @@ export default function Carrito() {
 
                 Swal.fire({
                     title: 'Venta realizada',
-                    text: 'El cambio a entregar es: '+`${cambio}`,
+                    text: 'El cambio a entregar es: $'+`${cambio}`,
                     icon: 'success',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
@@ -134,6 +139,23 @@ export default function Carrito() {
             }
           
         }
+
+    }
+
+    async function ConsultaCantidadesProductos(idproducto, cantidad){
+        const {data} = await axios.get('http://localhost:5000/api/sales/verifyproduct'+`/${idproducto}`+`/${rol}`)
+        if (data.cantidadproducto < cantidad){
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'No hay suficiente producto para realizar la compra!',
+              })
+        }else{
+            //Verificar la cantidad de complementos 
+        }
+    }
+
+    async function ConsultaCantidadesComplementos(){
 
     }
 
@@ -281,9 +303,7 @@ export default function Carrito() {
             confirmButtonText: 'Si, continua!'
           }).then((result) => {
             if (result.isConfirmed) {
-              Swal.fire(
                 Transaccion()
-              )
             }
           })
     }
@@ -324,14 +344,30 @@ export default function Carrito() {
     
     const selectedComplement = (e, idcarrito) => {
         const value = e.target.value
-        console.log(value)
+        let cantidadanterior
+        let nuevototal
+        let precio
+        let total
         var productdata = JSON.parse(localStorage["productdatas"])
         var indexproduct = JSON.parse(localStorage["productdatas"]).findIndex((obj => obj.idcarrito == idcarrito))
 
         //Se modifica la cantidad del producto que se venderá
         if(indexproduct >= 0){
+            cantidadanterior = productdata[indexproduct].cantidad
             productdata[indexproduct].cantidad = parseInt(value)
+
+            total = productdata[indexproduct].total
+            let cantidadcarrito = localStorage.getItem('Totalpagar')
+            cantidadcarrito = parseInt(cantidadcarrito) - parseInt(total)
+        
+            precio = productdata[indexproduct].precioproducto
+            nuevototal = parseInt(precio) * parseInt(value)
+            productdata[indexproduct].total = nuevototal
+            cantidadcarrito = parseInt(cantidadcarrito) + nuevototal
+
+            localStorage.setItem('Totalpagar', cantidadcarrito)
         }
+
         localStorage.removeItem("productdatas")
         localStorage["productdatas"] = JSON.stringify(productdata)
     }
@@ -396,7 +432,7 @@ export default function Carrito() {
           <Button variant="secondary" onClick={handleClose}>
             Cancelar
           </Button>
-          <Button variant="primary">Aceptar Transacción </Button>
+          <Button variant="primary" onClick={PagoTarjeta.bind(this)} >Aceptar Transacción </Button>
         </Modal.Footer>
       </Modal>
         </div>

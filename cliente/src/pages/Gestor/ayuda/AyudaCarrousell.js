@@ -77,7 +77,7 @@ export default function AyudaCarrousell() {
               </Paper>
             </Grid>
             <Grid item xs={6}>
-              <Paper className={classes.paper}>
+              <Paper className="card">
                 <AyudaForm />
               </Paper>
             </Grid>

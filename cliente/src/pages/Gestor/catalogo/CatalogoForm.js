@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(3),
   },
 }));
-
+//<DisplayFormikState {...values} /> 
 export default function CatalogoForm() {
   const classes = useStyles();
   const [openAlert, setOpenAlert] = React.useState(false);
@@ -245,7 +245,6 @@ export default function CatalogoForm() {
                 Guardar
               </Button>
             </Box>
-            <DisplayFormikState {...values} /> 
           </Grid>
         </Grid>
       )}
