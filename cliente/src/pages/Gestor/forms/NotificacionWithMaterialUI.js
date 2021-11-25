@@ -932,7 +932,7 @@ const Basic = () => {
           /* and other goodies */
         }) => (
           <div className={classes.layout}>
-            <Paper className={classes.paper} elevation={15}>
+            <Paper className="card" elevation={15}>
               <Grid container spacing={1}>
                 {getStepContent(activeStep)}
                 <FieldArray
@@ -954,7 +954,7 @@ const Basic = () => {
                 />
                 {/* {values.encuesta.paginas.length} */}
                 <Grid item xs={12}>
-                  <DisplayFormikState {...values} />
+                  
                 </Grid>
               </Grid>
             </Paper>
