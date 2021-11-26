@@ -86,13 +86,13 @@ export default function NivelesPaper() {
             </Grid>
             {(addForm || values.editar) && (
               <Grid item xs={12}>
-                <Paper className={classes.paper}>
+                <Paper className="card">
                   <NivelForm />
                 </Paper>
               </Grid>
             )}
             <Grid item xs={12}>
-              <Paper className={classes.paper}>
+              <Paper className="card">
                 <ConfigNivelForm />
               </Paper>
             </Grid>

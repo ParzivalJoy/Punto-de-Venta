@@ -572,7 +572,6 @@ export default function SellosForm() {
                 Guardar
               </Button>
             </Box>
-            <DisplayFormikState {...values} /> 
           </Grid>
         </Grid>
       )}

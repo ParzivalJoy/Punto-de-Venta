@@ -31,7 +31,7 @@ export default function SellosPaper() {
           </Paper>
         </Grid> */}
         <Grid item xs={12}>
-          <Paper className={classes.paper}>
+          <Paper className="card">
             <SellosForm />
           </Paper>
         </Grid>

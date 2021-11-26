@@ -193,7 +193,6 @@ export default function AyudaForm() {
               Guardar
             </Button>
           </Box>
-          <DisplayFormikState {...values} /> 
         </Grid>
       )}
       {values.isEditEnabled && (
@@ -223,7 +222,6 @@ export default function AyudaForm() {
               cancelar
             </Button>
           </Box>
-          <DisplayFormikState {...values} /> 
         </Grid>
       )}
     </Grid>

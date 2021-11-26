@@ -153,7 +153,6 @@ export default function NivelForm() {
                 Guardar
               </Button>
             </Box>
-            <DisplayFormikState {...values} /> 
           </Grid>
         </Grid>
       )}
