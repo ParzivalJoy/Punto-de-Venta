@@ -6,6 +6,8 @@ import StoreIcon from '@material-ui/icons/Store';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import axios from 'axios'
+import useBubbletownApi from '../../Gestor/helpers/useBubbletownApi';
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 
 export default function Cards() {
@@ -13,6 +15,10 @@ export default function Cards() {
     const [salestoday, setSalesToday] = useState('')
     const [salesyes, setSalesYes] = useState('')
     const [productnot, setProductNot] = useState('')
+
+    const {data: Participantes, loading} = useBubbletownApi({
+        path: 'participantes'
+    })
 
     const rol = localStorage.getItem('rol')
 
@@ -57,7 +63,7 @@ export default function Cards() {
         getProductNot()
     }, [])
 
-
+    if (loading) return <CircularProgress/>
     return (
         <div>
             <div className="row">
@@ -96,8 +102,7 @@ export default function Cards() {
                 <span className="card-title">Clientes afiliados</span>
                 <div className="card-money">
                     <PersonAddIcon className="icons"/>
-                    <span className="card-money-title">60</span>
-                    <span className="card-money-sub">+10<TrendingUpIcon className="uparrow"/> </span> 
+                    <span className="card-money-title">{Object.keys(Participantes.Participantes).length}</span>
                 </div>
             </div>
             </div>

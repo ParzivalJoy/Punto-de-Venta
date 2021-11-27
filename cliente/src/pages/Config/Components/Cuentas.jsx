@@ -89,7 +89,7 @@ export default function Cuentas() {
             </div>
           ) : (
             <div>
-              <p>Código QR necesario para hacer transferencias y pagos mediante Mercado Pago</p>
+              <p>Define el código QR necesario para hacer transferencias y pagos mediante Mercado Pago</p>
             </div>
           )}
         </div>

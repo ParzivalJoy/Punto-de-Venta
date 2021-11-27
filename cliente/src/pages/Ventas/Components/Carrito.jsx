@@ -27,6 +27,15 @@ export default function Carrito() {
     const [multipledata, setMultipleData] = useState([])
     const [recibido, setRecibido] = useState(0)
 
+    const [productverify, setProductVerify] = useState(null)
+    const [ingredientverify, setIngredientVerify] = useState(null)   
+    const [complementverify, setComplementVerify] = useState(null)
+    const [ingredientcompverify, setIngredientCompVerify] = useState(null)
+    const [modifierverify, setModifierVerify] = useState(null)
+
+    const [total, setTotal] = useState(localStorage.getItem('Totalpagar'))
+    
+
     function getDatos(){
         if(localStorage["productdatas"]){
             setProductData(JSON.parse(localStorage["productdatas"]))
@@ -71,7 +80,157 @@ export default function Carrito() {
           }
     }
 
+    function Consultas(){
+        productdata.map(item =>(
+            ConsultaCantidadesProductos(item.idproducto, item.cantidad),
+            ConsultaCantidadesIngredientes(item.idproducto, item.cantidad)
+        ))
+        if (complementdata.length !== 0){
+            complementdata.map(item =>(
+                ConsultaCantidadesComplementos(item.id, item.cantidad),
+                ConsultaCantidadesIngredientesComplementos(item.id, item.cantidad)
+            ))
+        }else{
+            setComplementVerify(true)
+            setIngredientCompVerify(true)
+        }
+        if (multipledata.length !== 0){
+            multipledata.map(item=>(
+                ConsultaCantidadesIngredientesMoficiadores(item.id, item.porcion)
+            ))
+        }else{
+            setModifierVerify(true)
+        }
+               
+    }
+
     
+
+    function PagoEfectivo(pago){
+        //Verifica la cantidad recibida del cliente
+        if(recibido === 0 || recibido < localStorage.getItem('Totalpagar')){
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'El dinero recibido del cliente no es el adecuado. Porfavor verifica la cantidad'
+              })
+        }else{
+            //Verifica las cantidades de productos
+            if(productverify === false ){
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Producto agotado',
+                    text: 'La venta no puede ser realizada. Revisa los inventarios de productos'
+                  })
+            }else if(ingredientverify === false || ingredientcompverify === false || modifierverify === false){
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Ingredientes agotados',
+                    text: 'La venta no puede ser realizada. Revisa los inventarios de ingredientes'
+                  })
+            }else if (complementverify === false){
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Complementos agotados',
+                    text: 'La venta no puede ser realizada. Revisa los inventarios de productos'
+                  })
+            }
+            if (productverify === true && ingredientverify === true && ingredientcompverify === true && modifierverify === true && complementverify === true){
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Se puede hacer la venta',
+                    text: 'La venta no puede ser realizada. Revisa los inventarios de productos'
+                  })
+            }  
+
+            if (productverify === null || ingredientverify === null || ingredientcompverify === null || modifierverify === null || complementverify === null){
+            let timerInterval
+        Swal.fire({
+          title: 'Verificación',
+          html: 'No se han verificado las cantidades de los productos. Intentalo de nuevo',
+          timer: 2000,
+          timerProgressBar: true,
+          didOpen: () => {
+            Swal.showLoading()     
+          },
+          willClose: () => {
+            clearInterval(timerInterval)
+          }
+        }).then((result) => {
+          /* Read more about handling dismissals below */
+          if (result.dismiss === Swal.DismissReason.timer) {
+            console.log('I was closed by the timer')
+          }
+        })
+    }
+        }
+        console.log("Producto",productverify)
+        console.log("Ingrediente producto", ingredientverify)
+        console.log("Complemento",complementverify)
+        console.log("Ingrediente complemento", ingredientcompverify)
+        console.log("Ingrdiente modificador", modifierverify)
+    }
+
+    async function ConsultaCantidadesProductos(idproducto, cantidad){
+        if(productdata.length !== 0){
+            const {data} = await axios.get('http://localhost:5000/api/sales/verifyproduct'+`/${idproducto}`+`/${rol}`)
+            //Se verifica la cantidad de productos
+            if (data.cantidadproducto < cantidad){
+                setProductVerify(false)
+            }else{
+                setProductVerify(true)
+            }
+        }
+    }
+
+    async function ConsultaCantidadesIngredientes(idproducto, cantidad){
+        if(productdata.length !== 0){
+            const {data} = await axios.get('http://localhost:5000/api/sales/verifyingredients'+`/${idproducto}`+`/${rol}`)
+            if(data !== null){
+                if (data.cantidadingrediente < cantidad){
+                    setIngredientVerify(false)
+                }else{
+                    setIngredientVerify(true)
+                }
+            }else{
+                setIngredientVerify(true)
+            }
+        }
+    }
+
+    async function ConsultaCantidadesComplementos(idcomplemento, cantidad){
+        const {data} = await axios.get('http://localhost:5000/api/sales/verifycomplements'+`/${idcomplemento}`+`/${rol}`)
+        if(data.cantidadproducto < cantidad){
+            setComplementVerify(false)
+        }else{
+            setComplementVerify(true)
+        }
+    }
+
+    async function ConsultaCantidadesIngredientesComplementos(idmodificador, cantidad){
+            const {data} = await axios.get('http://localhost:5000/api/sales/verifycomplementsingredients'+`/${idmodificador}`+`/${rol}`)
+            if(data !== null){
+                if(data.cantidadingrediente < cantidad){
+                    setIngredientCompVerify(false)
+                }else{
+                    setIngredientCompVerify(true)
+                }  
+            }else{
+                setIngredientCompVerify(true)
+            }
+    }
+
+    async function ConsultaCantidadesIngredientesMoficiadores(idopcion, cantidad){
+            const {data} = await axios.get('http://localhost:5000/api/sales/verifymodifiersingredients'+`/${idopcion}`+`/${rol}`)
+            if(data !== null){
+                if(data.cantidadingrediente < cantidad){
+                    setModifierVerify(false)
+                }else{
+                    setModifierVerify(true)
+                }
+        }
+    }
+
 
     async function Transaccion(){
         if(recibido === 0){
@@ -142,22 +301,8 @@ export default function Carrito() {
 
     }
 
-    async function ConsultaCantidadesProductos(idproducto, cantidad){
-        const {data} = await axios.get('http://localhost:5000/api/sales/verifyproduct'+`/${idproducto}`+`/${rol}`)
-        if (data.cantidadproducto < cantidad){
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'No hay suficiente producto para realizar la compra!',
-              })
-        }else{
-            //Verificar la cantidad de complementos 
-        }
-    }
 
-    async function ConsultaCantidadesComplementos(){
 
-    }
 
     async function updateProduct(idusuario, idproducto, cantidad, precio, nombre, nota, total){
         const obj = {idusuario, idproducto, cantidad, nombre, nota, precio, total}
@@ -252,10 +397,9 @@ export default function Carrito() {
             //Busca el producto por indice del carrito y lo elimina
             if(indexproduct >= 0){
                 restaventa += productdata[indexproduct].total
-                console.log(restaventa)
                 productdata.splice(indexproduct, 1)
             }
-
+            console.log(restaventa)
             //Recorre los arreglos, elimina los elementos que coincidan con el idcarrito
             complementdata.forEach(function(elemento, indice, array){
                 if(elemento.idcarrito === idcarrito){
@@ -272,7 +416,7 @@ export default function Carrito() {
                     multipledata.splice(indice, 1)
                 }
             })
-
+       
             localStorage.removeItem("productdatas")
             localStorage.removeItem("complementdatas")
             localStorage.removeItem("multipledatas")
@@ -280,10 +424,12 @@ export default function Carrito() {
             localStorage["productdatas"] = JSON.stringify(productdata)
             localStorage["complementdatas"] = JSON.stringify(complementdata)
             localStorage["multipledatas"] = JSON.stringify(multipledata)
+            
 
             var tempventa = localStorage.getItem('Totalpagar')
             var totalventa = parseInt(tempventa) - parseInt(restaventa)
             localStorage.setItem('Totalpagar', totalventa)
+            setTotal(totalventa)
 
             history.push("/ventas")  
             }
@@ -335,6 +481,7 @@ export default function Carrito() {
     }
 
     useEffect(() =>{
+
         getDatos()  
         getImageCuenta()
     }, [])
@@ -364,7 +511,7 @@ export default function Carrito() {
             nuevototal = parseInt(precio) * parseInt(value)
             productdata[indexproduct].total = nuevototal
             cantidadcarrito = parseInt(cantidadcarrito) + nuevototal
-
+            setTotal(cantidadcarrito)
             localStorage.setItem('Totalpagar', cantidadcarrito)
         }
 
@@ -399,15 +546,15 @@ export default function Carrito() {
                 <div className="info-cobro">
                     <div className="total">
                         <span>Total</span>
-                        <input type="text" value={localStorage.getItem('Totalpagar')} disabled className="total-input"/>    
+                        <input type="text" value={total} disabled className="total-input"/>    
                     </div>
                     <div className="total">
                         <span>Recibido</span>
-                        <input type="text" onChange={ e=> setRecibido(e.target.value)} className="total-input" onFocus/>    
+                        <input type="text" onChange={ e=> setRecibido(e.target.value)} className="total-input"/>    
                     </div>    
                 </div>
                 <div className="input-cobrar">
-                    <button className="btn btn-primary btn-cobrar" onClick={Transaccion.bind(this)}><AttachMoneyIcon/>Cobrar</button>
+                    <button className="btn btn-primary btn-cobrar" onMouseOver={Consultas.bind(this)}onClick={PagoEfectivo.bind(this)}><AttachMoneyIcon/>Cobrar</button>
                 </div>
                 <div className="input-cobrar">
                     <button className="btn btn-primary btn-cobrar" onClick={handleShow}><PaymentIcon/>Tarjeta</button>

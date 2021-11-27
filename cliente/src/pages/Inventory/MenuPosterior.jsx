@@ -56,7 +56,7 @@ function MenuPosterior() {
   return (
     <div className="inventory">
       <div className="dash-cards">
-        <div className="card card-item">
+        <div className="card card-item-inv">
         <Link to="./inventory/add">
           <span className="card-title">Agregar inventario</span>
           <div className="card-money">
@@ -65,7 +65,7 @@ function MenuPosterior() {
           </Link>
         </div>
      
-        <div className="card card-item">
+        <div className="card card-item-inv">
         <Link to="/inventory/report">
           <span className="card-title">Reporte merma</span>
           <div className="card-money">
@@ -74,7 +74,7 @@ function MenuPosterior() {
         </Link>
         </div>
 
-        <div className="card card-item">
+        <div className="card card-item-inv">
         <Link to="/inventory/import">
           <span className="card-title">Importar inventario</span>
           <div className="card-money">
@@ -99,7 +99,7 @@ function MenuPosterior() {
             <option value="2">Productos</option>
             <option value="3">Productos con bajo inventario</option>
             <option value="4">Ingredientes con bajo inventario</option>
-            <option value="8">últimos movimientos inventario</option>
+            <option value="8">Últimos movimientos inventario</option>
             <option value="7">Mermas reportadas</option>
           </select>
         </div>

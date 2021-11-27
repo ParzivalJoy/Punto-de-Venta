@@ -386,7 +386,7 @@ const expresiones = {
           </div>
         </div>
 
-        <h6 className="p-2">Después de indicar los billetes y monedas, checa el recuento:</h6>
+        <h6 className="p-2">Verifica el recuento</h6>
 
         <div className="d-flex justify-content-center">
           <div className="mb-3 col-md-4 mt-2">
@@ -408,7 +408,7 @@ const expresiones = {
             </div>
           </div>
         </div>
-        <h6 className="p-2">Después de checar checar el recuento e indicar el cambio, checa el total:</h6>
+        <h6 className="p-2">Verifica el total</h6>
         <div className="d-flex justify-content-around">
           <div className="mb-3 col-md-4 mt-2">
             <label htmlFor="P16" className="form-label">
@@ -420,7 +420,7 @@ const expresiones = {
 
           <div className="mx-2 my-4">
                 <button type="submit" className="btn btn-primary" onMouseOver={validacion} onClick={insertCierre}>
-                  Término de cierre
+                  Finalizar cierre
                 </button>
           </div>
         </div>     

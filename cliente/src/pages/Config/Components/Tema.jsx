@@ -89,8 +89,8 @@ nombre: /^[a-zA-ZÀ-ÿ0-9\s]{3,20}$/, // Letras y espacios, pueden llevar acento
         <div className="card col-md-11 m-4">
           <h3 className="config-title" onClick={() => setActivotemas(!activotemas)}>
             {activotemas === true
-              ? "- Click para cerrar esta sección"
-              : "+ Click aquí para definir tu tema y logo"}
+              ? "- Clíck para cerrar esta sección"
+              : "+ Clíck aquí para definir tu tema y logo"}
           </h3>
           {activotemas === true ? (
             <div>
@@ -169,7 +169,7 @@ nombre: /^[a-zA-ZÀ-ÿ0-9\s]{3,20}$/, // Letras y espacios, pueden llevar acento
             </div>
           ) : (
             <div>
-              <p>Aqui puedes escoger el tema que desees para el POS!</p>
+              <p>Modifica el tema, colores y nombre del negocio en este apartado</p>
             </div>
           )}
         </div>

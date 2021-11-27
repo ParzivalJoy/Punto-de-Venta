@@ -215,7 +215,7 @@ function Product(props) {
                     {errors.nameproduct && <p className="text-danger">{errors.nameproduct}</p>}
                 </div>
                 <div className="mb-3 col-md-4 mt-2">
-                    <label className="col-form-label"> <b>Codigo:</b></label>
+                    <label className="col-form-label"> <b>Código:</b></label>
                     <input type="text" className="form-control"  name ="idproduct" value={props.formproduct.idproduct} onChange={handleChange}/>
                     {errors.idproduct && <p className="text-danger">{errors.idproduct}</p>}
                 </div>
@@ -253,8 +253,8 @@ function Product(props) {
                     <label className="col-form-label"><b> Categoría:</b></label>
                     <select
                         className="form-select" aria-label="Floating label select example" name="categoryproduct" value={props.formproduct.categoryproduct} onChange={handleChangeCategory}>
-                        <option value="-1">Seleccione una Categoria</option>
-                        <option value="0">Nueva Categoria</option>
+                        <option value="-1">Seleccione una Categoría</option>
+                        <option value="0">Nueva Categoría</option>
                         {listcategories.map((category) => (
                         <option
                             value={category.idcategoria}

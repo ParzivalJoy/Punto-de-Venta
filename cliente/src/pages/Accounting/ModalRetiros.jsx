@@ -131,7 +131,7 @@ const ModalRetiros = () => {
             />
           </div>
           <form className="d-flex justify-content-center m-3">
-              <div className="col-4 p-2">
+              <div className="col-3 p-2">
                 <input
                   type="text"
                   className="form-control"
@@ -154,7 +154,7 @@ const ModalRetiros = () => {
             <div className="p-2">
               <button
                 type="submit"
-                className="btn btn-primary p-2"
+                className="btn btn-success p-2"
                 disabled={lock}
                 onClick={handleRetiro}
                 onMouseOver={handleValid}
@@ -164,7 +164,7 @@ const ModalRetiros = () => {
             </div>
             <div className="p-2">
               <button
-                className="btn btn-secondary p-2"
+                className="btn btn-danger p-2"
                 onClick={handleCantidadTotal}
               >
                 Cancelar

@@ -236,11 +236,11 @@ const expresiones = {
         <div className="container" id="colors">
           <div className="row d-flex justify-content-center">
             <h4 className="card p-3" id="colors2">
-              Llene el formulario para reportar la merma:
+              Reporte de merma
             </h4>
             <form className="card mt-4 row">
             <div className="row " id="colors2">
-              <h6>Selecciona un producto o ingrediente!</h6>
+              <h6>Selecciona un producto o ingrediente</h6>
               <div className="card col-md-4 p-3" style={esproducto===1 ? {background: '#CCFFC0'}: {background: 'white'}}>
                 <p className="mb-0">Productos:</p>
                 <select

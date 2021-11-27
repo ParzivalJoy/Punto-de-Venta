@@ -808,7 +808,7 @@ const expresiones = {
         ) : (
           <div>
             <div className="card p-2 mt-3" id="colors">
-              <h4>Llene el formulario</h4>
+              <h4>Agregar inventario</h4>
             </div>
 
             <form
@@ -818,7 +818,7 @@ const expresiones = {
               <div className="mb-3 form-check m-3 col-md-10 col-11">
                 <input type="checkbox"className="form-check-input" id="exampleCheck1" checked={productonuevo} onChange={handleChangeCh}/>
                 <label className="form-check-label" htmlFor="exampleCheck1" id="colors2">
-                  Marca si agregas un producto/ingrediente nuevo
+                  Selecciona la casilla en caso de ser un producto o ingrediente nuevo en el inventario
                 </label>
               </div>
 
@@ -1117,7 +1117,7 @@ const expresiones = {
                     disabled={!habilitar}
                   />
                   <label className="form-check-label" htmlFor="exampleCheck1" id="colors2">
-                    Marca si es un ingrediente nuevo
+                    Selecciona la casilla si es un ingrediente nuevo
                   </label>
                 </div>
 

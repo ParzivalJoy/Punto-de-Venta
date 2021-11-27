@@ -359,11 +359,11 @@ export default function ImportarInv() {
       ) : (
         <div className="row py-3">
           <div className="card py-2 m-3" id="colors">
-            <h4>Importa tus inventarios de un Excel!</h4>
+            <h4>Carga la información desde Excel</h4>
           </div>
           <div id="colors">
           <div className="card">
-            <h6>Recuerda que tu excel debe llevar el siguiente formato:</h6>
+            <h6>El Excel debe llevar el siguiente formato:</h6>
             <div className="d-flex justify-content-center">
               <img
                 src={formato}
@@ -377,7 +377,7 @@ export default function ImportarInv() {
           </div>
     
           <div className="card py-2 m-2">
-            <h6>Carga tu archivo:</h6>
+            <h6>Carga el archivo:</h6>
             <input
               type="file"
               accept=".xlsx"
@@ -399,14 +399,14 @@ export default function ImportarInv() {
                 onChange={handleImportIngredients}
               />
               <label className="form-check-label" htmlFor="exampleCheck1">
-                  ¿Los datos que se importarán son ingredientes? Si es el caso, marca la casilla
+                Selecciona la casilla si los datos que se importarán corresponden a inventarios de ingredientes
               </label>
             </div>
           </div>
 
           <div className="card m-2">
             <h6>
-              Si la información que quieres importar es correcta, presiona
+              Si la información a importar es correcta, presiona
               este botón para insertar la información:
             </h6>
             <button

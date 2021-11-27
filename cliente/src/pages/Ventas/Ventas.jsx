@@ -120,6 +120,8 @@ export default function Ventas() {
         }
         console.log(JSON.parse(localStorage["productdatas"]))
 
+
+        localStorage.setItem('Totalpagar', parseInt(localStorage.getItem('Totalpagar')) + parseInt(data.precioproducto))
         history.push("/ventas");  
         window.location.reload(true);
     }

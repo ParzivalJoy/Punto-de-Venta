@@ -228,6 +228,54 @@ def verifyProducts(idproducto, rol):
     cur.close()
     return jsonify(rows)
 
+@ventas_api.route('/api/sales/verifyingredients/<idproducto>/<rol>', methods=['GET'])
+def verifyIngredients(idproducto, rol):
+    conn = conexionRol(rol)
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+    sql = """SELECT cantidadingrediente FROM productosingredientes INNER JOIN ingredientes ON
+            productosingredientes.idproducto = '{0}' AND productosingredientes.idingrediente = ingredientes.idingrediente""".format(idproducto)
+    cur.execute(sql, idproducto) 
+    rows = cur.fetchone()
+    conn.close()
+    cur.close()
+    return jsonify(rows)
+
+@ventas_api.route('/api/sales/verifycomplements/<idcomplemento>/<rol>', methods=['GET'])
+def verifyComplement(idcomplemento, rol):
+    conn = conexionRol(rol)
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+    sql = """SELECT cantidadproducto FROM complementos INNER JOIN productos ON
+            complementos.idcomplemento = {0} AND complementos.idproductooriginal = productos.idproducto""".format(idcomplemento)
+    cur.execute(sql, idcomplemento) 
+    rows = cur.fetchone()
+    conn.close()
+    cur.close()
+    return jsonify(rows)
+
+@ventas_api.route('/api/sales/verifycomplementsingredients/<idcomplemento>/<rol>', methods=['GET'])
+def verifyComplementIngredients(idcomplemento, rol):
+    conn = conexionRol(rol)
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+    sql = """SELECT cantidadingrediente FROM complementos INNER JOIN productosingredientes ON
+            complementos.idcomplemento = {0} AND complementos.idproductooriginal = productosingredientes.idproducto
+            INNER JOIN ingredientes ON productosingredientes.idingrediente = ingredientes.idingrediente""".format(idcomplemento)
+    cur.execute(sql, idcomplemento) 
+    rows = cur.fetchone()
+    conn.close()
+    cur.close()
+    return jsonify(rows)
+
+@ventas_api.route('/api/sales/verifymodifiersingredients/<idopcion>/<rol>', methods=['GET'])
+def verifyModifierIngredients(idopcion, rol):
+    conn = conexionRol(rol)
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+    sql = """SELECT cantidadingrediente FROM ingredientes INNER JOIN opciones ON 
+            opciones.idopcionmodificador = {0} AND opciones.idingrediente = ingredientes.idingrediente""".format(idopcion)
+    cur.execute(sql, idopcion) 
+    rows = cur.fetchone()
+    conn.close()
+    cur.close()
+    return jsonify(rows)
 ## ------------------------------------------------------------------------------ ##
 ## ----------- Cambios en las cantidades de productos e ingredientes------------- ##
 ## ------------------------------------------------------------------------------ ##

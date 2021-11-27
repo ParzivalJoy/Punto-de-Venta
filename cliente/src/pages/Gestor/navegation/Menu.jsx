@@ -11,7 +11,7 @@ export default function Menu() {
     return (
         <div className="p-3 mb-2">
             <div className="row">
-                <div className="col-md-4">
+                <div className="col-md-6">
                 <Link to = "/gestor/notificaciones" className="link">
                     <div className="card card-item">
                     <span className="top-title-card">Notificaciones</span>
@@ -21,7 +21,7 @@ export default function Menu() {
                     </div>
                     </Link>
                 </div>
-                <div className="col-md-4">
+                <div className="col-md-6">
                 <Link to = "/gestor/ayuda" className="link">
                     <div className="card card-item">
                     <span className="top-title-card">Ayuda (Q&A)</span>
@@ -31,14 +31,7 @@ export default function Menu() {
                     </div>
                     </Link>
                 </div>
-                <div className="col-md-4">
-                    <div className="card card-item">
-                    <span className="top-title-card">Formularios</span>
-                    <div className="card-money">        
-                            <DynamicFormIcon className="icons"/>
-                        </div>
-                    </div>
-                </div>
+            
                 <div className="col-md-6">
                 <Link to = "/gestor/sellos" className="link">
                     <div className="card card-item">

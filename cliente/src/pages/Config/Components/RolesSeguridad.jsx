@@ -36,17 +36,6 @@ function RolesSeguridad() {
       setPermisoinventarios(false)
     }
 
-    function informacionseccion(){
-      Swal.fire({
-        title: 'Sweet!',
-        text: 'Modal with a custom image.',
-        imageUrl: 'https://unsplash.it/400/200',
-        imageWidth: 400,
-        imageHeight: 200,
-        imageAlt: 'Custom image',
-      })
-    }
-
     const bringPermisos=async(actualempleado)=>{
         if(actualempleado===''){
           Swal.fire('Atención!','no tienes empleados aún!', 'info')
@@ -212,8 +201,63 @@ function RolesSeguridad() {
       DatosInicio()
     },[])
 
+    function InfoEmpleados(){
+      Swal.fire({
+        icon: 'info',
+        title: 'Empleados',
+        text: "En esta sección se encuentran los datos personales de los empleados registrados en el sistema. Se pueden agregar empleados, modificar sus datos y eliminarlos del sistema"
+      })
+    }
+
+    function InfoConfiguración(){
+      Swal.fire({
+        icon: 'info',
+        title: 'Configuración',
+        text: "Dentro de las configuraciones se puede cambiar el estilo del sistema, los permisos de los usuarios y cambiar los datos de la cuenta del negocio."
+      })
+    }
+    function InfoProductos(){
+      Swal.fire({
+        icon: 'info',
+        title: 'Flujo de venta',
+        text: "En esta sección se pueden agregar nuevos productos, agregar categorias, paquetes y modificaciones en el flujo de venta."
+      })
+    }
+
+    function InfoContabilidad(){
+      Swal.fire({
+        icon: 'info',
+        title: 'Contabilidad',
+        text: "En esta sección se pueden hacer retiros de efectivo, añadir cambio a la caja, realizar parciales, agregar observaciones, cierre de caja y apertura de caja."
+      })
+    }
+
+    function InfoInventarios(){
+      Swal.fire({
+        icon: 'info',
+        title: 'Inventarios',
+        text: "Sección para la gestión de inventarios de los productos e ingredientes registrados en el sistema."
+      })
+    }
+
+    function InfoGestor(){
+      Swal.fire({
+        icon: 'info',
+        title: 'Gestor de campañas',
+        text: "En esta sección se muestran las diferentes promociones de los clientes afiliados al programa de lealtad"
+      })
+    }
+
+    function InfoVentas(){
+      Swal.fire({
+        icon: 'info',
+        title: 'Ventas',
+        text: "En esta sección se hacen las ventas de los productos registrados en el sistema"
+      })
+    }
+
     return (
-      <div className="row d-flex justify-content-center">
+      <div className="row d-flex justify-content-center seguridad">
         {
           loading===true ? 
           (
@@ -230,8 +274,8 @@ function RolesSeguridad() {
         <div className="card col-md-11 m-4">
           <h3 className="config-title" onClick={() => setDesplegarsecc(!desplegarsecc)}>
             {desplegarsecc === false
-              ? "+ Click aquí para definir la seguridad del POS"
-              : "- Click para cerrar esta sección"}
+              ? "+ Clíck aquí para definir la seguridad del POS"
+              : "- Clíck para cerrar esta sección"}
           </h3>
           {desplegarsecc === true ? (
             <div>
@@ -262,7 +306,6 @@ function RolesSeguridad() {
                   <h6>
                     Selecciona los módulos a los que tiene acceso Laporte
                   </h6>
-                  <HelpOutlineIcon className="icons" onclick={informacionseccion.bind(this)}/>
                 </div>
                 <div className="card m-2 col-5">
                   <div className="form-check">
@@ -276,7 +319,8 @@ function RolesSeguridad() {
                     />
                     <label className="form-check-label" htmlFor="checkEmp">
                       Empleados
-                    </label>
+                    </label>   
+                  <HelpOutlineIcon onClick={InfoEmpleados.bind(this)} className="icons help-icon"/>
                   </div>
                   <div className="form-check">
                     <input
@@ -290,6 +334,7 @@ function RolesSeguridad() {
                     <label className="form-check-label" htmlFor="checkConf">
                       Configuración
                     </label>
+                    <HelpOutlineIcon onClick={InfoConfiguración.bind(this)} className="icons help-icon"/>
                   </div>
                   <div className="form-check">
                     <input
@@ -301,8 +346,9 @@ function RolesSeguridad() {
                       checked={permisoproductos}
                     />
                     <label className="form-check-label" htmlFor="checkProd">
-                      Productos
+                      Flujo de venta
                     </label>
+                    <HelpOutlineIcon onClick={InfoProductos.bind(this)} className="icons help-icon"/>
                   </div>
                   <div className="form-check">
                     <input
@@ -316,6 +362,7 @@ function RolesSeguridad() {
                     <label className="form-check-label" htmlFor="checkCont">
                       Contabilidad
                     </label>
+                    <HelpOutlineIcon onClick={InfoContabilidad.bind(this)} className="icons help-icon"/>
                   </div>
                 </div>
                 <div className="card m-2 col-5">
@@ -331,6 +378,7 @@ function RolesSeguridad() {
                     <label className="form-check-label" htmlFor="checkInv">
                       Inventarios
                     </label>
+                    <HelpOutlineIcon onClick={InfoInventarios.bind(this)} className="icons help-icon"/>
                   </div>
                   <div className="form-check">
                     <input
@@ -344,6 +392,7 @@ function RolesSeguridad() {
                     <label className="form-check-label" htmlFor="checkGDC">
                       Gestor de campañas
                     </label>
+                    <HelpOutlineIcon onClick={InfoGestor.bind(this)} className="icons help-icon"/>
                   </div>
                   <div className="form-check">
                     <input
@@ -357,6 +406,7 @@ function RolesSeguridad() {
                     <label className="form-check-label" htmlFor="checkVen">
                       Ventas
                     </label>
+                    <HelpOutlineIcon onClick={InfoVentas.bind(this)} className="icons help-icon"/>
                   </div>
                 </div>
                 <button className="btn btn-primary" type="submit" onClick={handlePermisos}>
@@ -367,7 +417,7 @@ function RolesSeguridad() {
           ) : (
             <div>
               <p>
-                Aqui puedes definir el acceso que cada empleado tiene al POS!
+                Define los permisos de los usuarios del sistema
               </p>
             </div>
           )}
