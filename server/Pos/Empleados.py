@@ -66,7 +66,7 @@ def saveEmployee(rol):
         contrasena = contrasena + cryptogen.choice(valores)
         longitud = longitud - 1
     #Inserta en la tabla usuarios
-    sql2 = "INSERT INTO usuarios (usuario, contrasena) VALUES ('{0}','{1}') RETURNING idusuario".format(data['emailempleado'],contrasena)
+    sql2 = "INSERT INTO usuarios (usuario, contrasena, estado, fechaalta, fechavigencia) VALUES ('{0}','{1}','true','{2}','{3}') RETURNING idusuario".format(data['emailempleado'],contrasena,data['fechacontra'],data['fechavigencia'])
     cur.execute(sql2)
     idusuario= cur.fetchone()
     #Inserta permisos

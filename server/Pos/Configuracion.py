@@ -171,3 +171,27 @@ def getTPermisos(userid, rol):
     row = cur.fetchall()
     conn.close()
     return jsonify(row)
+
+## ------------------------------------------------------------------------------ ##
+## --------------Obtención de los permisos de los empleados---------------------- ##
+## ------------------------------------------------------------------------------ ##
+
+@config_api.route('/api/permisos/<id>/<rol>',  methods=['GET'])
+def getPermisos(id, rol):
+    conn = conexionRol(rol)
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+    sql = "SELECT idpermiso, acceso FROM permisosusuarios WHERE idusuario = {0}".format(id)
+    cur.execute(sql)
+    rows = cur.fetchall()
+    conn.close()
+    return jsonify(rows)
+
+@config_api.route('/api/usuario/<id>/<rol>',  methods=['GET'])
+def getUsuario(id, rol):
+    conn = conexionRol(rol)
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+    sql = "SELECT idusuario FROM usuarios WHERE idempleado = {0}".format(id)
+    cur.execute(sql)
+    rows = cur.fetchone()
+    conn.close()
+    return jsonify(rows)

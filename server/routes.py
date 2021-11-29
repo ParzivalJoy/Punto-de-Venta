@@ -80,7 +80,7 @@ def verifyLogin():
         rol=nombreempresa['nombreempresa']
         conn = conexionRol(rol)
         cur = conn.cursor(cursor_factory=RealDictCursor)
-        sql="SELECT a.nombreempleado as nombreempleado, c.nombrecargo as nombrecargo FROM empleados a LEFT JOIN usuarios b ON a.idempleado=b.idempleado LEFT JOIN perfil c ON a.idcargo=c.idcargo WHERE b.usuario='{0}' AND b.contrasena='{1}'".format(data['username'],data['password'])
+        sql="SELECT a.idempleado as idempleado, a.nombreempleado as nombreempleado, c.nombrecargo as nombrecargo FROM empleados a LEFT JOIN usuarios b ON a.idempleado=b.idempleado LEFT JOIN perfil c ON a.idcargo=c.idcargo WHERE b.usuario='{0}' AND b.contrasena='{1}'".format(data['username'],data['password'])
         cur.execute(sql)
         row = cur.fetchone()
         conn.close()

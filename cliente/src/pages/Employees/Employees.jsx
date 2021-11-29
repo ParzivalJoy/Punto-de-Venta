@@ -35,9 +35,18 @@ function Employees() {
         return `${year}${separator}${month<10?`0${month}`:`${month}`}${separator}${date}`
     }
 
+    function getVigenciaDate(separator=''){
+      let newDate = new Date()
+      let date = newDate.getDate();
+      let month = newDate.getMonth() + 1;
+      let year = newDate.getFullYear() + 2;
+      return `${year}${separator}${month<10?`0${month}`:`${month}`}${separator}${date}`
+  }
+
     async function saveEmployee(){
         let fechacontra=getCurrentDate()
-        const obj = { nombreempleado,fechacontra, emailempleado, telempleado,dirempleado}
+        let fechavigencia = getVigenciaDate()
+        const obj = { nombreempleado,fechacontra, emailempleado, telempleado,dirempleado, fechavigencia}
         const { data } = await axios.post(baseURL+`/${rol}`, obj)
         console.log(data)
         clearInput()

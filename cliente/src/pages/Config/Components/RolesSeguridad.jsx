@@ -192,6 +192,7 @@ function RolesSeguridad() {
             Swal.fire('Bien!','Permisos actualizados!', 'success')
             cleanstates()
             setLoading(false)
+            window.location.reload(true);
         }else{
             Swal.fire('Error!','selecciona un empleado primero!', 'error')
         }

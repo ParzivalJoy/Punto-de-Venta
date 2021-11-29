@@ -29,6 +29,7 @@ import BirthdayPaper from "./pages/Gestor/birthdays/index";
 import AyudaPaper from "./pages/Gestor/ayuda/index";
 import SellosPaper from "./pages/Gestor/sellos/index";
 import CatalogoPaper from "./pages/Gestor/catalogo/index";
+import SinAcceso from './pages/SinAcceso/index'
 
 
 function App() {
@@ -93,6 +94,7 @@ function App() {
           <ProtectedRoute exact path="/gestor/sellos" component={SellosPaper}/>
           <ProtectedRoute exact path="/gestor/puntos" component={NivelesPaper}/>
           <ProtectedRoute exact path="/gestor/tabla" component={TableRemote}/>
+          <ProtectedRoute exact path="/sinacceso" component={SinAcceso}/>
 
 
 

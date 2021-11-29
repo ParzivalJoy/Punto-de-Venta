@@ -95,6 +95,7 @@ const Login = () => {
         localStorage.setItem('role',data.nombrecargo)
         localStorage.setItem('token',data.access_token)
         localStorage.setItem('rol', data.role)
+        localStorage.setItem('userid',data.idempleado)
         history.push("/dashboard");
       }else
       {
