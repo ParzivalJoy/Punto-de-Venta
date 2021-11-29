@@ -5,6 +5,7 @@ import  { useEffect, useState } from 'react'
 import axios from 'axios' //npm i axios
 import '../../styles.scss'
 import Swal from 'sweetalert2'
+import emailjs from 'emailjs-com' //npm i emailjs-com 
 
 const baseURL = process.env.REACT_APP_API_URL //npm i dotenv
 
@@ -16,6 +17,7 @@ function Employees() {
     const [ telempleado, setTel ] = useState('')
     const [ dirempleado, setDir ] = useState('')
     const [ update, setUpdate ] = useState(false)
+    const [passwordempleado,setPasswordEmpleado] = useState('')
     const rol = localStorage.getItem('rol')
 
     useEffect(() => {
@@ -35,20 +37,24 @@ function Employees() {
         return `${year}${separator}${month<10?`0${month}`:`${month}`}${separator}${date}`
     }
 
-    function getVigenciaDate(separator=''){
-      let newDate = new Date()
-      let date = newDate.getDate();
-      let month = newDate.getMonth() + 1;
-      let year = newDate.getFullYear() + 2;
-      return `${year}${separator}${month<10?`0${month}`:`${month}`}${separator}${date}`
-  }
+    function sendEmail(){
+      emailjs.send('service_vvmlhv5','template_80673b6',{ email: emailempleado,
+        message: "Su contraseña es: "+ passwordempleado,
+        name: nombreempleado}, 'user_vE01873KnIdtHQnqhpb3Q', )
+      .then((response) => {
+             console.log('SUCCESS!', response.status, response.text);
+      }, (err) => {
+             console.log('FAILED...', err);
+      });
+    }
 
     async function saveEmployee(){
         let fechacontra=getCurrentDate()
-        let fechavigencia = getVigenciaDate()
-        const obj = { nombreempleado,fechacontra, emailempleado, telempleado,dirempleado, fechavigencia}
+        const obj = { nombreempleado,fechacontra, emailempleado, telempleado,dirempleado}
         const { data } = await axios.post(baseURL+`/${rol}`, obj)
         console.log(data)
+        setPasswordEmpleado(data)
+        sendEmail()
         clearInput()
         getEmployees()
 
@@ -68,7 +74,7 @@ function Employees() {
         setDir('')
     }
 
-    async function deleteEmployee(idempleado){
+    async function deleteEmployee(emailempleado){
         const swalWithBootstrapButtons = Swal.mixin({
             customClass: {
               confirmButton: 'btn btn-primary',
@@ -92,7 +98,7 @@ function Employees() {
                 'El empleado ha sido eliminado de forma correcta',
                 'success'
               )
-              deleteEmployeeAlert(idempleado)
+              deleteEmployeeAlert(emailempleado)
             } else if (
               /* Read more about handling dismissals below */
               result.dismiss === Swal.DismissReason.cancel
@@ -107,8 +113,8 @@ function Employees() {
 
     }
 
-    async function deleteEmployeeAlert(idempleado){
-        const { data } = await axios.delete(baseURL+`/${idempleado}`+`/${rol}`)
+    async function deleteEmployeeAlert(emailempleado){
+        const { data } = await axios.post(baseURL+`/${emailempleado}`+`/${rol}`)
         console.log(data)
         getEmployees()
     }

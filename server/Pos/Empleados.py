@@ -9,6 +9,7 @@ from werkzeug.utils import secure_filename
 
 empleado_api = Blueprint('empleado_api', __name__)
 
+
 def conexion():
     return psycopg2.connect(
     host="localhost",
@@ -16,14 +17,13 @@ def conexion():
     user="postgres",
     password="root")
 
-
 def conexionRol(role):
     return psycopg2.connect(
     host="localhost",
     database="puntodeventa",
     user=role,
     password="root")
-    
+
 ## ------------------------------------------------------------------------------ ##
 ## -----------------Lista de empleados registrados en el sistema----------------- ##
 ## ------------------------------------------------------------------------------ ##
@@ -32,7 +32,7 @@ def conexionRol(role):
 def index(rol):
     conn = conexionRol(rol)
     cur = conn.cursor(cursor_factory=RealDictCursor)
-    cur.execute("SELECT idempleado, nombreempleado, to_char(fechacontra, 'DD/MM/YYYY') as fechacontra, dirempleado, telempleado, emailempleado FROM empleados ORDER BY idempleado")
+    cur.execute("SELECT b.idempleado, b.nombreempleado, to_char(b.fechacontra, 'DD/MM/YYYY') as fechacontra, b.dirempleado, b.telempleado, b.emailempleado FROM empleados b LEFT JOIN usuarios a ON a.idempleado=b.idempleado WHERE a.estado=true ORDER BY b.idempleado")
     rows = cur.fetchall()
     conn.close()
     return jsonify(rows)
@@ -55,8 +55,9 @@ def saveEmployee(rol):
     cur = conn.cursor()
     #Inserta en la tabla empleados 
     sql = """INSERT INTO empleados (nombreempleado, fechacontra, dirempleado,telempleado, emailempleado, idcargo )
-                VALUES (%(nombreempleado)s,%(fechacontra)s, %(dirempleado)s, %(telempleado)s, %(emailempleado)s,2)"""
+                VALUES (%(nombreempleado)s,%(fechacontra)s, %(dirempleado)s, %(telempleado)s, %(emailempleado)s,2) RETURNING idempleado"""
     cur.execute(sql, data) 
+    idempleado= cur.fetchone()
     #Genera contraseña
     longitud = 8
     valores = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -66,7 +67,7 @@ def saveEmployee(rol):
         contrasena = contrasena + cryptogen.choice(valores)
         longitud = longitud - 1
     #Inserta en la tabla usuarios
-    sql2 = "INSERT INTO usuarios (usuario, contrasena, estado, fechaalta, fechavigencia) VALUES ('{0}','{1}','true','{2}','{3}') RETURNING idusuario".format(data['emailempleado'],contrasena,data['fechacontra'],data['fechavigencia'])
+    sql2 = "INSERT INTO usuarios (usuario, contrasena,estado,idempleado) VALUES ('{0}','{1}','true','{2}') RETURNING idusuario".format(data['emailempleado'],contrasena,idempleado[0])
     cur.execute(sql2)
     idusuario= cur.fetchone()
     #Inserta permisos
@@ -91,14 +92,14 @@ def saveEmployee(rol):
     conn.close()
     #Inserta en el esquema publico en la tabla usuarios generales
     insertusuario(data['emailempleado'],contrasena,idempresa['idempresa'])
-    return jsonify(msg='added successfully!')
+    return jsonify(contrasena)
 
-@empleado_api.route('/api/<idempleado>/<rol>', methods=['DELETE'])
-def deleteEmployee(idempleado, rol):
+@empleado_api.route('/api/<emailempleado>/<rol>', methods=['POST'])
+def deleteEmployee(emailempleado, rol):
     conn = conexionRol(rol)
-    cur = conn.cursor()
-    sql = "DELETE FROM empleados WHERE idempleado = {0}".format(idempleado)
-    cur.execute(sql, idempleado) 
+    cur =conn.cursor(cursor_factory=RealDictCursor)
+    sql = "UPDATE usuarios SET estado='false' WHERE usuario = '{0}'".format(emailempleado)
+    cur.execute(sql) 
     conn.commit()
     conn.close()
     cur.close()
@@ -117,7 +118,7 @@ def updateEmployee(rol):
     return jsonify(msg="employee updated") 
 
 def insertusuario(usuario,contrasena,rol):
-    conn = conexion()
+    conn = conexionRol('postgres')
     cur = conn.cursor()
     sql = "INSERT INTO usuariosgenerales (usuariogeneral, contrasenausuariogeneral, idempresa) VALUES ('{0}','{1}','{2}') RETURNING idusuariogeneral".format(usuario,contrasena,rol)
     cur.execute(sql)

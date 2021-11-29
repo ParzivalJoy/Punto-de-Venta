@@ -37,7 +37,7 @@ function Card(props) {
                 <div ><b className="card-sub">Fecha Alta:</b> {props.fechacontra} </div>
                 <br/>
                 <div className="card-buttons">
-                <button className="btn btn-primary" onClick={props.deleteEmployee.bind(this, props.idempleado)}><DeleteOutlineIcon className="icons"/> Eliminar</button>   
+                <button className="btn btn-primary" onClick={props.deleteEmployee.bind(this, props.emailempleado)}><DeleteOutlineIcon className="icons"/> Eliminar</button>   
                 <button className="btn btn-primary" onClick={handleShow}><EditIcon className="icons"/>Editar</button>
                 </div>
                 <Modal
