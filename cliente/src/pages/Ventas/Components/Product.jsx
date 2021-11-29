@@ -26,10 +26,15 @@ export default function Product() {
     const [cant, setCant] = useState(1)
     const [nota, setNota] = useState('')
 
+    const [obligatorycomp, setObligatoryComp] = useState(0)
+
+
     const [complementlist, setComplementList] = useState([])
     const [modifierlist, setModifierList] = useState([])
     const [optionlist, setOptionList] = useState([])
 
+
+    
     async function getProduct(){
         const {data} = await axios.get('http://localhost:5000/api/getproducts'+`/${params.id}`+`/${rol}`)
         setProductName(data.nombreproducto)
@@ -63,8 +68,14 @@ export default function Product() {
     async function getListModifiers(){
         const {data} = await axios.get('http://localhost:5000/api/modifiers'+`/${params.id}`+`/${rol}`)
         setModifierList(data)
+        modifierlist.map(item =>(
+            (item.obligatorio === true) ? setObligatoryComp(obligatorycomp + 1) : ''
+        ))
+         
+
     }
 
+ 
     async function getListOptions(idmodificador){
         const {data} = await axios.get('http://localhost:5000/api/options'+`/${idmodificador}`+`/${rol}`)
         setOptionList(data)
@@ -101,7 +112,7 @@ export default function Product() {
 
     const selectedComplement = (e, id, name, price) => {
         const value = e.target.value
-        console.log(value)
+        
         var length = ''
             //Si el valor es diferente de 0
             if (value !== '0'){
@@ -109,7 +120,8 @@ export default function Product() {
                 //Si no existe en el arreglo se hace un push
                 if (length === 0){
                     totalventa += price * value
-                    dataComplement.push({idcarrito: '', idproducto: params.id, id: id, nombre: name, precio: price, cantidad: value, total: price * value}) 
+                    console.log(value)
+                    dataComplement.push({idcarrito: '', idproducto: params.id, id: id, nombre: name, precio: price, cantidad: parseInt(value), total: price * parseInt(value)}) 
                 //Si existe en el arreglo
                 }else{
                     var index = dataComplement.findIndex((obj => obj.id == id))
@@ -117,9 +129,10 @@ export default function Product() {
                     if(index >= 0){
                         totalventa -= dataComplement[index].total
                         dataComplement[index].total = price * value
+                        dataComplement[index].cantidad = parseInt(value)
                         totalventa += price * value
                     }else{
-                        dataComplement.push({idcarrito: '', idproducto: params.id, id: id, nombre: name, precio: price, cantidad: value, total: price * value})
+                        dataComplement.push({idcarrito: '', idproducto: params.id, id: id, nombre: name, precio: price, cantidad: parseInt(value), total: price * parseInt(value)})
                     }          
                 }
           }else{

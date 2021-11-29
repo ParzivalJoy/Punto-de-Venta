@@ -1,4 +1,4 @@
-import React, {useState,useEffect} from 'react'
+import React, {useState,useEffect, useRef} from 'react'
 import Swal from 'sweetalert2'
 import { Link } from 'react-router-dom';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
@@ -9,17 +9,25 @@ import CleaningServicesIcon from '@mui/icons-material/CleaningServices';
 import axios from 'axios' //npm i 
 import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
+import { useReactToPrint } from 'react-to-print';
+
+
 
 
 export default function Carrito() {
     
+  
     let history = useHistory()
     const rol = localStorage.getItem('rol')
 
     const [show, setShow] = useState(false);
+    const [showticket, setShowTicket] = useState(false)
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+
+    const handleCloseTicket = () => setShowTicket(false);
+    const handleShowTicket = () => setShowTicket(true);
 
     const[imagebinary, setImagebinary] = useState(null)
     const [productdata, setProductData] = useState([])
@@ -34,7 +42,18 @@ export default function Carrito() {
     const [modifierverify, setModifierVerify] = useState(null)
 
     const [total, setTotal] = useState(localStorage.getItem('Totalpagar'))
-    
+    const [nombre, setNombre] = useState('')
+
+    const componentRef = useRef();
+    const handlePrint = useReactToPrint({
+      content: () => componentRef.current,
+    });
+
+
+    async function getNombre(){
+        const {data} = await axios.get('http://localhost:5000/configuracion/getTemasEs'+`/${rol}`)
+        setNombre(data.logo)
+    }
 
     function getDatos(){
         if(localStorage["productdatas"]){
@@ -96,7 +115,7 @@ export default function Carrito() {
         }
         if (multipledata.length !== 0){
             multipledata.map(item=>(
-                ConsultaCantidadesIngredientesMoficiadores(item.id, item.porcion)
+                ConsultaCantidadesIngredientesModificadores(item.id, item.porcion)
             ))
         }else{
             setModifierVerify(true)
@@ -145,30 +164,27 @@ export default function Carrito() {
 
             if (productverify === null || ingredientverify === null || ingredientcompverify === null || modifierverify === null || complementverify === null){
             let timerInterval
-        Swal.fire({
-          title: 'Verificación',
-          html: 'No se han verificado las cantidades de los productos. Intentalo de nuevo',
-          timer: 2000,
-          timerProgressBar: true,
-          didOpen: () => {
-            Swal.showLoading()     
-          },
-          willClose: () => {
-            clearInterval(timerInterval)
-          }
-        }).then((result) => {
-          /* Read more about handling dismissals below */
-          if (result.dismiss === Swal.DismissReason.timer) {
-            console.log('I was closed by the timer')
-          }
-        })
-    }
+                Swal.fire({
+                title: 'Verificación',
+                html: 'No se han verificado las cantidades de los productos. Intentalo de nuevo',
+                timer: 2000,
+                timerProgressBar: true,
+                didOpen: () => {
+                    Swal.showLoading()     
+                },
+                willClose: () => {
+                    clearInterval(timerInterval)
+                }
+                }).then((result) => {
+                /* Read more about handling dismissals below */
+                if (result.dismiss === Swal.DismissReason.timer) {
+                    console.log('I was closed by the timer')
+                }
+                })
+            }else{
+                Transaccion()
+            }
         }
-        console.log("Producto",productverify)
-        console.log("Ingrediente producto", ingredientverify)
-        console.log("Complemento",complementverify)
-        console.log("Ingrediente complemento", ingredientcompverify)
-        console.log("Ingrdiente modificador", modifierverify)
     }
 
     async function ConsultaCantidadesProductos(idproducto, cantidad){
@@ -220,7 +236,7 @@ export default function Carrito() {
             }
     }
 
-    async function ConsultaCantidadesIngredientesMoficiadores(idopcion, cantidad){
+    async function ConsultaCantidadesIngredientesModificadores(idopcion, cantidad){
             const {data} = await axios.get('http://localhost:5000/api/sales/verifymodifiersingredients'+`/${idopcion}`+`/${rol}`)
             if(data !== null){
                 if(data.cantidadingrediente < cantidad){
@@ -228,6 +244,8 @@ export default function Carrito() {
                 }else{
                     setModifierVerify(true)
                 }
+        }else{
+            setModifierVerify(true)
         }
     }
 
@@ -249,6 +267,7 @@ export default function Carrito() {
                 let cambio = parseInt(recibido) - parseInt(tempventa) 
 
                 let idusuario = localStorage.getItem('userid')
+                /*
                 //Se agrega la venta como ticket de compra
                     addSale()
                 //Si hay productos en el carrito
@@ -273,20 +292,23 @@ export default function Carrito() {
                     }
                     localStorage.removeItem("productdatas")
                 }
-
-
+*/
                 Swal.fire({
                     title: 'Venta realizada',
                     text: 'El cambio a entregar es: $'+`${cambio}`,
                     icon: 'success',
+                    showDenyButton: true,
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'Aceptar!'
+                    confirmButtonText: 'Aceptar',
+                    denyButtonText: 'Verificar Ticket',
                 }).then((result) => {
                     if (result.isConfirmed) {
                         localStorage.setItem("Totalpagar",0)
                         history.push("/ventas");  
                         window.location.reload(true);
+                    }else if (result.isDenied){
+                        handleShowTicket()
                     }
                 })
             }else{
@@ -376,6 +398,10 @@ export default function Carrito() {
 
 
     function LimpiarElemento(idcarrito){
+        if(localStorage["productdatas"]){
+            var temp = JSON.parse(localStorage["productdatas"])
+        }
+        console.log("Datos", temp)
         var indexproduct = productdata.findIndex((obj => obj.idcarrito == idcarrito))
         var restaventa = 0
             
@@ -396,15 +422,13 @@ export default function Carrito() {
               )
             //Busca el producto por indice del carrito y lo elimina
             if(indexproduct >= 0){
-                restaventa += productdata[indexproduct].total
+                restaventa += temp[indexproduct].total
                 productdata.splice(indexproduct, 1)
             }
-            console.log(restaventa)
             //Recorre los arreglos, elimina los elementos que coincidan con el idcarrito
             complementdata.forEach(function(elemento, indice, array){
                 if(elemento.idcarrito === idcarrito){
                     restaventa += complementdata[indice].total
-                    console.log(restaventa)
                     complementdata.splice(indice, 1)
                 }
             })
@@ -412,7 +436,6 @@ export default function Carrito() {
             multipledata.forEach(function(elemento, indice, array){
                 if(elemento.idcarrito === idcarrito){
                     restaventa += multipledata[indice].precio
-                    console.log(restaventa)
                     multipledata.splice(indice, 1)
                 }
             })
@@ -425,6 +448,7 @@ export default function Carrito() {
             localStorage["complementdatas"] = JSON.stringify(complementdata)
             localStorage["multipledatas"] = JSON.stringify(multipledata)
             
+            console.log("Product:",productdata)
 
             var tempventa = localStorage.getItem('Totalpagar')
             var totalventa = parseInt(tempventa) - parseInt(restaventa)
@@ -481,12 +505,10 @@ export default function Carrito() {
     }
 
     useEffect(() =>{
-
+        getNombre()
         getDatos()  
         getImageCuenta()
     }, [])
-
-    console.log(productdata)
 
     
     const selectedComplement = (e, idcarrito) => {
@@ -500,11 +522,18 @@ export default function Carrito() {
 
         //Se modifica la cantidad del producto que se venderá
         if(indexproduct >= 0){
+            //Cantidad antes de cambiar
             cantidadanterior = productdata[indexproduct].cantidad
+            //Se cambia la cantidad por el nuevo valor del input
             productdata[indexproduct].cantidad = parseInt(value)
 
+            //Se guarda el total
             total = productdata[indexproduct].total
+
+            //Rescata el total del carrito
             let cantidadcarrito = localStorage.getItem('Totalpagar')
+
+            //Le resta la cantidad 
             cantidadcarrito = parseInt(cantidadcarrito) - parseInt(total)
         
             precio = productdata[indexproduct].precioproducto
@@ -514,13 +543,13 @@ export default function Carrito() {
             setTotal(cantidadcarrito)
             localStorage.setItem('Totalpagar', cantidadcarrito)
         }
-
+        console.log(productdata)
         localStorage.removeItem("productdatas")
         localStorage["productdatas"] = JSON.stringify(productdata)
     }
 
     return (
-        <div className="carrito">
+        <div className="carrito" >
             <div className="card products-cart"> 
             {productdata.map(item =>(
                 <div className="card">
@@ -529,20 +558,35 @@ export default function Carrito() {
                             {item.nombreproducto}
                         </div>
                         <div className="col-2" align="center">
-                            <div className="cart-com-mod">
-                                <span className="cart-comp">Complementos</span>
-                                <span className="cart-comp">Modificadores</span>
-                            </div>
+                            {complementdata.map(comp =>(
+                                <div>
+                                    {(item.idcarrito === comp.idcarrito) ?  
+                                        <div className="cart-com-mod">
+                                            <span className="cart-comp">{comp.nombre} {comp.cantidad}</span>
+                                        </div>
+                                    : ''}
+                                </div>     
+                            ))}
+                            {multipledata.map(mul =>(
+                                <div>
+                                {(item.idcarrito === mul.idcarrito) ?  
+                                    <div className="cart-com-mod">
+                                        <span className="cart-comp">{mul.nombre} {mul.cantidad}</span>
+                                    </div>
+                                : ''}
+                            </div> 
+                            ))}
                         </div>  
+                        
                         <div className="col-4">
                             <DeleteForeverIcon className="icons delete-icon" onClick={LimpiarElemento.bind(this, item.idcarrito)}/>
-                            <input type="number" className="product-cant-input" placeholder="1" min="1" max="10" defaultValue={item.cantidad} onChange={(e) => {selectedComplement(e, item.idcarrito)}}/>
+                            <input type="number" className="product-cant-input" placeholder="1" min="0" max="10" defaultValue={item.cantidad} onChange={(e) => {selectedComplement(e, item.idcarrito)}}/>
                         </div>
                     </div>
                 </div>  
             ))}
             </div>
-            <div className="input-cart">
+            <div className="input-cart" onMouseOver={Consultas.bind(this)}>
                 <div className="info-cobro">
                     <div className="total">
                         <span>Total</span>
@@ -554,7 +598,7 @@ export default function Carrito() {
                     </div>    
                 </div>
                 <div className="input-cobrar">
-                    <button className="btn btn-primary btn-cobrar" onMouseOver={Consultas.bind(this)}onClick={PagoEfectivo.bind(this)}><AttachMoneyIcon/>Cobrar</button>
+                    <button className="btn btn-primary btn-cobrar" onClick={PagoEfectivo.bind(this)}><AttachMoneyIcon/>Cobrar</button>
                 </div>
                 <div className="input-cobrar">
                     <button className="btn btn-primary btn-cobrar" onClick={handleShow}><PaymentIcon/>Tarjeta</button>
@@ -563,25 +607,80 @@ export default function Carrito() {
                     <button className="btn btn-primary btn-cobrar" onClick={LimpiarCarrito.bind(this)}><CleaningServicesIcon/>Limpiar</button>
                 </div>
             </div>
-            <Modal
-        show={show}
-        onHide={handleClose}
-        backdrop="static"
-        keyboard={false}
-      >
-        <Modal.Header>
-          <Modal.Title>Muestra el QR al cliente</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <img src={imagebinary}/>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Cancelar
-          </Button>
-          <Button variant="primary" onClick={PagoTarjeta.bind(this)} >Aceptar Transacción </Button>
-        </Modal.Footer>
-      </Modal>
+            <Modal show={show} onHide={handleClose} backdrop="static" keyboard={false}>
+                <Modal.Header>
+                    <Modal.Title>Muestra el QR al cliente</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <img src={imagebinary}/>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleClose}>
+                        Cancelar
+                    </Button>
+                    <Button variant="primary" onClick={PagoTarjeta.bind(this)} >Aceptar Transacción </Button>
+                </Modal.Footer>
+            </Modal>
+
+            <Modal show={showticket} onHide={handleCloseTicket} backdrop="static" keyboard={false}>
+                <Modal.Header>
+                    <Modal.Title>Ticket</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <div className="ticket" ref={componentRef}>
+                    <p className="centrado">{nombre}</p>
+                    <hr/>
+                    <p className="centrado">TICKET DE VENTA {getCurrentDate()} {getCurrentHour()}</p>
+                    <hr/>
+                        <table className="r-table">
+                            <thead>
+                                <tr>
+                                    <th className="cantidad">CANT</th>
+                                    <th className="producto">PRODUCTO</th>
+                                    <th className="precio">PRECIO</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {productdata.map(item=>(
+                                <div>
+                                    <tr>
+                                        <td className="cantidad">{item.cantidad}</td>
+                                        <td className="producto">{item.nombreproducto}</td>
+                                        <td className="precio">{item.total}</td>
+                                    </tr>
+                                    {complementdata.map(com =>(
+                                        (item.idcarrito === com.idcarrito) ? 
+                                        <tr>
+                                        <td className="cantidad">{com.cantidad}</td>
+                                        <td className="producto">{com.nombre}</td>
+                                        <td className="precio">{com.precio}</td>
+                                    </tr>
+                                    : ''
+                                    ))}
+                                    {multipledata.map(mul =>(
+                                        (item.idcarrito === mul.idcarrito) ? 
+                                        <tr>
+                                        <td className="cantidad"></td>
+                                        <td className="producto">{mul.nombre}</td>
+                                        <td className="precio">{mul.precio}</td>
+                                    </tr>
+                                    : ''
+                                    ))}
+                                </div>
+                                ))}
+                            </tbody>
+                        </table>
+                        <p class="centrado">¡GRACIAS POR SU COMPRA!</p>
+                    </div>
+                   
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleCloseTicket}>
+                        Cancelar
+                    </Button>
+                    <Button variant="primary" onClick={handlePrint}>Imprimir ticket </Button>
+                </Modal.Footer>
+            </Modal>
         </div>
     )
 }

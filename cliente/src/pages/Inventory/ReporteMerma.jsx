@@ -114,7 +114,8 @@ const traduccionUnidades= () =>{
 const handleinsert = async (e) =>{
     e.preventDefault();
 
-    if(todosvalidos==='true'){
+    if(todosvalidos==='true' && inicialstock>=productcantidad){
+      
         const res = await fetch(
           `http://localhost:5000/inventario/mermaProducto/${rol}`,
           {
@@ -195,8 +196,11 @@ const handleinsert = async (e) =>{
 
         cleanstates();
         Swal.fire('Bien!','la merma se ha reportado satisfacoriamente','success')
-      }else{
+      }else if(todosvalidos!=='true'){
         Swal.fire('Error','No se reportó la merma, revisa los campos que llenaste','warning')
+      }
+      else{
+        Swal.fire('Error','No tienes tanta cantidad de este producto','warning')
       }
       
 }
@@ -236,11 +240,11 @@ const expresiones = {
         <div className="container" id="colors">
           <div className="row d-flex justify-content-center">
             <h4 className="card p-3" id="colors2">
-              Reporte de merma
+              Llene el formulario para reportar la merma:
             </h4>
             <form className="card mt-4 row">
             <div className="row " id="colors2">
-              <h6>Selecciona un producto o ingrediente</h6>
+              <h6>Selecciona un producto o ingrediente!</h6>
               <div className="card col-md-4 p-3" style={esproducto===1 ? {background: '#CCFFC0'}: {background: 'white'}}>
                 <p className="mb-0">Productos:</p>
                 <select
