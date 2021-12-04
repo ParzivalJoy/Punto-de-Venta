@@ -51,7 +51,7 @@ export default function Carrito() {
 
 
     async function getNombre(){
-        const {data} = await axios.get('http://localhost:5000/configuracion/getTemasEs'+`/${rol}`)
+        const {data} = await axios.get('http://localhost:5000/api/configuracion/getTemasEs'+`/${rol}`)
         setNombre(data.logo)
     }
 
@@ -84,14 +84,14 @@ export default function Carrito() {
         console.log("Imagen :", data.qrcuenta)
         if(data.qrcuenta===null){
             const resb = await fetch(
-                `http://localhost:5000/inventario/bringImgs/sin-imagen.jpg`+`/${rol}`
+                `http://localhost:5000/api/inventario/bringImgs/sin-imagen.jpg`+`/${rol}`
               );
               const datab = await resb.blob();
               var sauce= URL.createObjectURL(datab)
               setImagebinary(sauce)
           }else{
             const resb = await fetch(
-              `http://localhost:5000/inventario/bringImgs/${data.qrcuenta}`+`/${rol}`
+              `http://localhost:5000/api/inventario/bringImgs/${data.qrcuenta}`+`/${rol}`
             );
             const datab = await resb.blob();
             var sauce= URL.createObjectURL(datab)

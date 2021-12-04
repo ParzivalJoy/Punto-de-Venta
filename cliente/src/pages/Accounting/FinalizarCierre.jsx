@@ -22,7 +22,7 @@ function FinalizarCierre() {
 const handleReportInfo = async () => {
   
   const res = await fetch(
-    `http://localhost:5000/contabilidad/DatosUltimoCierre/${rol}`
+    `http://localhost:5000/api/contabilidad/DatosUltimoCierre/${rol}`
   );
   const data = await res.json();
   if(data===null){
@@ -41,7 +41,7 @@ const handleReportInfo = async () => {
 
   ///////////Obtener el último apertura real /////////
   const res22 = await fetch(
-    `http://localhost:5000/contabilidad/ultimosAperturas/${rol}`
+    `http://localhost:5000/api/contabilidad/ultimosAperturas/${rol}`
   );
   const data22 = await res22.json();
   if(data22===null){
@@ -59,13 +59,13 @@ const handleReportInfo = async () => {
         
       setUltimoapertura(pfechap)
       const res23 = await fetch(
-        `http://localhost:5000/contabilidad/ultimosMovimientos/${rol}/${pfechap}`
+        `http://localhost:5000/api/contabilidad/ultimosMovimientos/${rol}/${pfechap}`
       );
       const data23 = await res23.json();
       setMovimientosperiodo(data23)
       
       const res3 = await fetch(
-        `http://localhost:5000/contabilidad/VentasHastaAhora/${rol}/${pfechap}`
+        `http://localhost:5000/api/contabilidad/VentasHastaAhora/${rol}/${pfechap}`
       );
       const data3 = await res3.json();
       if (data3.sum === null) {
@@ -76,7 +76,7 @@ const handleReportInfo = async () => {
       }
        /////Obtener ventas de tarjetas desde el apertura
        const res4 = await fetch(
-        `http://localhost:5000/contabilidad/VentasHastaAhoraTarjetas/${rol}/${pfechap}`
+        `http://localhost:5000/api/contabilidad/VentasHastaAhoraTarjetas/${rol}/${pfechap}`
       );
       const data4 = await res4.json();
       if(data4.sum===null){
@@ -87,7 +87,7 @@ const handleReportInfo = async () => {
       }
       //////////Obtener ventas de tarjetas desde el apertura
       const res5 = await fetch(
-        `http://localhost:5000/contabilidad/VentasHastaAhoraVales/${rol}/${pfechap}`
+        `http://localhost:5000/api/contabilidad/VentasHastaAhoraVales/${rol}/${pfechap}`
       );
       const data5 = await res5.json();
       if(data5.sum===null){
@@ -99,7 +99,7 @@ const handleReportInfo = async () => {
       setTotalsistema(parseFloat(data3.sum)+parseFloat(data4.sum)+parseFloat(data5.sum))
         //////////Obtener los gastos desde el apertura
         const res6 = await fetch(
-          `http://localhost:5000/contabilidad/GastosCaja/${rol}/${pfechap}`
+          `http://localhost:5000/api/contabilidad/GastosCaja/${rol}/${pfechap}`
         );
         const data6 = await res6.json();
         if(data6.sum===null){
@@ -109,7 +109,7 @@ const handleReportInfo = async () => {
         }
         ///////Obtener los cambios ingresados desde apertura
         const res7 = await fetch(
-          `http://localhost:5000/contabilidad/CambiosCaja/${rol}/${pfechap}`
+          `http://localhost:5000/api/contabilidad/CambiosCaja/${rol}/${pfechap}`
         );
         const data7 = await res7.json();
         if(data7.sum===null){

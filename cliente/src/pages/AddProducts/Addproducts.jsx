@@ -93,7 +93,7 @@ function Products() {
             //Agregar información a ProductosProveedores
             await axios.post(baseURL+`/products/proveedores/${formproduct.idproduct}`+`/${rol}`)
             /////////////////Inserción de la imagen /////////////////////////////////
-            const {resImgs} = await axios.put(`http://localhost:5000/inventario/manejoImgs/${formproduct.idproduct}`+`/${rol}`,formDataS)
+            const {resImgs} = await axios.put(`http://localhost:5000/api/inventario/manejoImgs/${formproduct.idproduct}`+`/${rol}`,formDataS)
               console.log(resImgs)
               setImagebinary(null)
             //Agrega modificadores

@@ -163,7 +163,7 @@ def getProducts(idcategoria, rol):
 ## -----------Verificacion de Cantidades de productos e Ingredientes ------------ ##
 ## ------------------------------------------------------------------------------ ##
 
-@ventas_api.route('/sales/verification/<id>/<rol>',  methods=['GET'])
+@ventas_api.route('/api/sales/verification/<id>/<rol>',  methods=['GET'])
 def verifyCantProduct(id, rol):
     conn = conexionRol(rol)
     cur = conn.cursor(cursor_factory=RealDictCursor)

@@ -30,7 +30,7 @@ function AperturaCaja() {
         setRol(role)
 
         const res222 = await fetch(
-          `http://localhost:5000/accesibilidad/getIdUsuario/${rol}/${user}`
+          `http://localhost:5000/api/accesibilidad/getIdUsuario/${rol}/${user}`
         );
         const data222 = await res222.json();
 
@@ -42,7 +42,7 @@ function AperturaCaja() {
     setFechaactual(hoy.toDateString());
 
     const res = await fetch(
-      `http://localhost:5000/contabilidad/ultimoApertura/${rol}`
+      `http://localhost:5000/api/contabilidad/ultimoApertura/${rol}`
     );
     const data = await res.json();
     if(data===null){
@@ -52,7 +52,7 @@ function AperturaCaja() {
     }
 
     const res2 = await fetch(
-      `http://localhost:5000/contabilidad/ultimosAperturas/${rol}`
+      `http://localhost:5000/api/contabilidad/ultimosAperturas/${rol}`
     );
     const data2 = await res2.json();
     if(data===null){
@@ -72,7 +72,7 @@ function AperturaCaja() {
         let ve=0;
         let vv=0;
         const res3 = await fetch(
-          `http://localhost:5000/contabilidad/VentasHastaAhora/${rol}/${pfechap}`
+          `http://localhost:5000/api/contabilidad/VentasHastaAhora/${rol}/${pfechap}`
         );
         const data3 = await res3.json();
         if(data3.sum===null){
@@ -84,7 +84,7 @@ function AperturaCaja() {
         }
         /////Obtener ventas de tarjetas desde el apertura
         const res4 = await fetch(
-          `http://localhost:5000/contabilidad/VentasHastaAhoraTarjetas/${rol}/${pfechap}`
+          `http://localhost:5000/api/contabilidad/VentasHastaAhoraTarjetas/${rol}/${pfechap}`
         );
         const data4 = await res4.json();
         if(data4.sum===null){
@@ -96,7 +96,7 @@ function AperturaCaja() {
         }
         //////////Obtener ventas de vales desde el apertura
         const res5 = await fetch(
-          `http://localhost:5000/contabilidad/VentasHastaAhoraVales/${rol}/${pfechap}`
+          `http://localhost:5000/api/contabilidad/VentasHastaAhoraVales/${rol}/${pfechap}`
         );
         const data5 = await res5.json();
         if(data5.sum===null){
@@ -108,7 +108,7 @@ function AperturaCaja() {
         }
         let vcargas=0;
         const res7 = await fetch(
-          `http://localhost:5000/contabilidad/inversionPeriodoPasado/${rol}/${pfechap}`
+          `http://localhost:5000/api/contabilidad/inversionPeriodoPasado/${rol}/${pfechap}`
         );
         const data7 = await res7.json();
         if(data7.sum===null){
@@ -139,7 +139,7 @@ function AperturaCaja() {
 
       if(cantidadaperturavalid==='true'){
         const res = await fetch(
-          `http://localhost:5000/contabilidad/ultimoApertura/${rol}`
+          `http://localhost:5000/api/contabilidad/ultimoApertura/${rol}`
         );
         const data = await res.json();
         if(data===null){
@@ -147,7 +147,7 @@ function AperturaCaja() {
           const idusuario=idusuarioes;
           const cuenta=12345;
           const res9 = await fetch(
-            `http://localhost:5000/contabilidad/insertPrimerApertura/${rol}`,
+            `http://localhost:5000/api/contabilidad/insertPrimerApertura/${rol}`,
             {
               method: "POST",
               headers: {
@@ -169,7 +169,7 @@ function AperturaCaja() {
           const idcorte= data.idcortecaja;
   
           const res2 = await fetch(
-          `http://localhost:5000/contabilidad/editApertura/${rol}`,
+          `http://localhost:5000/api/contabilidad/editApertura/${rol}`,
           {
             method: "PUT",
             headers: {

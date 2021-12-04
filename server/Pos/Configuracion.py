@@ -27,7 +27,7 @@ config_api = Blueprint('config_api', __name__)
 ## ---------------Configuración del Tema, Logo y Colores------------------------- ##
 ## ------------------------------------------------------------------------------ ##
 
-@config_api.route('/configuracion/editTema/<rol>', methods=['PUT'])
+@config_api.route('/api/configuracion/editTema/<rol>', methods=['PUT'])
 def editionTema(rol):
     conn=conexionRol(rol)
     cur=conn.cursor()
@@ -39,7 +39,7 @@ def editionTema(rol):
     cur.close()
     return jsonify(msg='tema editado de manera satisfactoria!');
 
-@config_api.route('/configuracion/getTemasEs/<rol>',  methods=['GET'])
+@config_api.route('/api/configuracion/getTemasEs/<rol>',  methods=['GET'])
 def getTema(rol):
     conn = conexionRol(rol)
     cur = conn.cursor(cursor_factory=RealDictCursor)
@@ -54,7 +54,7 @@ def getTema(rol):
 ## -------------Configuración de los permisos de los empleados------------------- ##
 ## ------------------------------------------------------------------------------ ##
 
-@config_api.route('/configuracion/editPermisoEmpleados/<rol>', methods=['PUT'])
+@config_api.route('/api/configuracion/editPermisoEmpleados/<rol>', methods=['PUT'])
 def editPermisoEmp(rol):
     conn=conexionRol(rol)
     cur=conn.cursor()
@@ -66,7 +66,7 @@ def editPermisoEmp(rol):
     cur.close()
     return jsonify(msg='bien');
 
-@config_api.route('/configuracion/editPermisoInventarios/<rol>', methods=['PUT'])
+@config_api.route('/api/configuracion/editPermisoInventarios/<rol>', methods=['PUT'])
 def editPermisoInv(rol):
     conn=conexionRol(rol)
     cur=conn.cursor()
@@ -78,7 +78,7 @@ def editPermisoInv(rol):
     cur.close()
     return jsonify(msg='bien');
 
-@config_api.route('/configuracion/editPermisoConfiguracion/<rol>', methods=['PUT'])
+@config_api.route('/api/configuracion/editPermisoConfiguracion/<rol>', methods=['PUT'])
 def editPermisoCon(rol):
     conn=conexionRol(rol)
     cur=conn.cursor()
@@ -90,7 +90,7 @@ def editPermisoCon(rol):
     cur.close()
     return jsonify(msg='bien');
 
-@config_api.route('/configuracion/editPermisoGestor/<rol>', methods=['PUT'])
+@config_api.route('/api/configuracion/editPermisoGestor/<rol>', methods=['PUT'])
 def editPermisoGes(rol):
     conn=conexionRol(rol)
     cur=conn.cursor()
@@ -102,7 +102,7 @@ def editPermisoGes(rol):
     cur.close()
     return jsonify(msg='bien');
 
-@config_api.route('/configuracion/editPermisoProductos/<rol>', methods=['PUT'])
+@config_api.route('/api/configuracion/editPermisoProductos/<rol>', methods=['PUT'])
 def editPermisoPro(rol):
     conn=conexionRol(rol)
     cur=conn.cursor()
@@ -114,7 +114,7 @@ def editPermisoPro(rol):
     cur.close()
     return jsonify(msg='bien');
 
-@config_api.route('/configuracion/editPermisoVentas/<rol>', methods=['PUT'])
+@config_api.route('/api/configuracion/editPermisoVentas/<rol>', methods=['PUT'])
 def editPermisoVen(rol):
     conn=conexionRol(rol)
     cur=conn.cursor()
@@ -126,7 +126,7 @@ def editPermisoVen(rol):
     cur.close()
     return jsonify(msg='bien');
 
-@config_api.route('/configuracion/editPermisoContabilidad/<rol>', methods=['PUT'])
+@config_api.route('/api/configuracion/editPermisoContabilidad/<rol>', methods=['PUT'])
 def editPermisoConta(rol):
     conn=conexionRol(rol)
     cur=conn.cursor()
@@ -142,7 +142,7 @@ def editPermisoConta(rol):
 ## --------------Obtención de los datos de los empleados------------------------- ##
 ## ------------------------------------------------------------------------------ ##
 
-@config_api.route('/configuracion/getEmpleados/<rol>',  methods=['GET'])
+@config_api.route('/api/configuracion/getEmpleados/<rol>',  methods=['GET'])
 def getTEmpleados(rol):
     conn = conexionRol(rol)
     cur = conn.cursor(cursor_factory=RealDictCursor)
@@ -152,7 +152,7 @@ def getTEmpleados(rol):
     conn.close()
     return jsonify(row)
 
-@config_api.route('/configuracion/getIdusuario/<idempleado>/<rol>',  methods=['GET'])
+@config_api.route('/api/configuracion/getIdusuario/<idempleado>/<rol>',  methods=['GET'])
 def getTUsuario(idempleado, rol):
     conn = conexionRol(rol)
     cur = conn.cursor(cursor_factory=RealDictCursor)
@@ -162,7 +162,7 @@ def getTUsuario(idempleado, rol):
     conn.close()
     return jsonify(row)
 
-@config_api.route('/configuracion/getPermisos/<userid>/<rol>',  methods=['GET'])
+@config_api.route('/api/configuracion/getPermisos/<userid>/<rol>',  methods=['GET'])
 def getTPermisos(userid, rol):
     conn = conexionRol(rol)
     cur = conn.cursor(cursor_factory=RealDictCursor)

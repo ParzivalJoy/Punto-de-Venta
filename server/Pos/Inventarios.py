@@ -29,7 +29,7 @@ def conexionRol(role):
 
 
 
-@inv_api.route('/inventario/insertInventarioMovimiento/<rol>', methods=['POST'])
+@inv_api.route('/api/inventario/insertInventarioMovimiento/<rol>', methods=['POST'])
 def insercionMoveInv(rol):
     conn=conexionRol(rol)
     cur=conn.cursor()
@@ -42,7 +42,7 @@ def insercionMoveInv(rol):
     return jsonify(msg='movimiento de entrada agregado')
     
 
-@inv_api.route('/inventario/getActualProduct/<rol>/<id>',  methods=['GET'])
+@inv_api.route('/api/inventario/getActualProduct/<rol>/<id>',  methods=['GET'])
 def getProductsInv(rol,id):
     conn = conexionRol(rol)
     cur = conn.cursor(cursor_factory=RealDictCursor)
@@ -53,7 +53,7 @@ def getProductsInv(rol,id):
     return jsonify(row)
 
 
-@inv_api.route('/inventario/getInventario2/<rol>/<int:valor>', methods=['GET'])
+@inv_api.route('/api/inventario/getInventario2/<rol>/<int:valor>', methods=['GET'])
 def selectall2(rol,valor):
     conn=conexionRol(rol)
     cur=conn.cursor(cursor_factory= RealDictCursor)
@@ -79,7 +79,7 @@ def selectall2(rol,valor):
     return jsonify(rows)
 
 
-@inv_api.route('/inventario/getInventario/<rol>/<int:valor>', methods=['GET'])
+@inv_api.route('/api/inventario/getInventario/<rol>/<int:valor>', methods=['GET'])
 def selectall(rol,valor):
     conn=conexionRol(rol)
     cur=conn.cursor(cursor_factory= RealDictCursor)
@@ -100,7 +100,7 @@ def selectall(rol,valor):
     cur.close()
     return jsonify(rows)
 
-@inv_api.route('/inventario/getActualIngredient/<rol>/<ids>',  methods=['GET'])
+@inv_api.route('/api/inventario/getActualIngredient/<rol>/<ids>',  methods=['GET'])
 def getIngredientsInv(rol,ids):
     conn = conexionRol(rol)
     cur = conn.cursor(cursor_factory=RealDictCursor)
@@ -110,7 +110,7 @@ def getIngredientsInv(rol,ids):
     conn.close()
     return jsonify(row)
 
-@inv_api.route('/inventario/insertProduct/<rol>', methods=['POST'])
+@inv_api.route('/api/inventario/insertProduct/<rol>', methods=['POST'])
 def insercionProductInv(rol):
     conn=conexionRol(rol)
     cur=conn.cursor()
@@ -122,7 +122,7 @@ def insercionProductInv(rol):
     cur.close()
     return jsonify(msg='added succesfully');
 
-@inv_api.route('/inventario/editProduct/<rol>', methods=['PUT'])
+@inv_api.route('/api/inventario/editProduct/<rol>', methods=['PUT'])
 def editionProductInv(rol):
     conn=conexionRol(rol)
     cur=conn.cursor()
@@ -134,7 +134,7 @@ def editionProductInv(rol):
     cur.close()
     return jsonify(msg='edited succesfully');
 
-@inv_api.route('/inventario/editProductMerma/<rol>', methods=['PUT'])
+@inv_api.route('/api/inventario/editProductMerma/<rol>', methods=['PUT'])
 def editionProductMermaInv(rol):
     conn=conexionRol(rol)
     cur=conn.cursor()
@@ -146,7 +146,7 @@ def editionProductMermaInv(rol):
     cur.close()
     return jsonify(msg='edited succesfully');
 
-@inv_api.route('/inventario/editIngredientMerma/<rol>', methods=['PUT'])
+@inv_api.route('/api/inventario/editIngredientMerma/<rol>', methods=['PUT'])
 def editionIngredientMermaInv(rol):
     conn=conexionRol(rol)
     cur=conn.cursor()
@@ -158,7 +158,7 @@ def editionIngredientMermaInv(rol):
     cur.close()
     return jsonify(msg='edited succesfully');
 
-@inv_api.route('/inventario/editIngredient/<rol>', methods=['PUT'])
+@inv_api.route('/api/inventario/editIngredient/<rol>', methods=['PUT'])
 def editionIngredientInv(rol):
     conn=conexionRol(rol)
     cur=conn.cursor()
@@ -170,7 +170,7 @@ def editionIngredientInv(rol):
     cur.close()
     return jsonify(msg='edited succesfully');
 
-@inv_api.route('/inventario/editProveedorPro/<rol>', methods=['PUT'])
+@inv_api.route('/api/inventario/editProveedorPro/<rol>', methods=['PUT'])
 def editionProveedorPro(rol):
     conn=conexionRol(rol)
     cur=conn.cursor()
@@ -182,7 +182,7 @@ def editionProveedorPro(rol):
     cur.close()
     return jsonify(msg='edited succesfully');
 
-@inv_api.route('/inventario/editCategoriaPro/<rol>', methods=['PUT'])
+@inv_api.route('/api/inventario/editCategoriaPro/<rol>', methods=['PUT'])
 def editionCategoriaPro(rol):
     conn=conexionRol(rol)
     cur=conn.cursor()
@@ -194,7 +194,7 @@ def editionCategoriaPro(rol):
     cur.close()
     return jsonify(msg='edited completely succesfully');
 
-@inv_api.route('/inventario/editProveedorPro2/<rol>', methods=['PUT'])
+@inv_api.route('/api/inventario/editProveedorPro2/<rol>', methods=['PUT'])
 def editionProveedorPro2(rol):
     conn=conexionRol(rol)
     cur=conn.cursor()
@@ -206,7 +206,7 @@ def editionProveedorPro2(rol):
     cur.close()
     return jsonify(msg='edited succesfully');
 
-@inv_api.route('/inventario/editProveedorIng2/<rol>', methods=['PUT'])
+@inv_api.route('/api/inventario/editProveedorIng2/<rol>', methods=['PUT'])
 def editionProveedorIng2(rol):
     conn=conexionRol(rol)
     cur=conn.cursor()
@@ -218,7 +218,7 @@ def editionProveedorIng2(rol):
     cur.close()
     return jsonify(msg='edited succesfully');
 
-@inv_api.route('/inventario/insertIngredient/<rol>', methods=['POST'])
+@inv_api.route('/api/inventario/insertIngredient/<rol>', methods=['POST'])
 def insercionIngredientInv(rol):
     conn=conexionRol(rol)
     cur=conn.cursor()
@@ -230,7 +230,7 @@ def insercionIngredientInv(rol):
     cur.close()
     return jsonify(msg='added succesfully');
 
-@inv_api.route('/inventario/mermaProducto/<rol>', methods=['POST'])
+@inv_api.route('/api/inventario/mermaProducto/<rol>', methods=['POST'])
 def insercionMermaProducto(rol):
     conn=conexionRol(rol)
     cur=conn.cursor()
@@ -242,7 +242,7 @@ def insercionMermaProducto(rol):
     cur.close()
     return jsonify(msg='added succesfully');
 
-@inv_api.route('/inventario/getProveedor/<rol>/<proveedor>',  methods=['GET'])
+@inv_api.route('/api/inventario/getProveedor/<rol>/<proveedor>',  methods=['GET'])
 def getProveedor(rol, proveedor):
     conn = conexionRol(rol)
     cur = conn.cursor(cursor_factory=RealDictCursor)
@@ -252,7 +252,7 @@ def getProveedor(rol, proveedor):
     conn.close()
     return jsonify(row)
 
-@inv_api.route('/inventario/getCategoria/<rol>/<categoria>',  methods=['GET'])
+@inv_api.route('/api/inventario/getCategoria/<rol>/<categoria>',  methods=['GET'])
 def getCategoria(rol,categoria):
     conn = conexionRol(rol)
     cur = conn.cursor(cursor_factory=RealDictCursor)
@@ -262,7 +262,7 @@ def getCategoria(rol,categoria):
     conn.close()
     return jsonify(row)
 
-@inv_api.route('/inventario/getActualProveedorId/<rol>/<idproducto>',  methods=['GET'])
+@inv_api.route('/api/inventario/getActualProveedorId/<rol>/<idproducto>',  methods=['GET'])
 def getProveedorId(rol,idproducto):
     conn = conexionRol(rol)
     cur = conn.cursor(cursor_factory=RealDictCursor)
@@ -272,7 +272,7 @@ def getProveedorId(rol,idproducto):
     conn.close()
     return jsonify(row)
 
-@inv_api.route('/inventario/getActualProveedorIdIng/<rol>/<idingrediente1>',  methods=['GET'])
+@inv_api.route('/api/inventario/getActualProveedorIdIng/<rol>/<idingrediente1>',  methods=['GET'])
 def getProveedorIdIng(rol,idingrediente1):
     conn = conexionRol(rol)
     cur = conn.cursor(cursor_factory=RealDictCursor)
@@ -282,7 +282,7 @@ def getProveedorIdIng(rol,idingrediente1):
     conn.close()
     return jsonify(row)
 
-@inv_api.route('/inventario/getActualProveedorName/<rol>/<idproveedor>',  methods=['GET'])
+@inv_api.route('/api/inventario/getActualProveedorName/<rol>/<idproveedor>',  methods=['GET'])
 def getProveedorName(rol,idproveedor):
     conn = conexionRol(rol)
     cur = conn.cursor(cursor_factory=RealDictCursor)
@@ -292,7 +292,7 @@ def getProveedorName(rol,idproveedor):
     conn.close()
     return jsonify(row)
 
-@inv_api.route('/inventario/insertProveedor/<rol>', methods=['POST'])
+@inv_api.route('/api/inventario/insertProveedor/<rol>', methods=['POST'])
 def insercionProveedor(rol):
     conn=conexionRol(rol)
     cur=conn.cursor()
@@ -304,7 +304,7 @@ def insercionProveedor(rol):
     cur.close()
     return jsonify(msg='added succesfully');
 
-@inv_api.route('/inventario/insertCategoria/<rol>', methods=['POST'])
+@inv_api.route('/api/inventario/insertCategoria/<rol>', methods=['POST'])
 def insercionCategoria(rol):
     conn=conexionRol(rol)
     cur=conn.cursor()
@@ -316,7 +316,7 @@ def insercionCategoria(rol):
     cur.close()
     return jsonify(msg='added succesfully');
 
-@inv_api.route('/inventario/insertCategoria2/<rol>', methods=['PUT'])
+@inv_api.route('/api/inventario/insertCategoria2/<rol>', methods=['PUT'])
 def insercionCategoria2(rol):
     conn=conexionRol(rol)
     cur=conn.cursor()
@@ -328,7 +328,7 @@ def insercionCategoria2(rol):
     cur.close()
     return jsonify(msg='la inserción se realizó con éxito');
 
-@inv_api.route('/inventario/insertProveedorProduct/<rol>', methods=['POST'])
+@inv_api.route('/api/inventario/insertProveedorProduct/<rol>', methods=['POST'])
 def insercionProveedorProducto(rol):
     conn=conexionRol(rol)
     cur=conn.cursor()
@@ -340,7 +340,7 @@ def insercionProveedorProducto(rol):
     cur.close()
     return jsonify(msg='added succesfully');
 
-@inv_api.route('/inventario/insertProveedorIng/<rol>', methods=['POST'])
+@inv_api.route('/api/inventario/insertProveedorIng/<rol>', methods=['POST'])
 def insercionProveedorIngrediente(rol):
     conn=conexionRol(rol)
     cur=conn.cursor()

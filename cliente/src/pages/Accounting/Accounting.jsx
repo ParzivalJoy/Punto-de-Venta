@@ -19,7 +19,7 @@ export default function Accounting() {
     const handleShowContabilidad= async()=>{
 
       const res = await fetch(
-        `http://localhost:5000/contabilidad/DatosUltimoCierre/${rol}`
+        `http://localhost:5000/api/contabilidad/DatosUltimoCierre/${rol}`
       );
       const data = await res.json();
       if(data===null){

@@ -109,11 +109,11 @@ def getEmailUser():
         return jsonify(0)
     return jsonify(row)
 
-@app.route('/inventario/bringImgs/<filename>/<rol>')
+@app.route('/api/inventario/bringImgs/<filename>/<rol>')
 def uploaded_file(filename, rol):
     return send_from_directory(IMAGE_FOLDER, path=filename, as_attachment=False)
 
-@app.route('/inventario/manejoImgs/<id>/<rol>', methods=['PUT'])
+@app.route('/api/inventario/manejoImgs/<id>/<rol>', methods=['PUT'])
 def uploadimage(id, rol):
     conn = conexionRol(rol)
     cur = conn.cursor(cursor_factory=RealDictCursor)
@@ -131,7 +131,7 @@ def uploadimage(id, rol):
     else:
         return jsonify('extensiones permitidas: jpg, jpeg, png')
 
-@app.route('/cuentas/manejoImgs/<rol>', methods=['PUT'])
+@app.route('/api/cuentas/manejoImgs/<rol>', methods=['PUT'])
 def uploadimagecuenta(rol):
     conn = conexionRol(rol)
     cur = conn.cursor(cursor_factory=RealDictCursor)
@@ -149,7 +149,6 @@ def uploadimagecuenta(rol):
     else:
         return jsonify('extensiones permitidas: jpg, jpeg, png')
 
-    
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)

@@ -20,7 +20,7 @@ function RolesSeguridad() {
 
     const DatosInicio= async()=>{
       const res2 = await fetch(
-        `http://localhost:5000/configuracion/getEmpleados`+`/${rol}`
+        `http://localhost:5000/api/configuracion/getEmpleados`+`/${rol}`
       );
       const data2 = await res2.json();
       setListemployees(data2)
@@ -43,13 +43,13 @@ function RolesSeguridad() {
         else{
 
           const res3 = await fetch(
-            `http://localhost:5000/configuracion/getIdusuario/${actualempleado}`+`/${rol}`
+            `http://localhost:5000/api/configuracion/getIdusuario/${actualempleado}`+`/${rol}`
           );
           const data3 = await res3.json();
           let userid= data3.idusuario;
           setIdusuario(data3.idusuario)
           const res4 = await fetch(
-            `http://localhost:5000/configuracion/getPermisos/${userid}`+`/${rol}`
+            `http://localhost:5000/api/configuracion/getPermisos/${userid}`+`/${rol}`
           );
           const data4 = await res4.json();
           data4.map((permiso)=>{
@@ -86,7 +86,7 @@ function RolesSeguridad() {
 
           setLoading(true)
           const res = await fetch(
-            `http://localhost:5000/configuracion/editPermisoEmpleados`+`/${rol}`,
+            `http://localhost:5000/api/configuracion/editPermisoEmpleados`+`/${rol}`,
             {
               method: "PUT",
               headers: {
@@ -101,7 +101,7 @@ function RolesSeguridad() {
             await res.json();
           ////////editar permiso de inventarios//////////////////
           const resinv = await fetch(
-            `http://localhost:5000/configuracion/editPermisoInventarios`+`/${rol}`,
+            `http://localhost:5000/api/configuracion/editPermisoInventarios`+`/${rol}`,
             {
               method: "PUT",
               headers: {
@@ -116,7 +116,7 @@ function RolesSeguridad() {
             await resinv.json();
           ///////////editar permiso de configuracion//////////////////
           const rescon = await fetch(
-            `http://localhost:5000/configuracion/editPermisoConfiguracion`+`/${rol}`,
+            `http://localhost:5000/api/configuracion/editPermisoConfiguracion`+`/${rol}`,
             {
               method: "PUT",
               headers: {
@@ -131,7 +131,7 @@ function RolesSeguridad() {
             await rescon.json();
           /////////////////editar permisos de gestor //////////////////
           const resges = await fetch(
-            `http://localhost:5000/configuracion/editPermisoGestor`+`/${rol}`,
+            `http://localhost:5000/api/configuracion/editPermisoGestor`+`/${rol}`,
             {
               method: "PUT",
               headers: {
@@ -146,7 +146,7 @@ function RolesSeguridad() {
             await resges.json();
           /////////////editar permisos de productos///////////////////
           const respro = await fetch(
-            `http://localhost:5000/configuracion/editPermisoProductos`+`/${rol}`,
+            `http://localhost:5000/api/configuracion/editPermisoProductos`+`/${rol}`,
             {
               method: "PUT",
               headers: {
@@ -161,7 +161,7 @@ function RolesSeguridad() {
             await respro.json();
           ////////////editar permisos de ventas//////////////////
           const resven = await fetch(
-            `http://localhost:5000/configuracion/editPermisoVentas`+`/${rol}`,
+            `http://localhost:5000/api/configuracion/editPermisoVentas`+`/${rol}`,
             {
               method: "PUT",
               headers: {
@@ -176,7 +176,7 @@ function RolesSeguridad() {
             await resven.json();
           //////////editar permisos de contabilidad//////////////
           const resconta = await fetch(
-            `http://localhost:5000/configuracion/editPermisoContabilidad`+`/${rol}`,
+            `http://localhost:5000/api/configuracion/editPermisoContabilidad`+`/${rol}`,
             {
               method: "PUT",
               headers: {

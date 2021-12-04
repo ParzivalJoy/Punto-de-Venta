@@ -63,7 +63,7 @@ function CierreCaja() {
     const user = localStorage.getItem("user")
 
         const res222 = await fetch(
-          `http://localhost:5000/accesibilidad/getIdUsuario/${rol}/${user}`
+          `http://localhost:5000/api/accesibilidad/getIdUsuario/${rol}/${user}`
         );
         const data222 = await res222.json();
 
@@ -77,7 +77,7 @@ function CierreCaja() {
         var cuenta='12345';
         var idusuario=idusuarioes;
         const res = await fetch(
-          `http://localhost:5000/contabilidad/insertCierre/${rol}`,
+          `http://localhost:5000/api/contabilidad/insertCierre/${rol}`,
           {
             method: "POST",
             headers: {

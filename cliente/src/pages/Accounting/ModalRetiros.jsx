@@ -40,7 +40,7 @@ const ModalRetiros = () => {
       const user = localStorage.getItem("user")
 
        const res222 = await fetch(
-        `http://localhost:5000/accesibilidad/getIdUsuario/${rol}/${user}`
+        `http://localhost:5000/api/accesibilidad/getIdUsuario/${rol}/${user}`
         );
         const data222 = await res222.json();
 
@@ -55,7 +55,7 @@ const ModalRetiros = () => {
         var idusuario=idusuarioes
         var descripcionmov=('Se hizo un retiro de '+totalretiro+ ' pesos')
         const res9 = await fetch(
-          `http://localhost:5000/contabilidad/insertContabilidadMovimiento/${rol}`,
+          `http://localhost:5000/api/contabilidad/insertContabilidadMovimiento/${rol}`,
           {
             method: "POST",
             headers: {

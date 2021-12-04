@@ -14,7 +14,7 @@ function Tema() {
     const datosInicio=async()=>{
       //////////datos de temas desde el inicio ////////////////////////
       const res1 = await fetch(
-        `http://localhost:5000/configuracion/getTemasEs`+`/${rol}`
+        `http://localhost:5000/api/configuracion/getTemasEs`+`/${rol}`
       );
       const data1 = await res1.json();
       if(data1===null){
@@ -45,7 +45,7 @@ function Tema() {
       if(nombreempresavalid===true){
 
         const res = await fetch(
-          `http://localhost:5000/configuracion/editTema`+`/${rol}`,
+          `http://localhost:5000/api/configuracion/editTema`+`/${rol}`,
           {
             method: "PUT",
             headers: {

@@ -44,14 +44,14 @@ export default function Product() {
         var imgblob= data.imagebproducto;
         if(imgblob===null){
             const resb = await fetch(
-                `http://localhost:5000/inventario/bringImgs/sin-imagen.jpg`+`/${rol}`
+                `http://localhost:5000/api/inventario/bringImgs/sin-imagen.jpg`+`/${rol}`
               );
               const datab = await resb.blob();
               var sauce= URL.createObjectURL(datab)
               setImagebinary(sauce)
           }else{
             const resb = await fetch(
-              `http://localhost:5000/inventario/bringImgs/${imgblob}`+`/${rol}`
+              `http://localhost:5000/api/inventario/bringImgs/${imgblob}`+`/${rol}`
             );
             const datab = await resb.blob();
             var sauce= URL.createObjectURL(datab)

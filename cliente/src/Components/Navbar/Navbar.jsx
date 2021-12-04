@@ -10,7 +10,7 @@ export default function Navbar() {
     const rol = localStorage.getItem('rol')
 
     async function getNombre(){
-        const {data} = await axios.get('http://localhost:5000/configuracion/getTemasEs'+`/${rol}`)
+        const {data} = await axios.get('http://localhost:5000/api/configuracion/getTemasEs'+`/${rol}`)
         setNombre(data.logo)
     }
 

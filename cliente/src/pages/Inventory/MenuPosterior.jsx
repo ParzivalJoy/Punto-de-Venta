@@ -29,7 +29,7 @@ function MenuPosterior() {
     /* console.log(name) */
 
     const res = await fetch(
-      `http://localhost:5000/inventario/getInventario2/${rol}/${name}`
+      `http://localhost:5000/api/inventario/getInventario2/${rol}/${name}`
     );
     const data = await res.json();
     setUsers(data);

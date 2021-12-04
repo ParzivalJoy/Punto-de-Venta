@@ -28,7 +28,7 @@ def conexionRol(role):
 ## --------------------------Operaciones de contabilidad------------------------- ##
 ## ------------------------------------------------------------------------------ ##
 
-@conta_api.route('/contabilidad/sumaParciales/<rol>/<fecha>',  methods=['GET'])
+@conta_api.route('/api/contabilidad/sumaParciales/<rol>/<fecha>',  methods=['GET'])
 def getSumaParciales(rol,fecha):
     conn = conexionRol(rol)
     cur = conn.cursor(cursor_factory=RealDictCursor)
@@ -38,7 +38,7 @@ def getSumaParciales(rol,fecha):
     conn.close()
     return jsonify(row)
 
-@conta_api.route('/contabilidad/ultimosMovimientos/<rol>/<fecha>',  methods=['GET'])
+@conta_api.route('/api/contabilidad/ultimosMovimientos/<rol>/<fecha>',  methods=['GET'])
 def getultimosMovimientos(rol,fecha):
     conn = conexionRol(rol)
     cur = conn.cursor(cursor_factory=RealDictCursor)
@@ -48,7 +48,7 @@ def getultimosMovimientos(rol,fecha):
     conn.close()
     return jsonify(row)
 
-@conta_api.route('/contabilidad/inversionPeriodoPasado/<rol>/<fecha>',  methods=['GET'])
+@conta_api.route('/api/contabilidad/inversionPeriodoPasado/<rol>/<fecha>',  methods=['GET'])
 def getInversionPeriodoPasado(rol,fecha):
     conn = conexionRol(rol)
     cur = conn.cursor(cursor_factory=RealDictCursor)
@@ -58,7 +58,7 @@ def getInversionPeriodoPasado(rol,fecha):
     conn.close()
     return jsonify(row)
 
-@conta_api.route('/contabilidad/ultimosAperturas/<rol>',  methods=['GET'])
+@conta_api.route('/api/contabilidad/ultimosAperturas/<rol>',  methods=['GET'])
 def getultimosAperturas(rol):
     conn = conexionRol(rol)
     cur = conn.cursor(cursor_factory=RealDictCursor)
@@ -68,7 +68,7 @@ def getultimosAperturas(rol):
     conn.close()
     return jsonify(row)
 
-@conta_api.route('/contabilidad/editApertura/<rol>', methods=['PUT'])
+@conta_api.route('/api/contabilidad/editApertura/<rol>', methods=['PUT'])
 def editionApertura(rol):
     conn=conexionRol(rol)
     cur=conn.cursor()
@@ -80,7 +80,7 @@ def editionApertura(rol):
     cur.close()
     return jsonify(msg='edited succesfully');
 
-@conta_api.route('/contabilidad/ultimoApertura/<rol>',  methods=['GET'])
+@conta_api.route('/api/contabilidad/ultimoApertura/<rol>',  methods=['GET'])
 def getultimoApertura(rol):
     conn = conexionRol(rol)
     cur = conn.cursor(cursor_factory=RealDictCursor)
@@ -90,7 +90,7 @@ def getultimoApertura(rol):
     conn.close()
     return jsonify(row)
 
-@conta_api.route('/contabilidad/insertContabilidadMovimiento/<rol>', methods=['POST'])
+@conta_api.route('/api/contabilidad/insertContabilidadMovimiento/<rol>', methods=['POST'])
 def insercionMoveCont(rol):
     conn=conexionRol(rol)
     cur=conn.cursor()
@@ -102,7 +102,7 @@ def insercionMoveCont(rol):
     cur.close()
     return jsonify(msg='movimiento registrado');
 
-@conta_api.route('/contabilidad/insertPrimerApertura/<rol>', methods=['POST'])
+@conta_api.route('/api/contabilidad/insertPrimerApertura/<rol>', methods=['POST'])
 def insercionPrimerApertura(rol):
     conn=conexionRol(rol)
     cur=conn.cursor()
@@ -114,7 +114,7 @@ def insercionPrimerApertura(rol):
     cur.close()
     return jsonify(msg='movimiento registrado');
 
-@conta_api.route('/contabilidad/insertCierre/<rol>', methods=['POST'])
+@conta_api.route('/api/contabilidad/insertCierre/<rol>', methods=['POST'])
 def insercionCierreCaja(rol):
     conn=conexionRol(rol)
     cur=conn.cursor()
@@ -126,7 +126,7 @@ def insercionCierreCaja(rol):
     cur.close()
     return jsonify(msg='cierre registrado');
 
-@conta_api.route('/contabilidad/DatosUltimoCierre/<rol>',  methods=['GET'])
+@conta_api.route('/api/contabilidad/DatosUltimoCierre/<rol>',  methods=['GET'])
 def getUltimoCierre(rol):
     conn = conexionRol(rol)
     cur = conn.cursor(cursor_factory=RealDictCursor)
@@ -136,7 +136,7 @@ def getUltimoCierre(rol):
     conn.close()
     return jsonify(row)
 
-@conta_api.route('/contabilidad/VentasHastaAhora/<rol>/<fecha>',  methods=['GET'])
+@conta_api.route('/api/contabilidad/VentasHastaAhora/<rol>/<fecha>',  methods=['GET'])
 def getVentasDesdeApertura(rol,fecha):
     conn = conexionRol(rol)
     cur = conn.cursor(cursor_factory=RealDictCursor)
@@ -146,7 +146,7 @@ def getVentasDesdeApertura(rol,fecha):
     conn.close()
     return jsonify(row)
 
-@conta_api.route('/contabilidad/VentasHastaAhoraTarjetas/<rol>/<fecha>',  methods=['GET'])
+@conta_api.route('/api/contabilidad/VentasHastaAhoraTarjetas/<rol>/<fecha>',  methods=['GET'])
 def getVentasHoyT(rol,fecha):
     conn = conexionRol(rol)
     cur = conn.cursor(cursor_factory=RealDictCursor)
@@ -156,7 +156,7 @@ def getVentasHoyT(rol,fecha):
     conn.close()
     return jsonify(row)
 
-@conta_api.route('/contabilidad/VentasHastaAhoraVales/<rol>/<fecha>',  methods=['GET'])
+@conta_api.route('/api/contabilidad/VentasHastaAhoraVales/<rol>/<fecha>',  methods=['GET'])
 def getVentasHoyV(rol,fecha):
     conn = conexionRol(rol)
     cur = conn.cursor(cursor_factory=RealDictCursor)
@@ -166,7 +166,7 @@ def getVentasHoyV(rol,fecha):
     conn.close()
     return jsonify(row)
 
-@conta_api.route('/contabilidad/CajaHastaAhora/<rol>/<fecha>',  methods=['GET'])
+@conta_api.route('/api/contabilidad/CajaHastaAhora/<rol>/<fecha>',  methods=['GET'])
 def getCajaHoy(rol,fecha):
     conn = conexionRol(rol)
     cur = conn.cursor(cursor_factory=RealDictCursor)
@@ -176,7 +176,7 @@ def getCajaHoy(rol,fecha):
     conn.close()
     return jsonify(row)
 
-@conta_api.route('/contabilidad/GastosCaja/<rol>/<fecha>',  methods=['GET'])
+@conta_api.route('/api/contabilidad/GastosCaja/<rol>/<fecha>',  methods=['GET'])
 def getRetirosHoy(rol,fecha):
     conn = conexionRol(rol)
     cur = conn.cursor(cursor_factory=RealDictCursor)
@@ -186,7 +186,7 @@ def getRetirosHoy(rol,fecha):
     conn.close()
     return jsonify(row)
 
-@conta_api.route('/contabilidad/CambiosCaja/<rol>/<fecha>',  methods=['GET'])
+@conta_api.route('/api/contabilidad/CambiosCaja/<rol>/<fecha>',  methods=['GET'])
 def getCambiosHoy(rol,fecha):
     conn = conexionRol(rol)
     cur = conn.cursor(cursor_factory=RealDictCursor)
