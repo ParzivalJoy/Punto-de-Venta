@@ -61,8 +61,8 @@ function Employees() {
         Swal.fire({
             icon: 'success',
             title: 'Se agrego el emplado correctamente!',
-            showConfirmButton: false,
-            timer: 1500
+            text: 'La contraseña se ha enviado al correo registrado',
+            showConfirmButton: true,
           })
    
     }

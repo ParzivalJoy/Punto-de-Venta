@@ -26,6 +26,7 @@ function Modificadores(props) {
         nameingredient:'',
         portion:'0.0',
     })
+    const rol = localStorage.getItem('rol')
     useEffect(() => {
         getModifiers()
     },[])
@@ -82,7 +83,7 @@ function Modificadores(props) {
     }
 
     async function getModifiers(){
-        const { data } = await axios.get(baseURL+'/products/modifiers')
+        const { data } = await axios.get(baseURL+'/products/modifiers/'+`${rol}`)
         setModifiers(data)
     }
 

@@ -20,8 +20,10 @@ function ReporteMerma() {
   const[productcantidadvalid, setProductcantidadvalid]= useState(null)
   const[productunidadvalid, setProductunidadvalid]= useState(null)
   const[todosvalidos, setTodosvalidos]=useState(null);
+  const [idusuarioes, setIdUsuarioEs] = useState(null)
   
   const rol = localStorage.getItem('rol')
+  
 
   ///////////////Reiniciar los estados /////////////////////////////////////////////////////////
 
@@ -57,6 +59,7 @@ function ReporteMerma() {
       const data = await res.json();
       setProducts(data);
     
+  setIdUsuarioEs(localStorage.getItem('userid'))
   };
 
   useEffect(()=>{
@@ -187,7 +190,8 @@ const handleinsert = async (e) =>{
               totalinversion,
               descripcionmov,
               razon,
-              tipo
+              tipo,
+              idusuarioes,
             }),
           }
         );

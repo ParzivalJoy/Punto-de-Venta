@@ -218,7 +218,7 @@ def getTransactions(fecha, rol):
     cur = conn.cursor(cursor_factory=RealDictCursor)
     sql = ('''SELECT usuarios.idusuario, usuario, fechaventa, totalventa, tipopago FROM ventas INNER JOIN usuarios
                     ON ventas.idusuario = usuarios.idusuario INNER JOIN pagos 
-                    ON pagos.idpago = ventas.idpago AND ventas.fechaventa = '{0}' '''.format(fecha))
+                    ON pagos.idpago = ventas.idpago AND ventas.fechaventa = '{0}' LIMIT 5'''.format(fecha))
     cur.execute(sql, fecha) 
     rows = cur.fetchall()
     conn.close()

@@ -554,15 +554,15 @@ export default function Carrito() {
             {productdata.map(item =>(
                 <div className="card">
                     <div className="row">
-                        <div className="col-5" algin="center">
+                        <div className="col-4" algin="center">
                             {item.nombreproducto}
                         </div>
-                        <div className="col-2" align="center">
+                        <div className="col-3" align="center">
                             {complementdata.map(comp =>(
                                 <div>
                                     {(item.idcarrito === comp.idcarrito) ?  
                                         <div className="cart-com-mod">
-                                            <span className="cart-comp">{comp.nombre} {comp.cantidad}</span>
+                                            <span className="cart-comp">{comp.nombre}</span>
                                         </div>
                                     : ''}
                                 </div>     
@@ -580,7 +580,7 @@ export default function Carrito() {
                         
                         <div className="col-4">
                             <DeleteForeverIcon className="icons delete-icon" onClick={LimpiarElemento.bind(this, item.idcarrito)}/>
-                            <input type="number" className="product-cant-input" placeholder="1" min="0" max="10" defaultValue={item.cantidad} onChange={(e) => {selectedComplement(e, item.idcarrito)}}/>
+                            <input type="number" className="product-cant-input" placeholder="1" min="1" max="10" defaultValue={item.cantidad} onChange={(e) => {selectedComplement(e, item.idcarrito)}}/>
                         </div>
                     </div>
                 </div>  

@@ -15,7 +15,7 @@ function Products() {
     const rol = localStorage.getItem('rol')
     const [listunits, setListUnits] = useState([])
     const [listingredients, setListIngredients] = useState([])
-    const [modifierschecked, setModifiersChecked] = useState(true)
+    const [modifierschecked, setModifiersChecked] = useState(false)
     const [complementschecked, setComplementsChecked] = useState(false)
     const [ingredientschecked, setIngredientsChecked] = useState(false)
     const [stockchecked, setStockChecked] = useState(false)
@@ -90,6 +90,8 @@ function Products() {
             const {data1}= await axios.post(baseURL+'/products/category'+`/${rol}`, {namecategory})
             //Agrega producto
             const {data}= await axios.post(baseURL+'/products'+`/${rol}`, formproduct)
+            //Agregar información a ProductosProveedores
+            await axios.post(baseURL+`/products/proveedores/${formproduct.idproduct}`+`/${rol}`)
             /////////////////Inserción de la imagen /////////////////////////////////
             const {resImgs} = await axios.put(`http://localhost:5000/inventario/manejoImgs/${formproduct.idproduct}`+`/${rol}`,formDataS)
               console.log(resImgs)

@@ -124,7 +124,7 @@ def uploadimage(id, rol):
         return jsonify('not got it, no name')
     if file and allowed_file(file.filename):
         filename=secure_filename(file.filename)
-        file.save(os.path.join(inv_api.instance_path, 'uploads', filename))
+        file.save(os.path.join(app.instance_path, 'uploads', filename))
         cur.execute("UPDATE productos SET imagebproducto=(%s) WHERE idproducto= '{0}' ".format(id),(filename,))
         conn.commit()
         return jsonify('got it: '+filename)
@@ -148,6 +148,8 @@ def uploadimagecuenta(rol):
         return jsonify('got it: '+filename)
     else:
         return jsonify('extensiones permitidas: jpg, jpeg, png')
+
+    
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)

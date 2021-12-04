@@ -34,12 +34,12 @@ def insercionMoveInv(rol):
     conn=conexionRol(rol)
     cur=conn.cursor()
     data=request.json
-    sql="""INSERT INTO movimientos (tipo,razon,descripcion,total,idusuario,fechamovimiento) values(%(tipo)s,%(razon)s,%(descripcionmov)s,%(totalinversion)s,1,NOW())"""
+    sql="""INSERT INTO movimientos (tipo,razon,descripcion,total,idusuario,fechamovimiento) values(%(tipo)s,%(razon)s,%(descripcionmov)s,%(totalinversion)s,%(idusuarioes)s,NOW())"""
     cur.execute(sql, data)
     conn.commit()
     conn.close()
     cur.close()
-    return jsonify(msg='movimiento de entrada agregado');
+    return jsonify(msg='movimiento de entrada agregado')
     
 
 @inv_api.route('/inventario/getActualProduct/<rol>/<id>',  methods=['GET'])
@@ -72,7 +72,7 @@ def selectall2(rol,valor):
     if valor ==7:
         cur.execute("SELECT idproducto,cantidadmerma,descripcionmerma,nombreproducto,idunidad,fechareporte,TO_CHAR(fechareporte, 'DD/MM/YYYY') AS fechareporteZ FROM reportesMermas ORDER BY fechareporteZ DESC")
     if valor ==8:
-        cur.execute("SELECT descripcion,total,to_char(fechamovimiento, 'YYYY-MM-DD HH24:MI:SS') As fechamovimiento, usuarios.usuario FROM movimientos JOIN usuarios ON usuarios.idusuario=movimientos.idusuario WHERE (razon='carga' AND fechamovimiento>current_date-interval '5' day) ORDER BY fechamovimiento DESC")
+        cur.execute("SELECT descripcion,total,to_char(fechamovimiento, 'YYYY-MM-DD HH24:MI:SS') As fechamovimiento, usuarios.usuario AS usuario FROM movimientos JOIN usuarios ON usuarios.idusuario=movimientos.idusuario WHERE (razon='carga' AND fechamovimiento>current_date-interval '5' day) ORDER BY fechamovimiento DESC")
     rows=cur.fetchall()
     conn.close()
     cur.close()
@@ -355,7 +355,6 @@ def insercionProveedorIngrediente(rol):
 ## ------------------------------------------------------------------------------ ##
 ## ---------------------- Agregar productos al inventario ----------------------- ##
 ## ------------------------------------------------------------------------------ ##
-
 #Obtiene la lista de unidades ordenadas por el id
 @inv_api.route('/api/products/units/<rol>',  methods=['GET'])
 def getUnits(rol):
@@ -484,10 +483,10 @@ def newIngredient(idproducto, rol):
 	cur.close()
 	return jsonify(1)
 
-@inv_api.route('/api/products', methods=['POST'])
-def newProduct():
+@inv_api.route('/api/products/<rol>', methods=['POST'])
+def newProduct(rol):
 	data = request.json
-	conn = conexionRol(data['rol'])
+	conn = conexionRol(rol)
 	cur = conn.cursor()
 	sql = "INSERT INTO productos (idproducto, nombreproducto, precioproducto, costoproducto, descripcionproducto, idcategoria, idunidad, cantidadproducto,cantidadnotificacionproducto, imagebproducto ) VALUES (%(idproduct)s, %(nameproduct)s, %(priceproduct)s, %(costproduct)s, %(descriptionproduct)s, %(categoryproduct)s, %(unitproduct)s, %(stockinitproduct)s, %(stocknotifiproduct)s , %(imageproduct)s)"
 	cur.execute(sql, data)
@@ -525,3 +524,15 @@ def getModifiers(rol):
             modifier['optionsmodifier'].append(option)
     conn.close()
     return jsonify(modifiers)
+
+@inv_api.route('/api/products/proveedores/<idproducto>/<rol>', methods=['POST'])
+def InsertarProductoProveedor(idproducto, rol):
+    conn=conexionRol(rol)
+    cur=conn.cursor()
+    data=request.json
+    sql="""INSERT INTO productosproveedores(idproveedor, idproducto, cantidad,costo, fecha)values(1,{0},0, 0, NOW())""".format(idproducto)
+    cur.execute(sql, data)
+    conn.commit()
+    conn.close()
+    cur.close()
+    return jsonify(msg='added succesfully');

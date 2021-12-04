@@ -43,6 +43,7 @@ function AgregarInventario() {
     const[idusuarioes, setIdusuarioses]= useState(null)
 
     const rol = localStorage.getItem('rol')
+ 
 
     const cleanstates=()=>{
           setActualProduct('')
@@ -102,12 +103,7 @@ function AgregarInventario() {
         const user = localStorage.getItem("user")
         const role = localStorage.getItem('role')
 
-        const res2 = await fetch(
-          `http://localhost:5000/accesibilidad/getIdUsuario/${rol}/${user}`
-        );
-        const data2 = await res2.json();
-
-            setIdusuarioses(data2.idusuario)
+        setIdusuarioses(localStorage.getItem('userid'))
       
     };
 
@@ -265,7 +261,7 @@ function AgregarInventario() {
             await res.json();
             /////////////////Inserción de la imagen /////////////////////////////////
             const resImgs = await fetch(
-              `http://localhost:5000/inventario/manejoImgs/${rol}/${productcode}`,
+              `http://localhost:5000/inventario/manejoImgs/${productcode}/${rol}`,
               {
                 method: "PUT",
                 body: formDataS

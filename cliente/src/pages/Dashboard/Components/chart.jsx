@@ -18,8 +18,8 @@ export default function Chart({title, data, dataKey, grid}) {
             <span className="chart-title">{title}</span>
             <ResponsiveContainer width="100%" aspect={5/1}>
                 <LineChart data={data}>
-                    <XAxis dataKey="month" stroke="#D1D5DB"/>
-                    <Line type="monotone" dataKey={dataKey}  stroke="#D1D5DB"/>
+                    <XAxis dataKey="month"/>
+                    <Line type="monotone" dataKey={dataKey}/>
                     <Tooltip/>
                     {grid && <CartesianGrid stroke="#D1D5DB" strokeDasharray="5 5"/>}
                 </LineChart>
