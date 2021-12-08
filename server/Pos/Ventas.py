@@ -327,7 +327,7 @@ def addSale(rol):
     data = request.json
     conn = conexionRol(rol)
     cur = conn.cursor()
-    sql = """INSERT INTO ventas (idusuario, idcliente, idpago, totalventa, fechaventa, horaventa )
+    sql = """INSERT INTO ventas (idempleado, idcliente, idpago, totalventa, fechaventa, horaventa )
              VALUES (%(idusuario)s,%(idcliente)s, %(idpago)s, %(totalventa)s, %(fechaventa)s, %(horaventa)s)"""
     cur.execute(sql, data)
     conn.commit()

@@ -20,7 +20,7 @@ export default function Secondcards() {
         const {data} = await axios.get('http://localhost:5000/api/dashboard/doughnut'+`/${rol}`)
         if(usuarios.length === 0 && cuenta.length === 0){
             data.map(item =>(
-                usuarios.push(item.usuario),
+                usuarios.push(item.nombreempleado),
                 cuenta.push(item.count)
             ))
             }
@@ -114,7 +114,7 @@ export default function Secondcards() {
             title: {
                 display: true,
                 position: 'top',
-                text: 'Ventas de usuarios',
+                text: 'Ventas de empleados',
             }
         }
     }

@@ -37,16 +37,16 @@ export default function Righttable() {
             <table className="r-table">
                 <tr className="right-tr">
                     <th className="right-th-user">Id</th>
-                    <th className="right-th-user">Usuario</th>
+                    <th className="right-th-user">Empleado</th>
                     <th className="right-th-date">Fecha</th>
                     <th className="right-th-total">Total</th>
                     <th className="right-th-type">Tipo de pago</th>
                 </tr>
                 {transacciones.map(item =>(
                 <tr className="right-tr">
-                    <td><span className="td-username">{item.idusuario}</span></td>
+                    <td><span className="td-username">{item.idempleado}</span></td>
                     <td>
-                        <span className="td-username">{item.usuario}</span>
+                        <span className="td-username">{item.nombreempleado}</span>
                     </td>
                     <td className="td-date">{item.fechaventa}</td>
                     <td className="td-total">${item.totalventa}</td>

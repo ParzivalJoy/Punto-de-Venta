@@ -200,6 +200,7 @@ function Product(props) {
                         <img src={(props.imagebinary===null) ? product : props.imagebinary} width="150" height="150" className="rounded" alt="imagen producto " align="center"/>
                     </div>
                     <div  className="col-md-9 mt-5" align="center">
+                    <label className="col-form-label"><b> Imagen del producto:</b></label>
                         <div className="input-group">
                             <input type="file" className="form-control" id="file" name="file" accept="image/*" onChange={(e)=>convertiraBase64(e.target.files)} />
                             {errors.imageproduct && <p className="text-danger">{errors.imageproduct}</p>}

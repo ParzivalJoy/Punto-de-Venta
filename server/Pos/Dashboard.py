@@ -199,9 +199,8 @@ def getSalesComplement(rol):
 def getProductsToday(rol):
     conn = conexionRol(rol)
     cur = conn.cursor(cursor_factory=RealDictCursor)
-    sql="""select ventas.idusuario, usuario, count(ventas.idusuario) from ventas inner join usuarios
-        on ventas.idusuario = usuarios.idusuario
-        group by ventas.idusuario, usuario"""
+    sql="""SELECT nombreempleado, count(*) from ventas AS a INNER JOIN empleados AS b
+        ON a.idempleado = b.idempleado GROUP BY a.idempleado, nombreempleado"""
     cur.execute(sql) 
     row = cur.fetchall()
     conn.close()
@@ -216,8 +215,8 @@ def getProductsToday(rol):
 def getTransactions(fecha, rol):
     conn = conexionRol(rol)
     cur = conn.cursor(cursor_factory=RealDictCursor)
-    sql = ('''SELECT usuarios.idusuario, usuario, fechaventa, totalventa, tipopago FROM ventas INNER JOIN usuarios
-                    ON ventas.idusuario = usuarios.idusuario INNER JOIN pagos 
+    sql = ('''SELECT empleados.idempleado, empleados.nombreempleado, to_char(fechaventa, 'YYYY-MM-DD') As fechaventa, totalventa, tipopago FROM ventas INNER JOIN empleados
+                    ON ventas.idempleado = empleados.idempleado INNER JOIN pagos 
                     ON pagos.idpago = ventas.idpago AND ventas.fechaventa = '{0}' LIMIT 5'''.format(fecha))
     cur.execute(sql, fecha) 
     rows = cur.fetchall()

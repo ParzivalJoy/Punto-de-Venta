@@ -10,6 +10,7 @@ import axios from 'axios' //npm i
 import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
 import { useReactToPrint } from 'react-to-print';
+import '../../../styles.scss';
 
 
 
@@ -155,11 +156,7 @@ export default function Carrito() {
                   })
             }
             if (productverify === true && ingredientverify === true && ingredientcompverify === true && modifierverify === true && complementverify === true){
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Se puede hacer la venta',
-                    text: 'La venta no puede ser realizada. Revisa los inventarios de productos'
-                  })
+                Transaccion(pago)
             }  
 
             if (productverify === null || ingredientverify === null || ingredientcompverify === null || modifierverify === null || complementverify === null){
@@ -181,8 +178,6 @@ export default function Carrito() {
                     console.log('I was closed by the timer')
                 }
                 })
-            }else{
-                Transaccion()
             }
         }
     }
@@ -250,13 +245,77 @@ export default function Carrito() {
     }
 
 
-    async function Transaccion(){
-        if(recibido === 0){
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'No has ingresado el dinero recibido!'
-              })
+    async function Transaccion(pago){
+        if(pago === 1){
+            if(recibido === 0){
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'No has ingresado el dinero recibido!'
+                })
+            }else{
+                if(productdata.length !== 0){
+                    //productdata.map(item =>(
+                    //    ConsultaCantidadesProductos(item.idproducto, item.cantidad)
+                    //))
+
+                    let tempventa = localStorage.getItem('Totalpagar')
+                    let cambio = parseInt(recibido) - parseInt(tempventa) 
+
+                    let idusuario = localStorage.getItem('userid')
+                  
+                    //Se agrega la venta como ticket de compra
+                        addSale()
+                    //Si hay productos en el carrito
+                    if (Object.entries(productdata).length !== 0){
+                        productdata.map(item =>(
+                            updateProduct(idusuario, item.idproducto, item.cantidad, item.precioproducto, item.nombreproducto, item.nota, item.total)
+                        ))
+                        //Si hay complementos en el carrito 
+                        if (Object.entries(complementdata).length !== 0){
+                            complementdata.map(item =>(
+                                updateComplement(idusuario, item.id, item.cantidad, item.nombre, item.precio, item.total)
+                            ))
+                            localStorage.removeItem("complementdatas")
+                        }
+
+                        //Si hay modificadores en el carrito 
+                        if (Object.entries(multipledata).length !== 0){
+                            multipledata.map(item =>(
+                                updateModifier(idusuario, item.idmod, item.id, item.nombremodificador, item.nombre, item.precio, item.idingrediente, item.porcion)
+                            ))
+                            localStorage.removeItem("multipledatas")
+                        }
+                        localStorage.removeItem("productdatas")
+                    }
+                    
+                    Swal.fire({
+                        title: 'Venta realizada',
+                        text: 'El cambio a entregar es: $'+`${cambio}`,
+                        icon: 'success',
+                        showDenyButton: true,
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Aceptar',
+                        denyButtonText: 'Verificar Ticket',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            localStorage.setItem("Totalpagar",0)
+                            history.push("/ventas");  
+                            window.location.reload(true);
+                        }else if (result.isDenied){
+                            handleShowTicket()
+                        }
+                    })
+                }else{
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'El carrito está vacío!'
+                    })
+                }
+            
+            }
         }else{
             if(productdata.length !== 0){
                 //productdata.map(item =>(
@@ -267,7 +326,7 @@ export default function Carrito() {
                 let cambio = parseInt(recibido) - parseInt(tempventa) 
 
                 let idusuario = localStorage.getItem('userid')
-                /*
+              
                 //Se agrega la venta como ticket de compra
                     addSale()
                 //Si hay productos en el carrito
@@ -292,10 +351,10 @@ export default function Carrito() {
                     }
                     localStorage.removeItem("productdatas")
                 }
-*/
+                
                 Swal.fire({
                     title: 'Venta realizada',
-                    text: 'El cambio a entregar es: $'+`${cambio}`,
+                    text: 'La transacción se deberá de ver reflejada en su cuenta de Mercado Pago',
                     icon: 'success',
                     showDenyButton: true,
                     showCancelButton: true,
@@ -316,9 +375,8 @@ export default function Carrito() {
                     icon: 'error',
                     title: 'Oops...',
                     text: 'El carrito está vacío!'
-                  })
+                })
             }
-          
         }
 
     }
@@ -462,7 +520,7 @@ export default function Carrito() {
 
     }
 
-    async function PagoTarjeta(){
+    async function PagoTarjeta(pago){
         Swal.fire({
             title: '¿Se ha realizado la transacción',
             text: "Asegurate de que la transacción se haya realizado con éxito antes de continuar",
@@ -473,7 +531,7 @@ export default function Carrito() {
             confirmButtonText: 'Si, continua!'
           }).then((result) => {
             if (result.isConfirmed) {
-                Transaccion()
+                Transaccion(pago)
             }
           })
     }
@@ -598,7 +656,7 @@ export default function Carrito() {
                     </div>    
                 </div>
                 <div className="input-cobrar">
-                    <button className="btn btn-primary btn-cobrar" onClick={PagoEfectivo.bind(this)}><AttachMoneyIcon/>Cobrar</button>
+                    <button className="btn btn-primary btn-cobrar" onClick={PagoEfectivo.bind(this, 1)}><AttachMoneyIcon/>Cobrar</button>
                 </div>
                 <div className="input-cobrar">
                     <button className="btn btn-primary btn-cobrar" onClick={handleShow}><PaymentIcon/>Tarjeta</button>
@@ -618,7 +676,7 @@ export default function Carrito() {
                     <Button variant="secondary" onClick={handleClose}>
                         Cancelar
                     </Button>
-                    <Button variant="primary" onClick={PagoTarjeta.bind(this)} >Aceptar Transacción </Button>
+                    <Button variant="primary" onClick={PagoTarjeta.bind(this, 2)} >Aceptar Transacción </Button>
                 </Modal.Footer>
             </Modal>
 
@@ -635,39 +693,39 @@ export default function Carrito() {
                         <table className="r-table">
                             <thead>
                                 <tr>
-                                    <th className="cantidad">CANT</th>
-                                    <th className="producto">PRODUCTO</th>
-                                    <th className="precio">PRECIO</th>
+                                    <th className="cantidad">CANT..........................PRODUCTO...........................PRECIO</th>
+
                                 </tr>
                             </thead>
                             <tbody>
                             {productdata.map(item=>(
                                 <div>
                                     <tr>
-                                        <td className="cantidad">{item.cantidad}</td>
-                                        <td className="producto">{item.nombreproducto}</td>
-                                        <td className="precio">{item.total}</td>
+                                        <td className="cantidadtd">{item.cantidad}</td>
+                                        <td className="productotd">{item.nombreproducto}</td>
+                                        <td className="preciotd">${item.total}</td>
                                     </tr>
                                     {complementdata.map(com =>(
                                         (item.idcarrito === com.idcarrito) ? 
                                         <tr>
-                                        <td className="cantidad">{com.cantidad}</td>
-                                        <td className="producto">{com.nombre}</td>
-                                        <td className="precio">{com.precio}</td>
+                                        <td className="cantidadtd">{com.cantidad}</td>
+                                        <td className="productotd">{com.nombre}</td>
+                                        <td className="preciotd">${com.precio}</td>
                                     </tr>
                                     : ''
                                     ))}
                                     {multipledata.map(mul =>(
                                         (item.idcarrito === mul.idcarrito) ? 
                                         <tr>
-                                        <td className="cantidad"></td>
-                                        <td className="producto">{mul.nombre}</td>
-                                        <td className="precio">{mul.precio}</td>
+                                        <td className="cantidadtd"></td>
+                                        <td className="productotd">{mul.nombre}</td>
+                                        <td className="preciotd">${mul.precio}</td>
                                     </tr>
                                     : ''
                                     ))}
                                 </div>
                                 ))}
+                                <tr className="totalticket">Total a pagar: ${total}</tr>
                             </tbody>
                         </table>
                         <p class="centrado">¡GRACIAS POR SU COMPRA!</p>

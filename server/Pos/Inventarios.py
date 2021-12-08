@@ -27,7 +27,15 @@ def conexionRol(role):
 ## ------------------------------Manejo de inventarios--------------------------- ##
 ## ------------------------------------------------------------------------------ ##
 
-
+@inv_api.route('/api/inventario/getActualUser/<rol>/<id>',  methods=['GET'])
+def getUserInv(rol,id):
+    conn = conexionRol(rol)
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+    sql="SELECT idusuario FROM usuarios WHERE idempleado = {0}".format(id)
+    cur.execute(sql, id) 
+    row = cur.fetchone()
+    conn.close()
+    return jsonify(row)
 
 @inv_api.route('/api/inventario/insertInventarioMovimiento/<rol>', methods=['POST'])
 def insercionMoveInv(rol):

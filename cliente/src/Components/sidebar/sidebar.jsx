@@ -17,6 +17,7 @@ function Sidebar() {
     const user = localStorage.getItem("user")
     const rol = localStorage.getItem('rol')
     const id = localStorage.getItem('userid')
+    const role = localStorage.getItem('role')
 
     const [empleados, setEmpleados] = useState(null)
     const [ventas, setVentas] = useState(null)
@@ -107,7 +108,7 @@ function Sidebar() {
                     </div>
                     <div className="sidebar-info">
                         <span className="sidebar-info-name">{user}</span>
-                        <span className="sidebar-info-ocupation">{rol}</span>
+                        <span className="sidebar-info-ocupation">{role}</span>
                     </div>
                      
                 </div>
