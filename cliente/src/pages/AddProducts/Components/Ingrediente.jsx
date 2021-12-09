@@ -9,9 +9,9 @@ const baseURL = process.env.REACT_APP_API_URL //npm i dotenv
 export default function Ingrediente(props) {
 
     const rol = localStorage.getItem('rol')
-    const errors ={
+    const [errors, setErrors] = useState({
         idingredient:'*Campo obligatorio.', 
-        portioningredient:'*Campo obligatorio.'}
+        portioningredient:'*Campo obligatorio.'})
     const expresiones = {
 	text: /^[a-zA-ZÀ-ÿ\s]{1,50}$/, // Letras,espacios
 	textnumbers: /^[a-zA-ZÀ-ÿ0-9\s]{1,40}$/, // Letras y espacios, pueden llevar acentos.
@@ -23,7 +23,10 @@ export default function Ingrediente(props) {
         getIngredients()
         
     },[])
-    inputValidation()
+
+    useEffect(()=>{
+        inputValidation()
+    },[props.ingredients])
 
     const handleChange = e => {
         const { name, value } = e.target;
@@ -52,18 +55,38 @@ export default function Ingrediente(props) {
 
     function  inputValidation(){
         if(props.ingredients.nameingredient===''){
-                errors.idingredient="*Campo obligatorio."
+            setErrors({
+                ...errors,
+                ['idingredient']: "*Campo obligatorio."
+            })
+            //errors.idingredient="*Campo obligatorio."
         }else{
-                errors.idingredient=""
+            setErrors({
+                ...errors,
+                ['idingredient']: ""
+            })
+            //errors.idingredient=""
             }
 
         if(!expresiones.float.test(props.ingredients.portioningredient)){
-                errors.portioningredient="Este campo solo puede contener numeros."
+            setErrors({
+                ...errors,
+                ['portioningredient']: "Este campo solo puede contener numeros."
+            })
+            //errors.portioningredient="Este campo solo puede contener numeros."
         }else{
             if(props.ingredients.portioningredient==='0.0'){
-                errors.portioningredient="*Campo obligatorio."
+                setErrors({
+                    ...errors,
+                    ['portioningredient']: "*Campo obligatorio."
+                })
+                //errors.portioningredient="*Campo obligatorio."
             }else{
-                errors.portioningredient=""
+                setErrors({
+                    ...errors,
+                    ['portioningredient']: ""
+                })
+                //errors.portioningredient=""
             }
         }
         if(errors.idingredient===''&&errors.portioningredient===''){

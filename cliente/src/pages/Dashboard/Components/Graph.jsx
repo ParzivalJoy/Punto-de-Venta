@@ -5,13 +5,14 @@ import { red } from '@mui/material/colors'
 
 var labels = []
 var datas = []
+const baseURL = process.env.REACT_APP_API_URL //npm i dotenv
 
 export default function Graph() {
 
     const rol = localStorage.getItem('rol')
 
     async function getGraphData(){
-        const {data} = await axios.get('http://localhost:5000/api/dashboard/graphdata'+`/${rol}`)
+        const {data} = await axios.get(baseURL+`/dashboard/graphdata`+`/${rol}`)
         
         if(labels.length === 0 && datas.length === 0){
         data.map(item =>(

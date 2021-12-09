@@ -12,6 +12,8 @@ import { useHistory } from "react-router-dom";
     const data = []
     var totalventa = 0
 
+    const baseURL = process.env.REACT_APP_API_URL //npm i dotenv
+
 export default function Product() {
 
     let history = useHistory();
@@ -36,7 +38,7 @@ export default function Product() {
 
     
     async function getProduct(){
-        const {data} = await axios.get('http://localhost:5000/api/getproducts'+`/${params.id}`+`/${rol}`)
+        const {data} = await axios.get(baseURL+'/getproducts'+`/${params.id}`+`/${rol}`)
         setProductName(data.nombreproducto)
         setProductDescr(data.descripcionproducto)
         setProductPrice(data.precioproducto)
@@ -44,14 +46,14 @@ export default function Product() {
         var imgblob= data.imagebproducto;
         if(imgblob===null){
             const resb = await fetch(
-                `http://localhost:5000/api/inventario/bringImgs/sin-imagen.jpg`+`/${rol}`
+                baseURL+`/inventario/bringImgs/sin-imagen.jpg`+`/${rol}`
               );
               const datab = await resb.blob();
               var sauce= URL.createObjectURL(datab)
               setImagebinary(sauce)
           }else{
             const resb = await fetch(
-              `http://localhost:5000/api/inventario/bringImgs/${imgblob}`+`/${rol}`
+                baseURL+`/inventario/bringImgs/${imgblob}`+`/${rol}`
             );
             const datab = await resb.blob();
             var sauce= URL.createObjectURL(datab)
@@ -66,7 +68,7 @@ export default function Product() {
     }
 
     async function getListModifiers(){
-        const {data} = await axios.get('http://localhost:5000/api/modifiers'+`/${params.id}`+`/${rol}`)
+        const {data} = await axios.get(baseURL+'/modifiers'+`/${params.id}`+`/${rol}`)
         setModifierList(data)
         modifierlist.map(item =>(
             (item.obligatorio === true) ? setObligatoryComp(obligatorycomp + 1) : ''
@@ -77,7 +79,7 @@ export default function Product() {
 
  
     async function getListOptions(idmodificador){
-        const {data} = await axios.get('http://localhost:5000/api/options'+`/${idmodificador}`+`/${rol}`)
+        const {data} = await axios.get(baseURL+'/options'+`/${idmodificador}`+`/${rol}`)
         setOptionList(data)
         console.log(dataMultiple)
     } 

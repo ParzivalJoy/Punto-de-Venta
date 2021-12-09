@@ -3,6 +3,8 @@ import PacmanLoader from "react-spinners/PacmanLoader";
 import imgavailable from './imgs/noavailable.jpg'
 import Swal from 'sweetalert2';
 
+const baseURL = process.env.REACT_APP_API_URL //npm i dotenv
+
 function AgregarInventario() {
 
     const[productonuevo, setProductonuevo]= useState(false)
@@ -86,7 +88,7 @@ function AgregarInventario() {
     const handleShowAllMerca2= async (e)=>{
       
       const res = await fetch(
-        `http://localhost:5000/api/inventario/getInventario/${rol}/1`
+        baseURL+`/inventario/getInventario/${rol}/1`
       );
       const data = await res.json();
       setIngredients(data);
@@ -95,7 +97,7 @@ function AgregarInventario() {
     const handleShowAllMerca = async (e) => {
       
         const res = await fetch(
-          `http://localhost:5000/api/inventario/getInventario/${rol}/2`
+          baseURL+`/inventario/getInventario/${rol}/2`
         );
         const data = await res.json();
         setProducts(data);
@@ -121,7 +123,7 @@ function AgregarInventario() {
           Swal.fire('Atención!','no hay ingredientes, ingresa algunos!', 'info')
         }else{
           const res = await fetch(
-            `http://localhost:5000/api/inventario/getActualIngredient/${rol}/${actualingredient}`
+            baseURL+`/inventario/getActualIngredient/${rol}/${actualingredient}`
           );
           const data = await res.json();
           setProductprice(0);
@@ -146,7 +148,7 @@ function AgregarInventario() {
         setEsproducto(1);
       if (actualproduct!=='') {
         const res = await fetch(
-          `http://localhost:5000/api/inventario/getActualProduct/${rol}/${actualproduct}`
+          baseURL+`/inventario/getActualProduct/${rol}/${actualproduct}`
         );
         const data = await res.json();
         setProductprice(data.precioproducto);
@@ -166,7 +168,7 @@ function AgregarInventario() {
           setImagebinary(null)
         }else{
           const resb = await fetch(
-            `http://localhost:5000/api/inventario/bringImgs/${imgblob}/${rol}`
+            baseURL+`/inventario/bringImgs/${imgblob}/${rol}`
           );
           const datab = await resb.blob();
           var sauce= URL.createObjectURL(datab)
@@ -174,14 +176,14 @@ function AgregarInventario() {
         }
         //////////////////Para obtener el proveedor primero se obtiene el id////////////////
         const res1 = await fetch(
-          `http://localhost:5000/api/inventario/getActualProveedorId/${rol}/${actualproduct}`
+          baseURL+`/inventario/getActualProveedorId/${rol}/${actualproduct}`
         );
         const data1 = await res1.json();
         setIdproveedor(data1.idproveedor);
         const idproveedor2= data1.idproveedor;
         ///////////////////Con el idproveedor después obtenemos el nombre de proveedor////////
         const res2 = await fetch(
-          `http://localhost:5000/api/inventario/getActualProveedorName/${rol}/${idproveedor2}`
+          baseURL+`/inventario/getActualProveedorName/${rol}/${idproveedor2}`
         );
         const data2 = await res2.json();
         setProductproveedor(data2.nombreproveedor);
@@ -233,14 +235,14 @@ function AgregarInventario() {
         if (habilitar === true) {
 
           const res = await fetch(
-            `http://localhost:5000/api/inventario/getActualProduct/${rol}/${productcode}`
+            baseURL+`/inventario/getActualProduct/${rol}/${productcode}`
           );
           const dataV = await res.json();
 
           if(dataV===null){
 
             const res = await fetch(
-              `http://localhost:5000/api/inventario/insertProduct/${rol}`,
+              baseURL+`/inventario/insertProduct/${rol}`,
               {
                 method: "POST",
                 headers: {
@@ -261,7 +263,7 @@ function AgregarInventario() {
             await res.json();
             /////////////////Inserción de la imagen /////////////////////////////////
             const resImgs = await fetch(
-              `http://localhost:5000/api/inventario/manejoImgs/${productcode}/${rol}`,
+              baseURL+`/inventario/manejoImgs/${productcode}/${rol}`,
               {
                 method: "PUT",
                 body: formDataS
@@ -271,14 +273,14 @@ function AgregarInventario() {
             console.log(dataImgs)
 
             const res1 = await fetch(
-              `http://localhost:5000/api/inventario/getProveedor/${rol}/${productproveedor}`
+              baseURL+`/inventario/getProveedor/${rol}/${productproveedor}`
             );
             const data1 = await res1.json();
             console.log(data1)
             /////Si no existe ese nombre de proveedor, crearlo////
             if(data1===null){
               const res2 = await fetch(
-                `http://localhost:5000/api/inventario/insertProveedor/${rol}`,
+                baseURL+`/inventario/insertProveedor/${rol}`,
                 {
                   method: "POST",
                   headers: {
@@ -294,7 +296,7 @@ function AgregarInventario() {
             }
             /////Se consigue el id del proveedor recien creado//////////////////
             const res3 = await fetch(
-              `http://localhost:5000/api/inventario/getProveedor/${rol}/${productproveedor}`,
+              baseURL+`/inventario/getProveedor/${rol}/${productproveedor}`,
             );
             const data3 = await res3.json();
             setIdproveedor(data3.idproveedor)
@@ -302,7 +304,7 @@ function AgregarInventario() {
             console.log(data3)
             //////////al conseguirse el id del proveedor, se inserta este y los demas datos a proveedor-producto///
             const res4 = await fetch(
-              `http://localhost:5000/api/inventario/insertProveedorProduct/${rol}`,
+              baseURL+`/inventario/insertProveedorProduct/${rol}`,
               {
                 method: "POST",
                 headers: {
@@ -319,13 +321,13 @@ function AgregarInventario() {
             await res4.json();
             /////Ahora la categoria
             const res5 = await fetch(
-              `http://localhost:5000/api/inventario/getCategoria/${rol}/${productcategoria}`
+              baseURL+`/inventario/getCategoria/${rol}/${productcategoria}`
             );
             const data5 = await res5.json();
             /////Si no existe ese nombre de categoria, crearla////
             if(data5===null){
               const res6 = await fetch(
-                `http://localhost:5000/api/inventario/insertCategoria/${rol}`,
+                baseURL+`/inventario/insertCategoria/${rol}`,
                 {
                   method: "POST",
                   headers: {
@@ -340,13 +342,13 @@ function AgregarInventario() {
             }
              /////Se consigue el id de la categoria recien creada//////////////////
              const res7 = await fetch(
-              `http://localhost:5000/api/inventario/getCategoria/${rol}/${productcategoria}`,
+              baseURL+`/inventario/getCategoria/${rol}/${productcategoria}`,
             );
             const data7 = await res7.json();
             const idcategoria1= data7.idcategoria;
             ////////////////el id de la categoria se inserta en la tabla productos///////////////////
             const res8 = await fetch(
-              `http://localhost:5000/api/inventario/insertCategoria2/${rol}`,
+              baseURL+`/inventario/insertCategoria2/${rol}`,
               {
                 method: "PUT",
                 headers: {
@@ -367,7 +369,7 @@ function AgregarInventario() {
             var tipo='entradaInventario'
             var descripcionmov=('Se ingreso '+productstock+unidad+ ' de ('+productname+')')
             const res9 = await fetch(
-              `http://localhost:5000/api/inventario/insertInventarioMovimiento/${rol}`,
+              baseURL+`/inventario/insertInventarioMovimiento/${rol}`,
               {
                 method: "POST",
                 headers: {
@@ -395,7 +397,7 @@ function AgregarInventario() {
           if(esproducto===1){
             const stockParcial1= parseFloat(productstock)+parseFloat(stockparcial)
             const res = await fetch(
-              `http://localhost:5000/api/inventario/editProduct/${rol}`,
+              baseURL+`/inventario/editProduct/${rol}`,
               {
                 method: "PUT",
                 headers: {
@@ -417,7 +419,7 @@ function AgregarInventario() {
             /////////////////Editar imgs/////////////////////////
             if(formDataS!==null){
               const resImgs = await fetch(
-                `http://localhost:5000/api/inventario/manejoImgs/${rol}/${productcode}`,
+                baseURL+`/inventario/manejoImgs/${rol}/${productcode}`,
                 {
                   method: "PUT",
                   body: formDataS
@@ -426,7 +428,7 @@ function AgregarInventario() {
               await resImgs.json();
             }
             const res2 = await fetch(
-              `http://localhost:5000/api/inventario/editProveedorPro/${rol}`,
+              baseURL+`/inventario/editProveedorPro/${rol}`,
               {
                 method: "PUT",
                 headers: {
@@ -441,7 +443,7 @@ function AgregarInventario() {
             await res2.json();
 
             const res3 = await fetch(
-              `http://localhost:5000/api/inventario/editProveedorPro2/${rol}`,
+              baseURL+`/inventario/editProveedorPro2/${rol}`,
               {
                 method: "PUT",
                 headers: {
@@ -458,13 +460,13 @@ function AgregarInventario() {
             await res3.json();
 
             const res4 = await fetch(
-              `http://localhost:5000/api/inventario/getCategoria/${rol}/${productcategoria}`
+              baseURL+`/inventario/getCategoria/${rol}/${productcategoria}`
             );
             const data4 = await res4.json();
             /////Si no existe ese nombre de categoria, crearla////
             if(data4===null){
               const res5 = await fetch(
-                `http://localhost:5000/api/inventario/insertCategoria/${rol}`,
+                baseURL+`/inventario/insertCategoria/${rol}`,
                 {
                   method: "POST",
                   headers: {
@@ -479,13 +481,13 @@ function AgregarInventario() {
             }
              /////Se consigue el id de la categoria recien creada//////////////////
              const res6 = await fetch(
-              `http://localhost:5000/api/inventario/getCategoria/${rol}/${productcategoria}`,
+              baseURL+`/inventario/getCategoria/${rol}/${productcategoria}`,
             );
             const data6 = await res6.json();
             const idcategoria1= data6.idcategoria;
             ////////////////el id de la categoria se inserta en la tabla productos///////////////////
             const res7 = await fetch(
-              `http://localhost:5000/api/inventario/insertCategoria2/${rol}`,
+              baseURL+`/inventario/insertCategoria2/${rol}`,
               {
                 method: "PUT",
                 headers: {
@@ -506,7 +508,7 @@ function AgregarInventario() {
             razon='carga'
             tipo='entradaInventario'
             const res9 = await fetch(
-              `http://localhost:5000/api/inventario/insertInventarioMovimiento/${rol}`,
+              baseURL+`/inventario/insertInventarioMovimiento/${rol}`,
               {
                 method: "POST",
                 headers: {
@@ -528,7 +530,7 @@ function AgregarInventario() {
           else{
             const stockParcial1= parseFloat(productstock)+parseFloat(stockparcial)
             const res = await fetch(
-              `http://localhost:5000/api/inventario/editIngredient/${rol}`,
+              baseURL+`/inventario/editIngredient/${rol}`,
               {
                 method: "PUT",
                 headers: {
@@ -547,7 +549,7 @@ function AgregarInventario() {
             console.log(data);
 
             const res2 = await fetch(
-              `http://localhost:5000/api/inventario/editProveedorPro/${rol}`,
+              baseURL+`/inventario/editProveedorPro/${rol}`,
               {
                 method: "PUT",
                 headers: {
@@ -563,7 +565,7 @@ function AgregarInventario() {
             console.log(data2)
 
             const res3 = await fetch(
-              `http://localhost:5000/api/inventario/editProveedorIng2/${rol}`,
+              baseURL+`/inventario/editProveedorIng2/${rol}`,
               {
                 method: "PUT",
                 headers: {
@@ -586,7 +588,7 @@ function AgregarInventario() {
             razon='carga'
             tipo='entradaInventario'
             const res9 = await fetch(
-              `http://localhost:5000/api/inventario/insertInventarioMovimiento/${rol}`,
+              baseURL+`/inventario/insertInventarioMovimiento/${rol}`,
               {
                 method: "POST",
                 headers: {
@@ -621,13 +623,13 @@ function AgregarInventario() {
       if(todosvalidos==='true'){
 
         const res = await fetch(
-          `http://localhost:5000/api/inventario/getActualIngredient/${rol}/${productcode}`
+          baseURL+`/inventario/getActualIngredient/${rol}/${productcode}`
         );
         const dataV = await res.json();
 
         if(dataV===null){
 
-          const res= await fetch(`http://localhost:5000/api/inventario/insertIngredient/${rol}`,{
+          const res= await fetch(baseURL+`/inventario/insertIngredient/${rol}`,{
             method: 'POST',
             headers:{
               'Content-Type': 'application/json'
@@ -644,13 +646,13 @@ function AgregarInventario() {
           console.log(data)
           ///////////inserción de la parte de proveedores/////////////////////////////
           const res1 = await fetch(
-            `http://localhost:5000/api/inventario/getProveedor/${rol}/${productproveedor}`
+            baseURL+`/inventario/getProveedor/${rol}/${productproveedor}`
           );
           const data1 = await res1.json();
           /////Si no existe ese nombre de proveedor, crearlo////
           if(data1===null){
             const res2 = await fetch(
-              `http://localhost:5000/api/inventario/insertProveedor/${rol}`,
+              baseURL+`/inventario/insertProveedor/${rol}`,
               {
                 method: "POST",
                 headers: {
@@ -666,14 +668,14 @@ function AgregarInventario() {
           }
           /////Se consigue el id del proveedor recien creado//////////////////
           const res3 = await fetch(
-            `http://localhost:5000/api/inventario/getProveedor/${rol}/${productproveedor}`,
+            baseURL+`/inventario/getProveedor/${rol}/${productproveedor}`,
           );
           const data3 = await res3.json();
           setIdproveedor(data3.idproveedor)
           const idproveedor1= data3.idproveedor;
           //////////al conseguirse el id del proveedor, se inserta este y los demas datos a proveedor-producto///
           const res4 = await fetch(
-            `http://localhost:5000/api/inventario/insertProveedorIng/${rol}`,
+            baseURL+`/inventario/insertProveedorIng/${rol}`,
             {
               method: "POST",
               headers: {
@@ -695,7 +697,7 @@ function AgregarInventario() {
           var razon='carga'
           var tipo='entradaInventario'
           const res9 = await fetch(
-            `http://localhost:5000/api/inventario/insertInventarioMovimiento/${rol}`,
+            baseURL+`/inventario/insertInventarioMovimiento/${rol}`,
             {
               method: "POST",
               headers: {

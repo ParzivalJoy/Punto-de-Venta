@@ -101,14 +101,24 @@ def getEmailUser():
     cur = conn.cursor(cursor_factory=RealDictCursor)
     data=request.json
     print(data)
-    sql="SELECT a.emailempleado, a.nombreempleado,  b.contrasena FROM empleados a LEFT JOIN usuarios b ON b.idempleado=a.idempleado WHERE usuario= '{0}'".format(data['username'])
-    cur.execute(sql)
+    sql1="SELECT b.nombreempresa as nombreempresa FROM usuariosgenerales a LEFT JOIN empresas b ON a.idempresa=b.idempresa WHERE a.usuariogeneral='{0}'".format(data['username'])
+    cur.execute(sql1)
+    nombreempresa = cur.fetchone()
+    conn.close()
+    if (nombreempresa==None):
+        return jsonify('0')
+    rol=nombreempresa['nombreempresa']
+    conn = conexionRol(rol)
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+    sq2="SELECT a.emailempleado, a.nombreempleado,  b.contrasena FROM empleados a LEFT JOIN usuarios b ON b.idempleado=a.idempleado WHERE usuario= '{0}'".format(data['username'])
+    cur.execute(sq2)
     row = cur.fetchone()
     conn.close()
     if (row==None):
         return jsonify(0)
     return jsonify(row)
 
+    
 @app.route('/api/inventario/bringImgs/<filename>/<rol>')
 def uploaded_file(filename, rol):
     return send_from_directory(IMAGE_FOLDER, path=filename, as_attachment=False)

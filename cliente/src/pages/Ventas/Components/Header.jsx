@@ -12,6 +12,8 @@ import useBubbletownApi from '../../Gestor/helpers/useBubbletownApi';
 import axios from 'axios';
 import Swal from 'sweetalert2'
 
+const baseURL = process.env.REACT_APP_API_URL //npm i dotenv
+
 export default function Header(props) {
 
     const [show, setShow] = useState(false);

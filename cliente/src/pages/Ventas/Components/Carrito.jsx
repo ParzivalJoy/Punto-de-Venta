@@ -12,7 +12,7 @@ import Button from 'react-bootstrap/Button'
 import { useReactToPrint } from 'react-to-print';
 import '../../../styles.scss';
 
-
+const baseURL = process.env.REACT_APP_API_URL //npm i dotenv
 
 
 export default function Carrito() {
@@ -52,7 +52,7 @@ export default function Carrito() {
 
 
     async function getNombre(){
-        const {data} = await axios.get('http://localhost:5000/api/configuracion/getTemasEs'+`/${rol}`)
+        const {data} = await axios.get(baseURL+'http://localhost:5000/api/configuracion/getTemasEs'+`/${rol}`)
         setNombre(data.logo)
     }
 
@@ -81,18 +81,18 @@ export default function Carrito() {
     }
 
     async function getImageCuenta(){
-        const {data} = await axios.get('http://localhost:5000/api/sales/cuenta'+`/${rol}`)
+        const {data} = await axios.get(baseURL+'/sales/cuenta'+`/${rol}`)
         console.log("Imagen :", data.qrcuenta)
         if(data.qrcuenta===null){
             const resb = await fetch(
-                `http://localhost:5000/api/inventario/bringImgs/sin-imagen.jpg`+`/${rol}`
+                baseURL+`/inventario/bringImgs/sin-imagen.jpg`+`/${rol}`
               );
               const datab = await resb.blob();
               var sauce= URL.createObjectURL(datab)
               setImagebinary(sauce)
           }else{
             const resb = await fetch(
-              `http://localhost:5000/api/inventario/bringImgs/${data.qrcuenta}`+`/${rol}`
+                baseURL+`/inventario/bringImgs/${data.qrcuenta}`+`/${rol}`
             );
             const datab = await resb.blob();
             var sauce= URL.createObjectURL(datab)
@@ -184,7 +184,7 @@ export default function Carrito() {
 
     async function ConsultaCantidadesProductos(idproducto, cantidad){
         if(productdata.length !== 0){
-            const {data} = await axios.get('http://localhost:5000/api/sales/verifyproduct'+`/${idproducto}`+`/${rol}`)
+            const {data} = await axios.get(baseURL+'/sales/verifyproduct'+`/${idproducto}`+`/${rol}`)
             //Se verifica la cantidad de productos
             if (data.cantidadproducto < cantidad){
                 setProductVerify(false)
@@ -196,7 +196,7 @@ export default function Carrito() {
 
     async function ConsultaCantidadesIngredientes(idproducto, cantidad){
         if(productdata.length !== 0){
-            const {data} = await axios.get('http://localhost:5000/api/sales/verifyingredients'+`/${idproducto}`+`/${rol}`)
+            const {data} = await axios.get(baseURL+'/sales/verifyingredients'+`/${idproducto}`+`/${rol}`)
             if(data !== null){
                 if (data.cantidadingrediente < cantidad){
                     setIngredientVerify(false)
@@ -210,7 +210,7 @@ export default function Carrito() {
     }
 
     async function ConsultaCantidadesComplementos(idcomplemento, cantidad){
-        const {data} = await axios.get('http://localhost:5000/api/sales/verifycomplements'+`/${idcomplemento}`+`/${rol}`)
+        const {data} = await axios.get(baseURL+'/sales/verifycomplements'+`/${idcomplemento}`+`/${rol}`)
         if(data.cantidadproducto < cantidad){
             setComplementVerify(false)
         }else{
@@ -219,7 +219,7 @@ export default function Carrito() {
     }
 
     async function ConsultaCantidadesIngredientesComplementos(idmodificador, cantidad){
-            const {data} = await axios.get('http://localhost:5000/api/sales/verifycomplementsingredients'+`/${idmodificador}`+`/${rol}`)
+            const {data} = await axios.get(baseURL+'/sales/verifycomplementsingredients'+`/${idmodificador}`+`/${rol}`)
             if(data !== null){
                 if(data.cantidadingrediente < cantidad){
                     setIngredientCompVerify(false)
@@ -232,7 +232,7 @@ export default function Carrito() {
     }
 
     async function ConsultaCantidadesIngredientesModificadores(idopcion, cantidad){
-            const {data} = await axios.get('http://localhost:5000/api/sales/verifymodifiersingredients'+`/${idopcion}`+`/${rol}`)
+            const {data} = await axios.get(baseURL+'/sales/verifymodifiersingredients'+`/${idopcion}`+`/${rol}`)
             if(data !== null){
                 if(data.cantidadingrediente < cantidad){
                     setModifierVerify(false)
@@ -387,12 +387,12 @@ export default function Carrito() {
     async function updateProduct(idusuario, idproducto, cantidad, precio, nombre, nota, total){
         const obj = {idusuario, idproducto, cantidad, nombre, nota, precio, total}
         //Modificar la cantidad del producto
-        await axios.put('http://localhost:5000/api/sales/updateproduct'+`/${rol}`,obj)
+        await axios.put(baseURL+'/sales/updateproduct'+`/${rol}`,obj)
         //Agregar detalles de la venta de productos
-        await axios.post('http://localhost:5000/api/sales/addsaleproduct'+`/${rol}`, obj)
+        await axios.post(baseURL+'/sales/addsaleproduct'+`/${rol}`, obj)
 
         //Rescata la porcion de cada ingrediente que utiliza el producto
-        const {data} = await axios.get('http://localhost:5000/api/sales/verification/ingredient/portion'+`/${idproducto}`+`/${rol}`)
+        const {data} = await axios.get(baseURL+'/sales/verification/ingredient/portion'+`/${idproducto}`+`/${rol}`)
         
         //Si el producto tiene ingredientes le quita la cantidad utilizada
         if (data !== undefined){
@@ -405,24 +405,24 @@ export default function Carrito() {
     async function updateModifier(idusuario, idmod, idop, nombremod, nombreop, precio, idingrediente, porcion){
         //Agregar detalles de la venta de modificadores
         const obj = {idusuario, idmod, idop, nombremod, nombreop, precio, idingrediente, porcion}
-        await axios.post('http://localhost:5000/api/sales/addsalemodifier'+`/${rol}`,obj)
-        await axios.put('http://localhost:5000/api/sales/modifier/updateingredient'+`/${rol}`,obj)
+        await axios.post(baseURL+'/sales/addsalemodifier'+`/${rol}`,obj)
+        await axios.put(baseURL+'/sales/modifier/updateingredient'+`/${rol}`,obj)
     }
 
     async function updateComplement(idusuario, idcomplemento, cantidad, nombre, precio, total){
         //Se obtiene el id del producto original
-        const { data } = await axios.get('http://localhost:5000/api/sales/verification/complement'+`/${idcomplemento}`+`/${rol}`)
+        const { data } = await axios.get(baseURL+'/sales/verification/complement'+`/${idcomplemento}`+`/${rol}`)
         let idproducto = data.idproductooriginal
         const obj = {idproducto, cantidad}
         
         //Modificar la cantidad del producto
-        await axios.put('http://localhost:5000/api/sales/updateproduct'+`/${rol}`,obj)
+        await axios.put(baseURL+'/sales/updateproduct'+`/${rol}`,obj)
         //Agregar detalles de la venta de complementos
         const objproduct = {idusuario, idcomplemento, cantidad, nombre, precio, total}
-        await axios.post('http://localhost:5000/api/sales/addsalecomplement'+`/${rol}`, objproduct)
+        await axios.post(baseURL+'/sales/addsalecomplement'+`/${rol}`, objproduct)
        
         //Rescata la porcion de cada ingrediente que utiliza el producto
-        const {dataportion} = await axios.get('http://localhost:5000/api/sales/verification/ingredient/portion'+`/${idproducto}`+`/${rol}`)
+        const {dataportion} = await axios.get(baseURL+'/verification/ingredient/portion'+`/${idproducto}`+`/${rol}`)
         
         //Si el complemento tiene ingredientes tambien quita la cantidad utilizada
         if (dataportion !== undefined){
@@ -437,7 +437,7 @@ export default function Carrito() {
         console.log(porcion)
         console.log(idproducto)
         const obj = {porcion, idproducto}
-        await axios.put('http://localhost:5000/api/sales/updateingredient'+`/${rol}`, obj)
+        await axios.put(baseURL+'/sales/updateingredient'+`/${rol}`, obj)
     }
 
 
@@ -450,7 +450,7 @@ export default function Carrito() {
         let idpago = 1
 
         const obj = { idusuario, idcliente, idpago, totalventa , fechaventa, horaventa}
-        const { data } = await axios.post('http://localhost:5000/api/sales/venta'+`/${rol}`, obj)
+        const { data } = await axios.post(baseURL+'/sales/venta'+`/${rol}`, obj)
 
     }
 

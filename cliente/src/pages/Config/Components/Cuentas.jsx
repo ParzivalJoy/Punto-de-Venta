@@ -12,19 +12,20 @@ export default function Cuentas() {
     const[formDataS, setFormdatas]= useState(null)
     const[todosvalidos, setTodosvalidos]= useState(null);
     const [imagebd, setImageBD] = useState(null)
+    const baseURL = process.env.REACT_APP_API_URL //npm i dotenv
 
     async function getImageCuenta(){
-      const {data} = await axios.get('http://localhost:5000/api/sales/cuenta'+`/${rol}`)
+      const {data} = await axios.get(baseURL+`/sales/cuenta`+`/${rol}`)
       if(data.qrcuenta===null){
           const resb = await fetch(
-              `http://localhost:5000/api/inventario/bringImgs/sin-imagen.jpg`+`/${rol}`
+            baseURL+`/inventario/bringImgs/sin-imagen.jpg`+`/${rol}`
             );
             const datab = await resb.blob();
             var sauce= URL.createObjectURL(datab)
             setImageBD(sauce)
         }else{
           const resb = await fetch(
-            `http://localhost:5000/api/inventario/bringImgs/${data.qrcuenta}`+`/${rol}`
+            baseURL+`/inventario/bringImgs/${data.qrcuenta}`+`/${rol}`
           );
           const datab = await resb.blob();
           var sauce= URL.createObjectURL(datab)
@@ -36,7 +37,7 @@ export default function Cuentas() {
     const obj = {imagebinary}
     if(formDataS!==null){
       const resImgs = await fetch(
-        `http://localhost:5000/api/cuentas/manejoImgs/${rol}`,
+        baseURL+`/cuentas/manejoImgs/${rol}`,
         {
           method: "PUT",
           body: formDataS

@@ -15,6 +15,7 @@ const ModalCambio = () => {
   const[observacionesvalid, setObservacionesvalid]= useState('true')
   const[lock, setLock]= useState(false)
 
+  const baseURL = process.env.REACT_APP_API_URL //npm i dotenv
   const rol = localStorage.getItem('rol')
 
   const handleCierre=()=>{
@@ -31,7 +32,7 @@ const ModalCambio = () => {
       const user = localStorage.getItem("user")
 
       const res222 = await fetch(
-      `http://localhost:5000/api/accesibilidad/getIdUsuario/${rol}/${user}`
+      baseURL+`/accesibilidad/getIdUsuario/${rol}/${user}`
       );
       const data222 = await res222.json();
 
@@ -46,7 +47,7 @@ const ModalCambio = () => {
          var idusuario=idusuarioes
          var descripcionmov=('Observación: '+observacionesvar)
          const res9 = await fetch(
-           `http://localhost:5000/contabilidad/insertContabilidadMovimiento/${rol}`,
+          baseURL+`/contabilidad/insertContabilidadMovimiento/${rol}`,
            {
              method: "POST",
              headers: {

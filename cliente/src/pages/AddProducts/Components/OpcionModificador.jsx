@@ -1,5 +1,5 @@
 import React from 'react'
-import  { useEffect } from 'react'
+import  { useEffect, useState } from 'react'
 import RemoveIcon from '@mui/icons-material/Remove'
 import CheckIcon from '@mui/icons-material/Add';
 export default function OpcionModificador(props) {
@@ -8,13 +8,12 @@ export default function OpcionModificador(props) {
         textnumbers: /^[a-zA-ZÀ-ÿ0-9\s]{1,40}$/, // Letras y espacios, pueden llevar acentos.
         float:/^[0-9.]{1,20}$/, // 1 a 20 digitos con punto.
     }
-    const errors = {
-        nameoption:'', 
+    const [errors,setErrors] = useState({
+        nameoption:'*Campo obligatorio.', 
         priceoption:'',
-        portionoption:'',
-        idingredientoption:''}
+        portionoption:'*Campo obligatorio.',
+        idingredientoption:'*Campo obligatorio.'})
 
-        inputValidation()
     const handleChange = e => {
             const { name, value } = e.target;
             props.setOptionModifier({
@@ -24,38 +23,78 @@ export default function OpcionModificador(props) {
         
     };
 
+    useEffect(()=>{
+        inputValidation()
+    },[props.optionmodifier])
+
     function  inputValidation(){
         if(props.optionmodifier.name===''){
-                errors.nameoption="*Campo obligatorio."
-                props.setFormValidOptions(false)
+            setErrors({
+                ...errors,
+                ['nameoption']: "*Campo obligatorio."
+            })
+            //errors.nameoption="*Campo obligatorio."
+            props.setFormValidOptions(false)
         }else{
-                errors.nameoption=""
-                props.setFormValidOptions(true)
+            setErrors({
+                ...errors,
+                ['nameoption']: ""
+            })
+            //errors.nameoption=""
+            props.setFormValidOptions(true)
             }
 
         if(!expresiones.float.test(props.optionmodifier.price)){
-            errors.priceoption="Este campo solo puede contener numeros."
+            setErrors({
+                ...errors,
+                ['priceoption']: "Este campo solo puede contener numeros."
+            })
+            //errors.priceoption="Este campo solo puede contener numeros."
             props.setFormValidOptions(false)
         }else{
-                errors.priceoption=""
-                props.setFormValidOptions(true)
+            setErrors({
+                ...errors,
+                ['priceoption']: ""
+            })
+            //errors.priceoption=""
+            props.setFormValidOptions(true)
         }
         if(props.optionmodifier.idingredient===''){
-            errors.idingredientoption="*Campo obligatorio."
+            setErrors({
+                ...errors,
+                ['idingredientoption']: "*Campo obligatorio."
+            })
+            //errors.idingredientoption="*Campo obligatorio."
             props.setFormValidOptions(false)
         }else{
-                errors.idingredientoption=""
-                props.setFormValidOptions(true)
+            setErrors({
+                ...errors,
+                ['idingredientoption']: ""
+            })
+            //errors.idingredientoption=""
+            props.setFormValidOptions(true)
             }
         if(!expresiones.float.test(props.optionmodifier.portion)){
-            errors.portionoption="Este campo solo puede contener numeros."
+            setErrors({
+                ...errors,
+                ['portionoption']: "Este campo solo puede contener numeros"
+            })
+            //errors.portionoption="Este campo solo puede contener numeros."
             props.setFormValidOptions(false)
         }else{
             if(props.optionmodifier.portion==='0.0'){
-                errors.portionoption="*Campo obligatorio."
+                setErrors({
+                    ...errors,
+                    ['portionoption']: "*Campo obligatorio."
+                })
+                //errors.portionoption="*Campo obligatorio."
                 props.setFormValidOptions(false)
             }else{
-                errors.portionoption=""
+                setErrors({
+                    ...errors,
+                    ['portionoption']: ""
+                })
+                //errors.portionoption=""
                 props.setFormValidOptions(true)
             }
         }

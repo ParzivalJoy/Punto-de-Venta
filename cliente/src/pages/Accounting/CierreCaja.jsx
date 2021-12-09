@@ -39,6 +39,7 @@ function CierreCaja() {
   const [todosvalidos, setTodosvalidos]= useState(null)
   const[loading, setLoading]= useState(false)
 
+  const baseURL = process.env.REACT_APP_API_URL //npm i dotenv
   const rol = localStorage.getItem('rol')
 
   const handleTotalParcial = () =>{
@@ -63,7 +64,7 @@ function CierreCaja() {
     const user = localStorage.getItem("user")
 
         const res222 = await fetch(
-          `http://localhost:5000/api/accesibilidad/getIdUsuario/${rol}/${user}`
+          baseURL+`/accesibilidad/getIdUsuario/${rol}/${user}`
         );
         const data222 = await res222.json();
 
@@ -77,7 +78,7 @@ function CierreCaja() {
         var cuenta='12345';
         var idusuario=idusuarioes;
         const res = await fetch(
-          `http://localhost:5000/api/contabilidad/insertCierre/${rol}`,
+          baseURL+`/contabilidad/insertCierre/${rol}`,
           {
             method: "POST",
             headers: {

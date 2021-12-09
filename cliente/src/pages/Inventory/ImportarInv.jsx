@@ -4,6 +4,8 @@ import formato from './imgs/excelformato.png'
 import PacmanLoader from "react-spinners/PacmanLoader";
 import Swal from 'sweetalert2'
 
+const baseURL = process.env.REACT_APP_API_URL //npm i dotenv
+
 export default function ImportarInv() {
   const [products, setProducts] = useState([]);
   const [infovalida, setInfovalida] = useState(false);
@@ -20,7 +22,7 @@ export default function ImportarInv() {
         const role = localStorage.getItem('role')
 
         const res2 = await fetch(
-          `http://localhost:5000/api/accesibilidad/getIdUsuario/${rol}/${user}`
+          baseURL+`/accesibilidad/getIdUsuario/${rol}/${user}`
         );
         const data2 = await res2.json();
 
@@ -102,7 +104,7 @@ export default function ImportarInv() {
 
       if (habilitaring === false) {
         const res = await fetch(
-          `http://localhost:5000/api/inventario/insertProduct/${rol}`,
+          baseURL+`/inventario/insertProduct/${rol}`,
           {
             method: "POST",
             headers: {
@@ -124,14 +126,14 @@ export default function ImportarInv() {
         console.log(data);
 
         const res1 = await fetch(
-          `http://localhost:5000/api/inventario/getProveedor/${rol}/${productproveedor}`
+          baseURL+`/inventario/getProveedor/${rol}/${productproveedor}`
         );
         const data1 = await res1.json();
 
         /////Si no existe ese nombre de proveedor, crearlo////
         if (data1 === null) {
           const res2 = await fetch(
-            `http://localhost:5000/api/inventario/insertProveedor/${rol}`,
+            baseURL+`/inventario/insertProveedor/${rol}`,
             {
               method: "POST",
               headers: {
@@ -147,14 +149,14 @@ export default function ImportarInv() {
         }
         /////Se consigue el id del proveedor recien creado//////////////////
         const res3 = await fetch(
-          `http://localhost:5000/api/inventario/getProveedor/${rol}/${productproveedor}`
+          baseURL+`/inventario/getProveedor/${rol}/${productproveedor}`
         );
         const data3 = await res3.json();
         console.log(data3.idproveedor);
         const idproveedor1 = data3.idproveedor;
         //////////al conseguirse el id del proveedor, se inserta este y los demas datos a proveedor-producto///
         const res4 = await fetch(
-          `http://localhost:5000/api/inventario/insertProveedorProduct/${rol}`,
+          baseURL+`/inventario/insertProveedorProduct/${rol}`,
           {
             method: "POST",
             headers: {
@@ -173,13 +175,13 @@ export default function ImportarInv() {
 
         /////Ahora la categoria
         const res5 = await fetch(
-          `http://localhost:5000/api/inventario/getCategoria/${rol}/${productcategoria}`
+          baseURL+`/inventario/getCategoria/${rol}/${productcategoria}`
         );
         const data5 = await res5.json();
         /////Si no existe ese nombre de categoria, crearla////
         if (data5 === null) {
           const res6 = await fetch(
-            `http://localhost:5000/api/inventario/insertCategoria/${rol}`,
+            baseURL+`/inventario/insertCategoria/${rol}`,
             {
               method: "POST",
               headers: {
@@ -194,13 +196,13 @@ export default function ImportarInv() {
         }
         /////Se consigue el id de la categoria recien creada//////////////////
         const res7 = await fetch(
-          `http://localhost:5000/api/inventario/getCategoria/${rol}/${productcategoria}`
+          baseURL+`/inventario/getCategoria/${rol}/${productcategoria}`
         );
         const data7 = await res7.json();
         const idcategoria1 = data7.idcategoria;
         ////////////////el id de la categoria se inserta en la tabla productos///////////////////
         const res8 = await fetch(
-          `http://localhost:5000/api/inventario/insertCategoria2/${rol}`,
+          baseURL+`/inventario/insertCategoria2/${rol}`,
           {
             method: "PUT",
             headers: {
@@ -222,7 +224,7 @@ export default function ImportarInv() {
         var razon = "carga";
         var tipo = "entradaInventario";
         const res9 = await fetch(
-          `http://localhost:5000/api/inventario/insertInventarioMovimiento/${rol}`,
+          baseURL+`/inventario/insertInventarioMovimiento/${rol}`,
           {
             method: "POST",
             headers: {
@@ -242,7 +244,7 @@ export default function ImportarInv() {
       } else {
         /////////////////////////Inserción si se trata de ingredientes///////////////////////////////////
         const res = await fetch(
-          `http://localhost:5000/api/inventario/insertIngredient/${rol}`,
+          baseURL+`/inventario/insertIngredient/${rol}`,
           {
             method: "POST",
             headers: {
@@ -261,13 +263,13 @@ export default function ImportarInv() {
         console.log(data);
         ///////////inserción de la parte de proveedores/////////////////////////////
         const res1 = await fetch(
-          `http://localhost:5000/api/inventario/getProveedor/${rol}/${productproveedor}`
+          baseURL+`/inventario/getProveedor/${rol}/${productproveedor}`
         );
         const data1 = await res1.json();
         /////Si no existe ese nombre de proveedor, crearlo////
         if (data1 === null) {
           const res2 = await fetch(
-            `http://localhost:5000/api/inventario/insertProveedor/${rol}`,
+            baseURL+`/inventario/insertProveedor/${rol}`,
             {
               method: "POST",
               headers: {
@@ -283,13 +285,13 @@ export default function ImportarInv() {
         }
         /////Se consigue el id del proveedor recien creado//////////////////
         const res3 = await fetch(
-          `http://localhost:5000/api/inventario/getProveedor/${rol}/${productproveedor}`
+          baseURL+`/inventario/getProveedor/${rol}/${productproveedor}`
         );
         const data3 = await res3.json();
         const idproveedor1 = data3.idproveedor;
         //////////al conseguirse el id del proveedor, se inserta este y los demas datos a proveedor-producto///
         const res4 = await fetch(
-          `http://localhost:5000/api/inventario/insertProveedorIng/${rol}`,
+          baseURL+`/inventario/insertProveedorIng/${rol}`,
           {
             method: "POST",
             headers: {
@@ -313,7 +315,7 @@ export default function ImportarInv() {
         razon = "carga";
         tipo = "entradaInventario";
         const res9 = await fetch(
-          `http://localhost:5000/api/inventario/insertInventarioMovimiento/${rol}`,
+          baseURL+`/inventario/insertInventarioMovimiento/${rol}`,
           {
             method: "POST",
             headers: {

@@ -2,6 +2,8 @@ import React,{useState,useEffect} from 'react'
 import Swal from 'sweetalert2'
 import InvertColorsIcon from '@mui/icons-material/InvertColors';
 
+const baseURL = process.env.REACT_APP_API_URL //npm i dotenv
+
 function Tema() {
 
     const [activotemas, setActivotemas]= useState(false)
@@ -14,7 +16,7 @@ function Tema() {
     const datosInicio=async()=>{
       //////////datos de temas desde el inicio ////////////////////////
       const res1 = await fetch(
-        `http://localhost:5000/api/configuracion/getTemasEs`+`/${rol}`
+        baseURL+`/configuracion/getTemasEs`+`/${rol}`
       );
       const data1 = await res1.json();
       if(data1===null){
@@ -45,7 +47,7 @@ function Tema() {
       if(nombreempresavalid===true){
 
         const res = await fetch(
-          `http://localhost:5000/api/configuracion/editTema`+`/${rol}`,
+          baseURL+`/configuracion/editTema`+`/${rol}`,
           {
             method: "PUT",
             headers: {

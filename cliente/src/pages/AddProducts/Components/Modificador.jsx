@@ -6,18 +6,18 @@ import CheckIcon from '@mui/icons-material/Check';
 
 function Modificador(props) {
     const [formvalidoptions,setFormValidOptions]=useState(false)
-    const errors = {
-        namemodifier:'',
-        pricemodifier:''}
+    const [errors, setErrors] = useState({
+        namemodifier:'*Campo obligatorio.',
+        pricemodifier:'*Campo obligatorio'})
 
     const expresiones = {
 	text: /^[a-zA-ZÀ-ÿ\s]{1,50}$/, // Letras,espacios
 	textnumbers: /^[a-zA-ZÀ-ÿ0-9\s]{1,40}$/, // Letras y espacios, pueden llevar acentos.
 	float:/^[0-9.]{1,20}$/, // 1 a 20 digitos con punto.
     }
-    
-    inputValidation()
-
+    useEffect(()=>{
+        inputValidation()
+    },[props.modifier])
 
     const handleChange = e => {
         const { name, value } = e.target;
@@ -32,22 +32,43 @@ function Modificador(props) {
     
     function  inputValidation(){
         if(props.modifier.namemodifier===''){
-                errors.namemodifier="*Campo obligatorio."
-                props.setFormValidModifiers(false)
+            setErrors({
+                ...errors,
+                ['namemodifier']: "*Campo obligatorio."
+            })
+            //errors.namemodifier="*Campo obligatorio."
+            props.setFormValidModifiers(false)
         }else{
-                errors.namemodifier=""
-                props.setFormValidModifiers(true)
+            setErrors({
+                ...errors,
+                ['namemodifier']: ""
+            })
+            //errors.namemodifier=""
+            props.setFormValidModifiers(true)
             }
+
         if(props.modifier.pricemodifierchecked){
             if(!expresiones.float.test(props.modifier.pricemodifier)){
-                errors.pricemodifier="Este campo solo puede contener numeros."
+                setErrors({
+                    ...errors,
+                    ['pricemodifier']: "Este campo solo puede contener numeros."
+                })
+                //errors.pricemodifier="Este campo solo puede contener numeros."
                 props.setFormValidModifiers(false)
             }else{
                 if(props.modifier.pricemodifier==='0.0'){
-                    errors.pricemodifier="*Campo obligatorio."
+                    setErrors({
+                        ...errors,
+                        ['pricemodifier']: "*Campo obligatorio"
+                    })
+                    //errors.pricemodifier="*Campo obligatorio."
                     props.setFormValidModifiers(false)
                 }else{
-                    errors.pricemodifier=""
+                    setErrors({
+                        ...errors,
+                        ['pricemodifier']: ""
+                    })
+                    //errors.pricemodifier=""
                     props.setFormValidModifiers(true)
                 }
             }
@@ -87,7 +108,7 @@ function Modificador(props) {
     function removeOptionModifier(i){
         props.setListOptionsModifier(props.listoptionsmodifier.filter(item => item.idoptionmodifier !== i))
     }
-    console.log(props.modifier)
+
     return (
             <div className="row d-flex justify-content-center">
             <div className="">
@@ -250,6 +271,7 @@ function Modificador(props) {
                 {props.newmodifier
                 ?<div/>
                 :<div align="right">
+                    <br/>
                     {props.errorform && <p className="text-danger">{props.errorform}</p>}
                     <button className='btn btn-primary' onClick={props.newModifier} ><CheckIcon/> Agregar Modificador</button>
                     <br/>

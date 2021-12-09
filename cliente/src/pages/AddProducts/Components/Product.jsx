@@ -11,18 +11,18 @@ function Product(props) {
     const rol = localStorage.getItem('rol')
     const [listcategories, setListCategories] = useState([])
     const [msg, setMsg]=useState('')
-    const errors ={
+    const [errors, setErrors] = useState({
         imageproduct:'',
-        nameproduct:'', 
+        nameproduct:'*Campo obligatorio.', 
         priceproduct:'', 
         costproduct:'',
-        idproduct:'', 
+        idproduct:'*Campo obligatorio.', 
         descriptionproduct:'',
-        stockinitproduct:'', 
-        stocknotifiproduct:'',
-        namecategory:'',
-        unitproduct:'',
-        categoryproduct:''}
+        stockinitproduct:'*Campo Obligatorio.', 
+        stocknotifiproduct:'*Campo obligatorio.',
+        namecategory:'*Campo obligatorio.',
+        unitproduct:'*Campo obligatorio.',
+        categoryproduct:'*Campo obligatorio.'})
     const expresiones = {
 	text: /^[a-zA-ZÀ-ÿ\s]{1,50}$/, // Letras, numeros y espacio, almenos cuatro letras
 	textnumbers: /^[a-zA-ZÀ-ÿ0-9\s]{1,40}$/, // Letras y espacios, pueden llevar acentos.
@@ -34,7 +34,10 @@ function Product(props) {
         getCategories()
     },[])
 
-    inputValidation()
+    useEffect(()=>{
+        inputValidation()
+    },[props.formproduct])
+
     
     const convertiraBase64=(archivos)=>{
         Array.from(archivos).forEach(archivo=>{
@@ -83,109 +86,196 @@ function Product(props) {
     function  inputValidation(){
         if(!expresiones.text.test(props.formproduct.nameproduct)){
             if(props.formproduct.nameproduct===''){
-                errors.nameproduct="*Campo obligatorio."
+                setErrors({
+                    ...errors,
+                    ['nameproduct']: "*Campo obligatorio."
+                })
+                //errors.nameproduct="*Campo obligatorio."
                 props.setFormValid(false)
             }else{
-                errors.nameproduct="Este campo no puede contener números."
+                setErrors({
+                    ...errors,
+                    ['nameproduct']: "Este campo no puede contener números."
+                })
+                //errors.nameproduct="Este campo no puede contener números."
                 props.setFormValid(false)
             }
         }else{
-            errors.nameproduct=""
+            setErrors({
+                ...errors,
+                ['nameproduct']: ""
+            })
+            //errors.nameproduct=""
             props.setFormValid(true)
         }
 
         if(!expresiones.int.test(props.formproduct.idproduct)){
             if(props.formproduct.idproduct===''){
-                errors.idproduct="*Campo obligatorio."
+                setErrors({
+                    ...errors,
+                    ['idproduct']: "*Campo obligatorio."
+                })
+                //errors.idproduct="*Campo obligatorio."
                 props.setFormValid(false)
             }else{
-                errors.idproduct="Este campo solo puede contener numeros sin espacios."
+                setErrors({
+                    ...errors,
+                    ['idproduct']: "Este campo solo puede contener numeros sin espacios."
+                })
+                //errors.idproduct="Este campo solo puede contener numeros sin espacios."
                 props.setFormValid(false)
             }
         }else{
-            errors.idproduct=""
+            setErrors({
+                ...errors,
+                ['idproduct']: ""
+            })
+            //errors.idproduct=""
             props.setFormValid(true)
         }
 
         if(!expresiones.float.test(props.formproduct.priceproduct)){
             if(props.formproduct.priceproduct===''){
-                errors.priceproduct="*Campo obligatorio."
-                props.setFormValid(false)
+                props.setFormProduct({
+                    ...props.formproduct,
+                    ['priceproduct']: "0.0"
+                })
+                props.setFormValid(true)
             }else{
-                errors.priceproduct="Este campo solo puede contener numeros enteros o decimales."
+                setErrors({
+                    ...errors,
+                    ['priceproduct']: "Este campo solo puede contener numeros enteros o decimales."
+                })
+                //errors.priceproduct="Este campo solo puede contener numeros enteros o decimales."
                 props.setFormValid(false)
             }
         }else{
-            errors.priceproduct=""
+            setErrors({
+                ...errors,
+                ['priceproduct']: ""
+            })
+            //errors.priceproduct=""
             props.setFormValid(true)
         }
 
         if(!expresiones.int.test(props.formproduct.stockinitproduct)){
-                errors.stockinitproduct="Este campo solo puede contener numeros enteros."
-                props.setFormValid(false)
+            setErrors({
+                ...errors,
+                ['stockinitproduct']: "Este campo solo puede contener numeros enteros."
+            })
+            //errors.stockinitproduct="Este campo solo puede contener numeros enteros."
+            props.setFormValid(false)
         }else{
             if(props.formproduct.stockinitproduct==='0'){
-                errors.stockinitproduct="*Campo Obligatorio."
+                setErrors({
+                    ...errors,
+                    ['stockinitproduct']: "*Campo Obligatorio."
+                })
+                //errors.stockinitproduct="*Campo Obligatorio."
                 props.setFormValid(false)
             }else{
-                errors.stockinitproduct=""
+                setErrors({
+                    ...errors,
+                    ['stockinitproduct']: ""
+                })
+                //errors.stockinitproduct=""
                 props.setFormValid(true)
             }
         }
         if(!expresiones.int.test(props.formproduct.stocknotifiproduct)){
-                errors.stocknotifiproduct="Este campo solo puede contener numeros enteros."
-                props.setFormValid(false)
+            setErrors({
+                ...errors,
+                ['stocknotifiproduct']: "Este campo solo puede contener numeros enteros."
+            })
+            //errors.stocknotifiproduct="Este campo solo puede contener numeros enteros."
+            props.setFormValid(false)
         }else{
             if(props.formproduct.stocknotifiproduct==='0'){
-                errors.stocknotifiproduct="*Campo obligatorio."
+                setErrors({
+                    ...errors,
+                    ['stocknotifiproduct']: "*Campo obligatorio."
+                })
+                //errors.stocknotifiproduct="*Campo obligatorio."
                 props.setFormValid(false)
             }else{
-                errors.stocknotifiproduct=""
+                setErrors({
+                    ...errors,
+                    ['stocknotifiproduct']: ""
+                })
+                //errors.stocknotifiproduct=""
                 props.setFormValid(true)
             }
         }
         
         if(!expresiones.float.test(props.formproduct.costproduct)){
-            errors.costproduct="Este campo solo puede contener numeros enteros o decimales."
+            setErrors({
+                ...errors,
+                ['costproduct']: "Este campo solo puede contener numeros enteros o decimales."
+            })
+            //errors.costproduct="Este campo solo puede contener numeros enteros o decimales."
             props.setFormValid(false)
         }else{
-            errors.costproduct=""
+            setErrors({
+                ...errors,
+                ['costproduct']: ""
+            })
+            //errors.costproduct=""
             props.setFormValid(true)
         }
 
         if(!expresiones.text.test(props.namecategory)){
             if(props.namecategory===''){
-                errors.namecategory="*Campo obligatorio."
+                setErrors({
+                    ...errors,
+                    ['namecategory']: "*Campo obligatorio."
+                })
+                //errors.namecategory="*Campo obligatorio."
                 props.setFormValid(false)
             }else{
-                errors.namecategory="Este campo no puede contener números."
+                setErrors({
+                    ...errors,
+                    ['namecategory']: "Este campo no puede contener números."
+                })
+                //errors.namecategory="Este campo no puede contener números."
                 props.setFormValid(false)
             }
         }else{
-            errors.namecategory=""
+            setErrors({
+                ...errors,
+                ['namecategory']: ""
+            })
+            //errors.namecategory=""
             props.setFormValid(true)
         }
 
-        if(!expresiones.float.test(props.formproduct.costproduct)){
-            errors.costproduct="Este campo solo puede contener numeros enteros o decimales."
-            props.setFormValid(false)
-        }else{
-            errors.costproduct=""
-            props.setFormValid(true)    
-        }
-
         if(props.formproduct.categoryproduct===''){
-            errors.categoryproduct='*Campo obligatorio.'
+            setErrors({
+                ...errors,
+                ['categoryproduct']: "*Campo obligatorio."
+            })
+            //errors.categoryproduct='*Campo obligatorio.'
             props.setFormValid(false)
         }else{
-            errors.categoryproduct=''
+            setErrors({
+                ...errors,
+                ['categoryproduct']: ""
+            })
+            //errors.categoryproduct=''
             props.setFormValid(true)}
         
         if(props.formproduct.unitproduct===''){
-            errors.unitproduct='*Campo obligatorio.'
+            setErrors({
+                ...errors,
+                ['unitproduct']: "*Campo obligatorio."
+            })
+            //errors.unitproduct='*Campo obligatorio.'
             props.setFormValid(false)
         }else{
-            errors.unitproduct=''
+            setErrors({
+                ...errors,
+                ['unitproduct']: ""
+            })
+            //errors.unitproduct=''
             props.setFormValid(true)}
 
     }
@@ -200,8 +290,8 @@ function Product(props) {
                         <img src={(props.imagebinary===null) ? product : props.imagebinary} width="150" height="150" className="rounded" alt="imagen producto " align="center"/>
                     </div>
                     <div  className="col-md-9 mt-5" align="center">
-                    <label className="col-form-label"><b> Imagen del producto:</b></label>
                         <div className="input-group">
+                            <label className="col-form-label"><b> Imagen del producto:</b></label>
                             <input type="file" className="form-control" id="file" name="file" accept="image/*" onChange={(e)=>convertiraBase64(e.target.files)} />
                             {errors.imageproduct && <p className="text-danger">{errors.imageproduct}</p>}
                         </div>

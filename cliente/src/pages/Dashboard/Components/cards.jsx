@@ -9,6 +9,8 @@ import axios from 'axios'
 import useBubbletownApi from '../../Gestor/helpers/useBubbletownApi';
 import CircularProgress from "@material-ui/core/CircularProgress";
 
+const baseURL = process.env.REACT_APP_API_URL //npm i dotenv
+
 
 export default function Cards() {
 
@@ -42,18 +44,18 @@ export default function Cards() {
 
     async function getSalesToday(){
         let fechaventa = getCurrentDate()
-        const {data} = await axios.get('http://localhost:5000/api/dashboard'+`/${fechaventa}`+`/${rol}`)
+        const {data} = await axios.get(baseURL+`/dashboard`+`/${fechaventa}`+`/${rol}`)
         setSalesToday(data.sum)
     }
 
     async function getSalesYes(){
         let fechaventa = getYesDate()
-        const {data} = await axios.get('http://localhost:5000/api/dashboard'+`/${fechaventa}`+`/${rol}`)
+        const {data} = await axios.get(baseURL+`/dashboard`+`/${fechaventa}`+`/${rol}`)
         setSalesYes(data.sum)
     }
 
     async function getProductNot(){
-        const {data} = await axios.get('http://localhost:5000/api/dashboard'+`/${rol}`)
+        const {data} = await axios.get(baseURL+`/dashboard`+`/${rol}`)
         setProductNot(data.count)
     }
 

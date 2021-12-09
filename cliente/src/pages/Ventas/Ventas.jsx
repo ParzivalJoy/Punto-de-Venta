@@ -11,6 +11,7 @@ import Carrito from './Components/Carrito'
 import { useHistory } from "react-router-dom";
 
     const dataproduct = []
+    const baseURL = process.env.REACT_APP_API_URL //npm i dotenv
 
 export default function Ventas() {
 
@@ -30,7 +31,7 @@ export default function Ventas() {
     }
 
     async function getCategories(){
-        const {data} = await axios.get('http://localhost:5000/api/sales/categories'+`/${rol}`)
+        const {data} = await axios.get(baseURL+'/sales/categories'+`/${rol}`)
         setCategories(data)
     }
 
@@ -42,7 +43,7 @@ export default function Ventas() {
     }
 
     async function getProductByName(){
-        const {data} = await axios.get('http://localhost:5000/api/sales/products/name'+`/${search}`+`/${rol}`)
+        const {data} = await axios.get(baseURL+'/sales/products/name'+`/${search}`+`/${rol}`)
 
         //Si no encuentra nada en la consulta de nombre, hace la consulta por código
         if (Object.entries(data).length === 0){
@@ -54,7 +55,7 @@ export default function Ventas() {
     }
 
     async function getProductById(){
-        const {data} = await axios.get('http://localhost:5000/api/sales/products/id'+`/${search}`+`/${rol}`)
+        const {data} = await axios.get(baseURL+'/sales/products/id'+`/${search}`+`/${rol}`)
         console.log(data)       
         if (Object.entries(data).length === 0){
             Swal.fire({
@@ -70,7 +71,7 @@ export default function Ventas() {
     }
 
     async function verifyProductComplement(){
-        const {data} = await axios.get('http://localhost:5000/api/sales/verification/products/complements'+`/${search}`+`/${rol}`)
+        const {data} = await axios.get(baseURL+'/sales/verification/products/complements'+`/${search}`+`/${rol}`)
         console.log(data)
         if(data !== null){
             history.push('/product'+`/${search}`)
@@ -80,7 +81,7 @@ export default function Ventas() {
     }
 
     async function verifyProductModifier(){
-        const {data} = await axios.get('http://localhost:5000/api/sales/verification/products/modifiers'+`/${search}`+`/${rol}`)
+        const {data} = await axios.get(baseURL+'/sales/verification/products/modifiers'+`/${search}`+`/${rol}`)
         console.log(data)
         if(data !== null){
             history.push('/product'+`/${search}`)
@@ -90,7 +91,7 @@ export default function Ventas() {
     }
 
     async function getSearchProduct(){
-        const {data} = await axios.get('http://localhost:5000/api/getproducts/'+`/${search}`+`/${rol}`)
+        const {data} = await axios.get(baseURL+'/getproducts/'+`/${search}`+`/${rol}`)
 
         if(localStorage["productdatas"]){
             //Guarda los datos de localstorage en temp
@@ -127,7 +128,7 @@ export default function Ventas() {
     }
     
     async function getProductsByPrice1(){
-        const {data} = await axios.get('http://localhost:5000/api/sales/products/price1'+`/${rol}`)
+        const {data} = await axios.get(baseURL+'/sales/products/price1'+`/${rol}`)
         if (Object.entries(data).length === 0){
             Swal.fire({
                 icon: 'error',
@@ -145,7 +146,7 @@ export default function Ventas() {
     }
 
     async function getProductsByPrice2(){
-        const {data} = await axios.get('http://localhost:5000/api/sales/products/price2'+`/${rol}`)
+        const {data} = await axios.get(baseURL+'/sales/products/price2'+`/${rol}`)
         if (Object.entries(data).length === 0){
             Swal.fire({
                 icon: 'error',
@@ -164,7 +165,7 @@ export default function Ventas() {
 
     async function getProductsByPrice3(){
 
-        const {data} = await axios.get('http://localhost:5000/api/sales/products/price3'+`/${rol}`)
+        const {data} = await axios.get(baseURL+'/sales/products/price3'+`/${rol}`)
         if (Object.entries(data).length === 0){
             Swal.fire({
                 icon: 'error',

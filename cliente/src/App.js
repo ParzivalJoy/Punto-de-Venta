@@ -17,7 +17,6 @@ import './Themes.scss'
 import AperturaCaja from './pages/Accounting/AperturaCaja'
 import FinalizarCierre from './pages/Accounting/FinalizarCierre'
 import Accounting from './pages/Accounting/Accounting'
-import Cobro from './pages/Ventas/Components/Cobro'
 import Addproducts from './pages/AddProducts/Addproducts'
 import Config from './pages/Config/Config'
 import axios from 'axios'
@@ -69,7 +68,7 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Switch>
-          <Route exact path ="/login"><Form/></Route>   
+          <Route exact path ="/"><Form/></Route>   
           <ProtectedRoute exact path = "/dashboard" component={Dashboard}/>
           <ProtectedRoute exact path ="/employees" component={Employees}/>
           <ProtectedRoute exact path ="/configuration" component={Configuracion}/>
@@ -82,7 +81,6 @@ function App() {
           <ProtectedRoute exact path="/aperturaCaja" component={AperturaCaja} /> 
           <ProtectedRoute exact path="/reporteCierre" component={FinalizarCierre}/>
           <ProtectedRoute exact path="/accounting" component={Accounting}/>
-          <ProtectedRoute exact path="/cobrocarrito" component={Cobro}/>
           <ProtectedRoute exact path="/addproduct" component={Addproducts}/>
           <ProtectedRoute exact path="/configuracion" component={Config}/>
           <ProtectedRoute exact path="/gestor" component={Menu}/>

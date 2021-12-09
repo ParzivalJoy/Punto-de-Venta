@@ -9,6 +9,7 @@ import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import ReportGmailerrorredIcon from '@mui/icons-material/ReportGmailerrorred';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 
+const baseURL = process.env.REACT_APP_API_URL //npm i dotenv
 
 function MenuPosterior() {
 
@@ -29,7 +30,7 @@ function MenuPosterior() {
     /* console.log(name) */
 
     const res = await fetch(
-      `http://localhost:5000/api/inventario/getInventario2/${rol}/${name}`
+      baseURL+`/inventario/getInventario2/${rol}/${name}`
     );
     const data = await res.json();
     setUsers(data);

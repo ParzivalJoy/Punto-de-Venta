@@ -9,20 +9,22 @@ export default function Complemento(props) {
     
     const rol = localStorage.getItem('rol')
     const [listproducts, setListProducts] = useState([])
-    
-    useEffect(() => {
-        getProducts()
-        
-    },[])
-
-    const errors = {
-        namecomplement:'', 
-        pricecomplement:'', }
+    const [errors, setErrors] = useState({
+        namecomplement:'*Campo obligatorio.', 
+        pricecomplement:'*Campo obligatorio.', })
     const expresiones = {
 	text: /^[a-zA-ZÀ-ÿ\s]{1,50}$/, // Letras,espacios
 	textnumbers: /^[a-zA-ZÀ-ÿ0-9\s]{1,40}$/, // Letras y espacios, pueden llevar acentos.
 	float:/^[0-9.]{1,20}$/, // 1 a 20 digitos con punto.
     }
+    useEffect(() => {
+        getProducts()
+        
+    },[])
+    useEffect(()=>{
+        inputValidation()
+    },[props.complement])
+
     const handleChange = e => {
         const { name, value } = e.target;
         props.setComplement({
@@ -47,22 +49,42 @@ export default function Complemento(props) {
     }
     function  inputValidation(){
         if(props.complement.namecomplement===''){
-                errors.namecomplement="*Campo obligatorio."
-                props.setFormValidComplement(false)
+            setErrors({
+                ...errors,
+                ['namecomplement']: "*Campo obligatorio."
+            })
+            //errors.namecomplement="*Campo obligatorio."
+            props.setFormValidComplement(false)
         }else{
-                errors.namecomplement=""
-                props.setFormValidComplement(true)
+            setErrors({
+                ...errors,
+                ['namecomplement']: ""
+            })
+            //errors.namecomplement=""
+            props.setFormValidComplement(true)
             }
 
         if(!expresiones.float.test(props.complement.pricecomplement)){
-                errors.pricecomplement="Este campo solo puede contener numeros enteros."
-                props.setFormValidComplement(false)
+            setErrors({
+                ...errors,
+                ['pricecomplement']: "Este campo solo puede contener numeros enteros."
+            })
+            //errors.pricecomplement="Este campo solo puede contener numeros enteros."
+            props.setFormValidComplement(false)
         }else{
             if(props.complement.pricecomplement==='0.0'){
-                errors.pricecomplement="*Campo obligatorio."
+                setErrors({
+                    ...errors,
+                    ['pricecomplement']: "*Campo obligatorio."
+                })
+                //errors.pricecomplement="*Campo obligatorio."
                 props.setFormValidComplement(false)
             }else{
-                errors.pricecomplement=""
+                setErrors({
+                    ...errors,
+                    ['pricecomplement']: ""
+                })
+                //errors.pricecomplement=""
                 props.setFormValidComplement(true)
             }
         }
@@ -80,7 +102,7 @@ export default function Complemento(props) {
             ['typecomplement']: product.typecomplement,
         });
     };
-    inputValidation()
+
     return (
         <div className="row d-flex justify-content-center">
             {props.newcomplement

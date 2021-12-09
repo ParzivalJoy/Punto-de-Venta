@@ -3,6 +3,8 @@ import Swal from 'sweetalert2'
 import PacmanLoader from "react-spinners/PacmanLoader";
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 
+const baseURL = process.env.REACT_APP_API_URL //npm i dotenv
+
 function RolesSeguridad() {
 
     const[desplegarsecc, setDesplegarsecc]= useState(false)
@@ -20,7 +22,7 @@ function RolesSeguridad() {
 
     const DatosInicio= async()=>{
       const res2 = await fetch(
-        `http://localhost:5000/api/configuracion/getEmpleados`+`/${rol}`
+        baseURL+`/configuracion/getEmpleados`+`/${rol}`
       );
       const data2 = await res2.json();
       setListemployees(data2)
@@ -43,13 +45,13 @@ function RolesSeguridad() {
         else{
 
           const res3 = await fetch(
-            `http://localhost:5000/api/configuracion/getIdusuario/${actualempleado}`+`/${rol}`
+            baseURL+`/configuracion/getIdusuario/${actualempleado}`+`/${rol}`
           );
           const data3 = await res3.json();
           let userid= data3.idusuario;
           setIdusuario(data3.idusuario)
           const res4 = await fetch(
-            `http://localhost:5000/api/configuracion/getPermisos/${userid}`+`/${rol}`
+            baseURL+`/configuracion/getPermisos/${userid}`+`/${rol}`
           );
           const data4 = await res4.json();
           data4.map((permiso)=>{
@@ -86,7 +88,7 @@ function RolesSeguridad() {
 
           setLoading(true)
           const res = await fetch(
-            `http://localhost:5000/api/configuracion/editPermisoEmpleados`+`/${rol}`,
+            baseURL+`/configuracion/editPermisoEmpleados`+`/${rol}`,
             {
               method: "PUT",
               headers: {
@@ -101,7 +103,7 @@ function RolesSeguridad() {
             await res.json();
           ////////editar permiso de inventarios//////////////////
           const resinv = await fetch(
-            `http://localhost:5000/api/configuracion/editPermisoInventarios`+`/${rol}`,
+            baseURL+`/configuracion/editPermisoInventarios`+`/${rol}`,
             {
               method: "PUT",
               headers: {
@@ -116,7 +118,7 @@ function RolesSeguridad() {
             await resinv.json();
           ///////////editar permiso de configuracion//////////////////
           const rescon = await fetch(
-            `http://localhost:5000/api/configuracion/editPermisoConfiguracion`+`/${rol}`,
+            baseURL+`/configuracion/editPermisoConfiguracion`+`/${rol}`,
             {
               method: "PUT",
               headers: {
@@ -131,7 +133,7 @@ function RolesSeguridad() {
             await rescon.json();
           /////////////////editar permisos de gestor //////////////////
           const resges = await fetch(
-            `http://localhost:5000/api/configuracion/editPermisoGestor`+`/${rol}`,
+            baseURL+`/configuracion/editPermisoGestor`+`/${rol}`,
             {
               method: "PUT",
               headers: {
@@ -146,7 +148,7 @@ function RolesSeguridad() {
             await resges.json();
           /////////////editar permisos de productos///////////////////
           const respro = await fetch(
-            `http://localhost:5000/api/configuracion/editPermisoProductos`+`/${rol}`,
+            baseURL+`/configuracion/editPermisoProductos`+`/${rol}`,
             {
               method: "PUT",
               headers: {
@@ -161,7 +163,7 @@ function RolesSeguridad() {
             await respro.json();
           ////////////editar permisos de ventas//////////////////
           const resven = await fetch(
-            `http://localhost:5000/api/configuracion/editPermisoVentas`+`/${rol}`,
+            baseURL+`/configuracion/editPermisoVentas`+`/${rol}`,
             {
               method: "PUT",
               headers: {
@@ -176,7 +178,7 @@ function RolesSeguridad() {
             await resven.json();
           //////////editar permisos de contabilidad//////////////
           const resconta = await fetch(
-            `http://localhost:5000/api/configuracion/editPermisoContabilidad`+`/${rol}`,
+            baseURL+`/configuracion/editPermisoContabilidad`+`/${rol}`,
             {
               method: "PUT",
               headers: {

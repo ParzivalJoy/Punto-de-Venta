@@ -7,6 +7,7 @@ import ModalRetiros from './ModalRetiros';
 import ModalCambio from './ModalCambio';
 import ModalObservaciones from './ModalObservaciones';
 import Parcial from './Parcial';
+const baseURL = process.env.REACT_APP_API_URL
 
 export default function Accounting() {
 
@@ -19,7 +20,7 @@ export default function Accounting() {
     const handleShowContabilidad= async()=>{
 
       const res = await fetch(
-        `http://localhost:5000/api/contabilidad/DatosUltimoCierre/${rol}`
+        baseURL+`/contabilidad/DatosUltimoCierre/`+`${rol}`
       );
       const data = await res.json();
       if(data===null){

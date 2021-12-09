@@ -13,7 +13,7 @@ const Login = () => {
       localStorage.removeItem("user")
       localStorage.removeItem('role')
       localStorage.removeItem('token')
-      history.push("/login");
+      history.push("/");
     }, 5000);
   }
 

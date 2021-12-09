@@ -15,6 +15,7 @@ function BarraLateral() {
   const [cajaretiros, setCajaretiros]= useState('no hay cierres por hoy')
   const [cajacambios, setCajacambios]=useState('no han habido cambios hoy')
   const [totalsistema, setTotalsistema]= useState('desconocido')
+  const baseURL = process.env.REACT_APP_API_URL //npm i dotenv
 
   const rol = localStorage.getItem('rol')
 
@@ -28,7 +29,7 @@ function BarraLateral() {
     ////////////////////////////////////////////////////
 
     const res = await fetch(
-      `http://localhost:5000/api/contabilidad/DatosUltimoCierre/${rol}`
+      baseURL+`/contabilidad/DatosUltimoCierre/${rol}`
     );
     const data = await res.json();
     if(data===null){
@@ -44,7 +45,7 @@ function BarraLateral() {
     setFechaactual(hoy.toDateString());
     
     const res2 = await fetch(
-      `http://localhost:5000/api/contabilidad/ultimoApertura/${rol}`
+      baseURL+`/contabilidad/ultimoApertura/${rol}`
     );
     const data2 = await res2.json();
     const fechaultimoApertura= data2.fechaapertura;
@@ -52,7 +53,7 @@ function BarraLateral() {
     let ve=0;
     let vv=0;
     const res3 = await fetch(
-      `http://localhost:5000/api/contabilidad/VentasHastaAhora/${rol}/${fechaultimoApertura}`
+      baseURL+`/contabilidad/VentasHastaAhora/${rol}/${fechaultimoApertura}`
     );
     const data3 = await res3.json();
     if(data3.sum===null){
@@ -65,7 +66,7 @@ function BarraLateral() {
     /////Obtener ventas de tarjetas desde el apertura
     console.log('pasa aqui1')
     const res4 = await fetch(
-      `http://localhost:5000/api/contabilidad/VentasHastaAhoraTarjetas/${rol}/${fechaultimoApertura}`
+      baseURL+`/contabilidad/VentasHastaAhoraTarjetas/${rol}/${fechaultimoApertura}`
     );
     const data4 = await res4.json();
     if(data4.sum===null){
@@ -78,7 +79,7 @@ function BarraLateral() {
     //////////Obtener ventas de vales desde el apertura
     console.log('pasa aqui2')
     const res5 = await fetch(
-      `http://localhost:5000/api/contabilidad/VentasHastaAhoraVales/${rol}/${fechaultimoApertura}`
+      baseURL+`/contabilidad/VentasHastaAhoraVales/${rol}/${fechaultimoApertura}`
     );
     const data5 = await res5.json();
     if(data5.sum===null){
@@ -92,7 +93,7 @@ function BarraLateral() {
     //////////Obtener los gastos desde el apertura
     console.log('pasa aqui3')
     const res6 = await fetch(
-      `http://localhost:5000/api/contabilidad/GastosCaja/${rol}/${fechaultimoApertura}`
+      baseURL+`/contabilidad/GastosCaja/${rol}/${fechaultimoApertura}`
     );
     const data6 = await res6.json();
     if(data6.sum===null){
@@ -102,7 +103,7 @@ function BarraLateral() {
     }
     ///////Obtener los cambios ingresados desde apertura
     const res7 = await fetch(
-      `http://localhost:5000/api/contabilidad/CambiosCaja/${rol}/${fechaultimoApertura}`
+      baseURL+`/contabilidad/CambiosCaja/${rol}/${fechaultimoApertura}`
     );
     const data7 = await res7.json();
     if(data7.sum===null){
@@ -113,7 +114,7 @@ function BarraLateral() {
     ///////Suma de parciales hasta el momento
     console.log('pasa aqui5')
     const res8 = await fetch(
-      `http://localhost:5000/api/contabilidad/sumaParciales/${rol}/${fechaultimoApertura}`
+      baseURL+`/contabilidad/sumaParciales/${rol}/${fechaultimoApertura}`
     );
     const data8 = await res8.json();
     if(data8.sum===null){

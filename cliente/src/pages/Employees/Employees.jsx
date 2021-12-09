@@ -17,7 +17,6 @@ function Employees() {
     const [ telempleado, setTel ] = useState('')
     const [ dirempleado, setDir ] = useState('')
     const [ update, setUpdate ] = useState(false)
-    const [passwordempleado,setPasswordEmpleado] = useState('')
     const rol = localStorage.getItem('rol')
 
     useEffect(() => {
@@ -37,7 +36,8 @@ function Employees() {
         return `${year}${separator}${month<10?`0${month}`:`${month}`}${separator}${date}`
     }
 
-    function sendEmail(){
+    function sendEmail(passwordempleado){
+      console.log(passwordempleado)
       emailjs.send('service_vvmlhv5','template_80673b6',{ email: emailempleado,
         message: "Su contraseña es: "+ passwordempleado,
         name: nombreempleado}, 'user_vE01873KnIdtHQnqhpb3Q', )
@@ -52,17 +52,15 @@ function Employees() {
         let fechacontra=getCurrentDate()
         const obj = { nombreempleado,fechacontra, emailempleado, telempleado,dirempleado}
         const { data } = await axios.post(baseURL+`/${rol}`, obj)
-        console.log(data)
-        setPasswordEmpleado(data)
-        sendEmail()
+        sendEmail(data)
         clearInput()
         getEmployees()
 
         Swal.fire({
             icon: 'success',
-            title: 'Se agrego el emplado correctamente!',
-            text: 'La contraseña se ha enviado al correo registrado',
-            showConfirmButton: true,
+            title: '¡Se agregó el empleado correctamente!',
+            showConfirmButton: false,
+            timer: 1500
           })
    
     }
@@ -85,17 +83,17 @@ function Employees() {
           
           swalWithBootstrapButtons.fire({
             title: '¿Estas segur@?',
-            text: "No podrás revertir los cambios después!",
+            text: "No se podrán revertir los cambios después.",
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonText: 'Si, eliminalo!',
-            cancelButtonText: 'No, cancela!',
+            confirmButtonText: '¡Si, eliminalo!',
+            cancelButtonText: '¡No, cancela!',
             reverseButtons: true
           }).then((result) => {
             if (result.isConfirmed) {
               swalWithBootstrapButtons.fire(
-                'Eliminado!',
-                'El empleado ha sido eliminado de forma correcta',
+                '¡Eliminado!',
+                'El empleado ha sido eliminado de forma correcta.',
                 'success'
               )
               deleteEmployeeAlert(emailempleado)
@@ -105,7 +103,7 @@ function Employees() {
             ) {
               swalWithBootstrapButtons.fire(
                 'Cancelado',
-                'El empleado aun se encuentra en el sistema',
+                'El empleado aun se encuentra en el sistema.',
                 'error'
               )
             }
@@ -130,17 +128,17 @@ function Employees() {
           
           swalWithBootstrapButtons.fire({
             title: '¿Estas segur@?',
-            text: "Podrás cambiar los datos más adelante",
+            text: "Podrás cambiar los datos más adelante.",
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonText: 'Si, modificalo!',
-            cancelButtonText: 'No, cancela!',
+            confirmButtonText: '¡Si, modificalo!',
+            cancelButtonText: '¡No, cancela!',
             reverseButtons: true
           }).then((result) => {
             if (result.isConfirmed) {
               swalWithBootstrapButtons.fire(
-                'Modificado!',
-                'Los datos del empleado han sido modificados exitosamente',
+                '¡Modificado!',
+                'Los datos del empleado han sido modificados exitosamente.',
                 'success'
               )
               getEmployeeAlert(idempleado)
@@ -150,7 +148,7 @@ function Employees() {
             ) {
               swalWithBootstrapButtons.fire(
                 'Cancelado',
-                'No se han modificado los datos del empleado',
+                'No se han modificado los datos del empleado.',
                 'error'
               )
             }

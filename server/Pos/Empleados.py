@@ -12,17 +12,17 @@ empleado_api = Blueprint('empleado_api', __name__)
 
 def conexion():
     return psycopg2.connect(
-    host="localhost",
-    database="puntodeventa",
-    user="postgres",
-    password="root")
+    host="ls-f9d2bfd5bc2feb3aa745f0be542db2c5553af214.c0vwlmjwpoic.us-east-1.rds.amazonaws.com",
+    database="puntoventa",
+    user="dbmasteruser",
+    password="k-{&+870U_X^sg*9O|to_FqAb{G[2D;6")
 
 def conexionRol(role):
     return psycopg2.connect(
-    host="localhost",
-    database="puntodeventa",
+    host="ls-f9d2bfd5bc2feb3aa745f0be542db2c5553af214.c0vwlmjwpoic.us-east-1.rds.amazonaws.com",
+    database="puntoventa",
     user=role,
-    password="root")
+    password="k-{&+870U_X^sg*9O|to_FqAb{G[2D;6")
 
 ## ------------------------------------------------------------------------------ ##
 ## -----------------Lista de empleados registrados en el sistema----------------- ##
@@ -32,7 +32,7 @@ def conexionRol(role):
 def index(rol):
     conn = conexionRol(rol)
     cur = conn.cursor(cursor_factory=RealDictCursor)
-    cur.execute("SELECT b.idempleado, b.nombreempleado, to_char(b.fechacontra, 'DD/MM/YYYY') as fechacontra, b.dirempleado, b.telempleado, b.emailempleado FROM empleados b LEFT JOIN usuarios a ON a.idempleado=b.idempleado WHERE a.estado=true ORDER BY b.idempleado")
+    cur.execute("SELECT b.idempleado, b.nombreempleado, to_char(b.fechacontra, 'DD/MM/YYYY') as fechacontra, b.dirempleado, b.telempleado, b.emailempleado FROM empleados b LEFT JOIN usuarios a ON a.idempleado=b.idempleado WHERE a.estado=true AND b.idcargo='2' ORDER BY b.idempleado")
     rows = cur.fetchall()
     conn.close()
     return jsonify(rows)
@@ -82,7 +82,7 @@ def saveEmployee(rol):
     conn.close()
     cur.close()
     #Abre conexion publica
-    conn = conexionRol('postgres')
+    conn = conexion()
     cur =conn.cursor(cursor_factory=RealDictCursor)
     #Selecciona el rol
     sql4="SELECT idempresa FROM empresas WHERE nombreempresa= '{0}'".format(rol)
@@ -118,7 +118,7 @@ def updateEmployee(rol):
     return jsonify(msg="employee updated") 
 
 def insertusuario(usuario,contrasena,rol):
-    conn = conexionRol('postgres')
+    conn = conexion()
     cur = conn.cursor()
     sql = "INSERT INTO usuariosgenerales (usuariogeneral, contrasenausuariogeneral, idempresa) VALUES ('{0}','{1}','{2}') RETURNING idusuariogeneral".format(usuario,contrasena,rol)
     cur.execute(sql)

@@ -2,6 +2,8 @@ import React, {useState, useEffect} from 'react'
 import '../../../styles.scss';
 import axios from 'axios'
 
+const baseURL = process.env.REACT_APP_API_URL //npm i dotenv
+
 export default function Righttable() {
 
     const rol = localStorage.getItem('rol')
@@ -23,7 +25,7 @@ export default function Righttable() {
 
     async function getTransactions(){
         let fecha=getCurrentDate()
-        const {data} = await axios.get('http://localhost:5000/api/dashboard/transactions'+`/${fecha}`+`/${rol}`)
+        const {data} = await axios.get(baseURL+`/dashboard/transactions`+`/${fecha}`+`/${rol}`)
         setTransacciones(data)
     }
 
