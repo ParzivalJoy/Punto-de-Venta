@@ -40,7 +40,7 @@ export default function Graph() {
     }
 
     return (
-        <div className="graph">
+        <div className ="card col-md-4">
             <Bar data={Graphdata} options={opciones}/>
         </div>
     )

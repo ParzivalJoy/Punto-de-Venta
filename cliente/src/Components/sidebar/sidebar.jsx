@@ -13,6 +13,8 @@ import {Link} from 'react-router-dom';
 import axios from 'axios'
 import Swal from 'sweetalert2'
 
+const baseURL = process.env.REACT_APP_API_URL //npm i dotenv
+
 function Sidebar() {
     const user = localStorage.getItem("user")
     const rol = localStorage.getItem('rol')
@@ -29,12 +31,12 @@ function Sidebar() {
 
 
     async function getUsuario(){
-        const {data} = await axios.get('http://localhost:5000/api/usuario'+`/${id}`+`/${rol}`)
+        const {data} = await axios.get(baseURL+'/usuario'+`/${id}`+`/${rol}`)
         getPermisos(data.idusuario)
     }
 
     async function getPermisos(idusuario){
-        const {data} = await axios.get('http://localhost:5000/api/permisos'+`/${idusuario}`+`/${rol}`)
+        const {data} = await axios.get(baseURL+'/permisos'+`/${idusuario}`+`/${rol}`)
         data.map(item =>(
             RevisarPermisos(item.idpermiso, item.acceso)
         ))
@@ -124,13 +126,11 @@ function Sidebar() {
                         <li className="sidebar-items">
                             {(empleados === true) ? 
                             <Link to = '/employees' className= "link">
-                                <AssignmentIndIcon className="icons sidebar-icons"/> 
-                                <span className="sidebar-pages">Empleados</span>
+                                <AssignmentIndIcon className="icons sidebar-icons"/> <span className="sidebar-pages">Empleados</span>
                             </Link>
                             :
                             <Link to = '/sinacceso' className= "link">
-                                <AssignmentIndIcon className="icons sidebar-icons"/> 
-                                <span className="sidebar-pages">Empleados</span>
+                                <AssignmentIndIcon className="icons sidebar-icons"/> <span className="sidebar-pages">Empleados</span>
                             </Link>
                             }
                         </li>

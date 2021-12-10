@@ -4,13 +4,15 @@ import "./Components/themes.css"
 import StarsIcon from '@mui/icons-material/Stars'
 import axios from 'axios'
 
+const baseURL = process.env.REACT_APP_API_URL //npm i dotenv
+
 export default function Navbar() {
 
     const [nombre, setNombre] = useState('')
     const rol = localStorage.getItem('rol')
 
     async function getNombre(){
-        const {data} = await axios.get('http://localhost:5000/api/configuracion/getTemasEs'+`/${rol}`)
+        const {data} = await axios.get(baseURL+'/configuracion/getTemasEs'+`/${rol}`)
         setNombre(data.logo)
     }
 

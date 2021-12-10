@@ -199,20 +199,20 @@ export default function Ventas() {
             <div className="search-bar">
                 <div className="card search-card">
                     <div className="row">  
-                        <div className="col-11">
+                        <div className="col-md-11">
                             <input type="text" placeholder="Buscar" className="search-input" onChange={ e=> setSearch(e.target.value)}/>
                         </div>
-                        <div className="col-1"><button className="btn btn-primary" onClick={getProductByName.bind(this)}><SearchIcon/></button></div>
+                        <div className="col-md-1"><button className="btn btn-primary" onClick={getProductByName.bind(this)}><SearchIcon/></button></div>
                     </div>
                 </div> 
             </div>
             <div className="row">
-                <div className="col-7">
+                <div className="col-md-7">
                     <div className="card dropdown-card">
                         <div className="row">
-                            <div className="col-5">
+                            <div className="col-md-5">
                             </div>
-                            <div className="col-4">
+                            <div className="col-md-4">
                                 <DropdownButton id="dropdown-basic-button" title={category}>
                                     <DropdownItem onClick={getAllProducts.bind(this)}>Todos los productos</DropdownItem>
                                     {ListCategories.map(item =>(
@@ -222,7 +222,7 @@ export default function Ventas() {
                                     ))}
                                 </DropdownButton>
                             </div>
-                            <div className="col-2">
+                            <div className="col-md-2">
                                 <DropdownButton id="dropdown-basic-button" title='Filtros'>
                                     <DropdownItem onClick={getProductsByPrice1.bind(this)}>Precio $</DropdownItem>
                                     <DropdownItem onClick={getProductsByPrice2.bind(this)}>Precio $$</DropdownItem>
@@ -234,9 +234,9 @@ export default function Ventas() {
                     <div className="card catalogue-card">
                         <div className="row">
                         {ListAllProducts.map(item => (
-                            <div className="card product-card col-5">
+                            <div className="card product-card col-md-5">
                                 <div className="row">
-                                    <div className="col-12 product-info">
+                                    <div className="col-md-12 product-info">
                                         <span className="product-name" key={item.nombreproducto}>{item.nombreproducto}</span>
                                         <span className="product-descr" key={item.descripcionproducto}>{item.descripcionproducto}</span>
                                         <br/>
@@ -253,7 +253,7 @@ export default function Ventas() {
                     </div>
                     </div>
                 </div>
-                <div className="col-5">
+                <div className="col-md-5">
                     <div className="card">
                         <Carrito/>
                     </div>

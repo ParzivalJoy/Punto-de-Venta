@@ -30,6 +30,7 @@ import SellosPaper from "./pages/Gestor/sellos/index";
 import CatalogoPaper from "./pages/Gestor/catalogo/index";
 import SinAcceso from './pages/SinAcceso/index'
 
+const baseURL = process.env.REACT_APP_API_URL //npm i dotenv
 
 function App() {
 
@@ -38,7 +39,7 @@ function App() {
   const rol = localStorage.getItem('rol')
 
   async function getTema(){
-    const {data} = await axios.get('http://localhost:5000/api/configuracion/getTemasEs'+`/${rol}`)
+    const {data} = await axios.get(baseURL+'/configuracion/getTemasEs'+`/${rol}`)
     setTema(data.modo)
     setColor(data.color)
 }

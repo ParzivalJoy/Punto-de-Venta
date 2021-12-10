@@ -56,16 +56,19 @@ function MenuPosterior() {
 
   return (
     <div className="inventory">
-      <div className="dash-cards">
-        <div className="card card-item-inv">
-        <Link to="./inventory/add">
-          <span className="card-title">Agregar inventario</span>
-          <div className="card-money">
-            <AddShoppingCartIcon className="icons"/>
+      <div>
+        <div className="row">
+        <div className="col-md-4">
+          <div className="card card-item-inv">
+          <Link to="./inventory/add">
+            <span className="card-title">Agregar Inventario</span>
+            <div className="card-money">
+              <AddShoppingCartIcon className="icons"/>
+            </div>
+            </Link>
           </div>
-          </Link>
         </div>
-     
+        <div className="col-md-4">
         <div className="card card-item-inv">
         <Link to="/inventory/report">
           <span className="card-title">Reporte merma</span>
@@ -74,7 +77,8 @@ function MenuPosterior() {
           </div>
         </Link>
         </div>
-
+        </div>
+    <div className="col-md-4">
         <div className="card card-item-inv">
         <Link to="/inventory/import">
           <span className="card-title">Importar inventario</span>
@@ -83,6 +87,8 @@ function MenuPosterior() {
           </div>
           </Link>
         </div>
+        </div>
+    </div>
     </div>
 
     <div className="card container" ref={componentRef}>
